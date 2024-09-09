@@ -1,11 +1,9 @@
 import 'dart:async';
-
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_pickers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_template/modules/authentication/models/signin_form_data.dart';
 import 'package:flutter_template/modules/authentication/service/auth_service.dart';
-import 'package:flutter_template/utils/firebase_analytics_utils.dart';
 import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:flutter_template/utils/navigation_utils/routes.dart';
 import 'package:flutter_template/utils/validation_utils.dart';
@@ -48,9 +46,9 @@ class SignInController extends GetxController {
     isDisable.value = (controller.text == "" || controller.text.isEmpty) || (passwordController.text == "" || passwordController.text.isEmpty);
   }
 
-  @override
-  void onInit() {
-    FirebaseAnalyticsUtils().sendCurrentScreen(FirebaseAnalyticsUtils.signIn);
-    super.onInit();
-  }
+// @override
+// void onInit() {
+//   FirebaseAnalyticsUtils().sendCurrentScreen(FirebaseAnalyticsUtils.signIn);
+//   super.onInit();
+// }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_template/utils/assets.dart';
 import 'package:flutter_template/utils/navigation_utils/routes.dart';
 
 import 'utils/navigation_utils/navigation.dart';
@@ -16,25 +17,19 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Future.delayed(const Duration(seconds: 3), () {
-      navigateFurther(context);
+      navigateFurther();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
-      key: ValueKey("Container"),
-      width: double.maxFinite,
-      child: Center(
-        child: Text(
-          'Splash screen ',
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
+    return Image.asset(
+      ImagesAsset.splash,
+      fit: BoxFit.cover,
     );
   }
 
-  Future<void> navigateFurther(BuildContext context) async {
+  Future<void> navigateFurther() async {
     Navigation.replace(Routes.signIn);
   }
 }

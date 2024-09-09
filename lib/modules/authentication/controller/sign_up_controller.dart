@@ -1,9 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_template/modules/authentication/models/signup_form_data.dart';
 import 'package:flutter_template/modules/authentication/service/auth_service.dart';
-import 'package:flutter_template/utils/firebase_analytics_utils.dart';
 import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:flutter_template/utils/navigation_utils/routes.dart';
 import 'package:flutter_template/utils/validation_utils.dart';
@@ -45,9 +43,9 @@ class SignUpController extends GetxController {
         (controller.text == "" || controller.text.isEmpty) || (passwordController.text == "" || passwordController.text.isEmpty) || !isCheck.value;
   }
 
-  @override
-  void onInit() {
-    FirebaseAnalyticsUtils().sendCurrentScreen(FirebaseAnalyticsUtils.signUp);
-    super.onInit();
-  }
+// @override
+// void onInit() {
+//   FirebaseAnalyticsUtils().sendCurrentScreen(FirebaseAnalyticsUtils.signUp);
+//   super.onInit();
+// }
 }

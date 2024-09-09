@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
               getPages: Routes.pages,
               builder: (context, child) {
                 return Scaffold(
+                  resizeToAvoidBottomInset: false,
                   body: GestureDetector(
                     onTap: () {
                       Utils.hideKeyboardInApp(context);

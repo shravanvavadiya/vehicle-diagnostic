@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/widget/custom_loading_widget.dart';
+import 'package:get/get.dart';
 
 class CustomButton extends StatefulWidget {
   final double? height;
@@ -34,7 +35,7 @@ class CustomButton extends StatefulWidget {
     this.buttonBorderColor,
     this.buttonColor,
     this.fontWeight = FontWeight.w600,
-    this.fontSize = 18,
+    this.fontSize = 16,
     this.textColor,
     this.onTap,
     this.padding,
@@ -53,9 +54,9 @@ class CustomButton extends StatefulWidget {
 class CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
-    final buttonButton = (widget.isDisabled)
-        ? widget.disableButtonColor ?? AppColors.disableButtonColor
-        : widget.buttonColor ?? AppColors.appThemeColor;
+    final buttonColor =
+        (widget.isDisabled) ? widget.disableButtonColor ?? AppColors.disableButtonColor : widget.buttonColor ?? AppColors.highlightedColor;
+
     return GestureDetector(
       onTap: (widget.isLoader || widget.isDisabled) ? null : widget.onTap,
       child: Container(
@@ -64,9 +65,10 @@ class CustomButtonState extends State<CustomButton> {
         padding: widget.padding ?? const EdgeInsets.all(12),
         decoration: BoxDecoration(
           borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
-          color: buttonButton,
+          color: buttonColor,
           border: Border.all(
-            color: (widget.needBorderColor) ? buttonButton : Colors.transparent,
+            color: (widget.buttonBorderColor != null) ? widget.buttonBorderColor! : buttonColor,
+            // color: (widget.needBorderColor) ? buttonColor : Colors.transparent,
           ),
         ),
         child: Center(
@@ -80,42 +82,24 @@ class CustomButtonState extends State<CustomButton> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     if (widget.svg != null)
-                      Row(
-                        children: [
-                          SvgPicture.asset(
-                            widget.svg!,
-                            color: (widget.isDisabled)
-                                ? widget.disableTextColor ?? AppColors.textColor.withOpacity(0.6)
-                                : widget.textColor ?? Colors.white,
-                            height: 24,
-                          ),
-                         3.h.horizontalSpace,
-                        ],
-                      ),
+                      SvgPicture.asset(
+                        widget.svg!,
+                        height: 20.h,
+                      ).paddingOnly(right: 14.w),
                     Text(
                       widget.text.toString(),
                       style: TextStyle(
                         fontSize: widget.fontSize,
                         fontWeight: widget.fontWeight,
-                        color: (widget.isDisabled)
-                            ? widget.disableTextColor ?? AppColors.textColor.withOpacity(0.6)
-                            : widget.textColor ?? Colors.white,
+                        color:
+                            (widget.isDisabled) ? widget.disableTextColor ?? AppColors.textColor.withOpacity(0.6) : widget.textColor ?? Colors.white,
                       ),
                     ),
                     if (widget.endSvg != null)
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          3.w.horizontalSpace,
-                          SvgPicture.asset(
-                            widget.endSvg!,
-                            color: (widget.isDisabled)
-                                ? widget.disableTextColor ?? AppColors.textColor.withOpacity(0.6)
-                                : widget.textColor ?? Colors.white,
-                            height: 20,
-                          ),
-                        ],
-                      ),
+                      SvgPicture.asset(
+                        widget.endSvg!,
+                        height: 20.h,
+                      ).paddingOnly(left: 14.w),
                   ],
                 ),
         ),

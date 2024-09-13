@@ -14,6 +14,8 @@ class LetsStartWidget extends StatelessWidget {
   final bool? isStart;
   final double bottom;
   final VoidCallback? onTap;
+  final VoidCallback? yesOnTap;
+  final VoidCallback? noOnTap;
 
   const LetsStartWidget({
     super.key,
@@ -24,68 +26,89 @@ class LetsStartWidget extends StatelessWidget {
     this.isStart,
     required this.bottom,
     this.onTap,
+    this.yesOnTap,
+    this.noOnTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        toolbarHeight: 30.h,
-        backgroundColor: Colors.white,
-      ),
-      body: Column(
-        children: [
-          Center(
-            child: Image.asset(
-              ImagesAsset.appTitle,
-              height: 36.h,
+      // appBar: AppBar(
+      //   automaticallyImplyLeading: false,
+      //   toolbarHeight: 30.h,
+      //   backgroundColor: Colors.white,
+      // ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Column(
+              children: [
+                SizedBox(
+                  height: 30.h,
+                ),
+                Center(
+                  child: Image.asset(
+                    ImagesAsset.appTitle,
+                    height: 36.h,
+                  ),
+                ),
+                Image.asset(
+                  image,
+                  height: 256.h,
+                ).paddingOnly(
+                  top: 68.h,
+                  bottom: bottom,
+                ),
+                InfoTextWidget(
+                  title: title,
+                  titleFontSize: 32.sp,
+                  titleFontWeight: FontWeight.w500,
+                  description: description,
+                  fontSize: 16.sp,
+                  bottomSpace: 14.h,
+                  fontWeight: FontWeight.w400,
+                ).paddingOnly(
+                  bottom: 20.h,
+                  left: 16.w,
+                  right: 16.w,
+                ),
+              ],
             ),
-          ),
-          Image.asset(
-            image,
-            height: 256.h,
-          ).paddingOnly(top: 68.h, bottom: bottom),
-          Column(
-            children: [
-              InfoTextWidget(
-                title: title,
-                titleFontSize: 32.sp,
-                titleFontWeight: FontWeight.w500,
-                description: description,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w400,
-              ).paddingOnly(bottom: 32.h),
-              isStart == true
-                  ? Row(
-                      children: [
-                        Expanded(
-                          child: CustomButton(
-                            onTap: () {},
-                            text: "No",
-                            textColor: AppColors.highlightedColor,
-                            needBorderColor: true,
-                            buttonBorderColor: AppColors.highlightedColor,
-                            buttonColor: Colors.transparent,
-                          ),
+            const Expanded(child: SizedBox()),
+            isStart == true
+                ? Row(
+                    children: [
+                      Expanded(
+                        child: CustomButton(
+                          height: 50.h,
+                          onTap: noOnTap,
+                          text: "No",
+                          textColor: AppColors.highlightedColor,
+                          needBorderColor: true,
+                          buttonBorderColor: AppColors.highlightedColor,
+                          buttonColor: Colors.transparent,
                         ),
-                        SizedBox(width: 12.w),
-                        Expanded(
-                          child: CustomButton(
-                            onTap: () {},
-                            text: "Yes",
-                          ),
+                      ),
+                      SizedBox(width: 12.w),
+                      Expanded(
+                        child: CustomButton(
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w600,
+                          height: 50.h,
+                          onTap: yesOnTap,
+                          text: "Yes",
                         ),
-                      ],
-                    )
-                  : CustomButton(
-                      onTap: onTap,
-                      text: buttonText,
-                    )
-            ],
-          ).paddingSymmetric(horizontal: 16.w),
-        ],
+                      ),
+                    ],
+                  ).paddingSymmetric(horizontal: 16.w, vertical: 25.h)
+                : CustomButton(
+                    height: 50.h,
+                    onTap: onTap,
+                    text: buttonText,
+                  ).paddingSymmetric(horizontal: 16.w, vertical: 25.h),
+          ],
+        ),
       ),
     );
   }

@@ -6,14 +6,16 @@ import 'package:flutter/services.dart';
 class CustomAnnotatedRegions extends StatelessWidget {
   final Widget child;
   final bool isDarkTheme;
+  final Color? statusBarColor;
+  final Brightness? brightness;
 
-  const CustomAnnotatedRegions({Key? key, required this.child, this.isDarkTheme = true}) : super(key: key);
+  const CustomAnnotatedRegions({super.key, required this.child, this.isDarkTheme = true, this.statusBarColor, this.brightness,});
 
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
+        statusBarColor: statusBarColor??Colors.transparent,
         statusBarIconBrightness: _statusBarColor(),
         statusBarBrightness: _statusBarColor(),
       ),
@@ -23,7 +25,6 @@ class CustomAnnotatedRegions extends StatelessWidget {
 
   Brightness _statusBarColor() {
     late Brightness brightness;
-
     if (isDarkTheme) {
       brightness = Platform.isIOS ? Brightness.light : Brightness.dark;
     } else {

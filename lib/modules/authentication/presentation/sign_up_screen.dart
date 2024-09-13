@@ -6,12 +6,13 @@ import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:flutter_template/utils/navigation_utils/routes.dart';
 import 'package:flutter_template/utils/utils.dart';
+import 'package:flutter_template/widget/annotated_region.dart';
 import 'package:flutter_template/widget/custom_button.dart';
 import 'package:flutter_template/widget/custom_textfeild.dart';
 import 'package:get/get.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({super.key});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -22,91 +23,93 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 3.36.h,
-          ),
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              LayoutBuilder(
-                builder: (context, constraint) {
-                  return SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: constraint.maxHeight),
-                      child: IntrinsicHeight(
-                        child: Column(
-                          children: <Widget>[
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  20.h.verticalSpace,
-                                  _loginWidget(),
-                                  3.verticalSpace,
-                                  Center(
-                                    child: Text(
-                                      S.of(context).register,
+    return CustomAnnotatedRegions(
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 3.36.h,
+            ),
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                LayoutBuilder(
+                  builder: (context, constraint) {
+                    return SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(minHeight: constraint.maxHeight),
+                        child: IntrinsicHeight(
+                          child: Column(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    20.h.verticalSpace,
+                                    _loginWidget(),
+                                    3.verticalSpace,
+                                    Center(
+                                      child: Text(
+                                        S.of(context).register,
+                                        style: TextStyle(
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColors.textColor,
+                                        ),
+                                      ),
+                                    ),
+                                    5.verticalSpace,
+                                    _emailTextField(),
+                                    20.h.verticalSpace,
+                                    _passwordTextField(),
+                                    2.h.verticalSpace,
+                                    Text(
+                                      S.of(context).passwordValidationMsg,
                                       style: TextStyle(
-                                        fontSize: 18.sp,
-                                        fontWeight: FontWeight.w600,
+                                        fontSize: 10.sp,
+                                        fontWeight: FontWeight.w400,
                                         color: AppColors.textColor,
                                       ),
                                     ),
-                                  ),
-                                  5.verticalSpace,
-                                  _emailTextField(),
-                                  20.h.verticalSpace,
-                                  _passwordTextField(),
-                                  2.h.verticalSpace,
-                                  Text(
-                                    S.of(context).passwordValidationMsg,
-                                    style: TextStyle(
-                                      fontSize: 10.sp,
-                                      fontWeight: FontWeight.w400,
-                                      color: AppColors.textColor,
-                                    ),
-                                  ),
-                                  3.5.verticalSpace
-                                ],
+                                    3.5.verticalSpace
+                                  ],
+                                ),
                               ),
-                            ),
-                            // Spacer(),
-                            _agreeWidget(),
-                            8.5.verticalSpace,
-                          ],
+                              // Spacer(),
+                              _agreeWidget(),
+                              8.5.verticalSpace,
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Obx(
+                      () => Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 2.h,
+                        ),
+                        child: CustomButton(
+                          isLoader: _signUpController.isLoading.value,
+                          text: S.of(context).signUp,
+                          isDisabled: _signUpController.isDisable.value,
+                          onTap: () {
+                            onSubmit(context);
+                          },
                         ),
                       ),
                     ),
-                  );
-                },
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Obx(
-                    () => Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 2.h,
-                      ),
-                      child: CustomButton(
-                        isLoader: _signUpController.isLoading.value,
-                        text: S.of(context).signUp,
-                        isDisabled: _signUpController.isDisable.value,
-                        onTap: () {
-                          onSubmit(context);
-                        },
-                      ),
-                    ),
-                  ),
-                 2.h.verticalSpace,
-                ],
-              ),
-            ],
+                   2.h.verticalSpace,
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -115,9 +118,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void onSubmit(BuildContext context) async {
     Utils.hideKeyboardInApp(context);
-    if (_signUpController.checkError()) {
-      await _signUpController.signUp();
-    }
+    await _signUpController.signUp();
+   /* if (_signUpController.checkError()) {
+
+    }*/
   }
 
   Widget _loginWidget() {

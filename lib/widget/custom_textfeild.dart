@@ -15,6 +15,7 @@ class CustomTextField extends StatelessWidget {
   final FocusNode? focusNode;
   final String? hintText;
   final TextAlign? textAlign;
+  final String? Function(String?)? validator;
   final Widget? prefix;
   final Widget? suffix;
   final Color fillColor;
@@ -27,7 +28,7 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffixWidget;
 
   CustomTextField({
-    Key? key,
+    super.key,
     this.onChanged,
     this.maxLine = 1,
     this.maxLength,
@@ -39,6 +40,7 @@ class CustomTextField extends StatelessWidget {
     this.focusNode,
     this.hintText,
     this.textAlign,
+    this.validator,
     this.prefix,
     this.suffix,
     this.onTap,
@@ -50,85 +52,103 @@ class CustomTextField extends StatelessWidget {
     this.prefixWidget,
     this.suffixWidget,
     this.readOnly = false,
-  }) : super(key: key);
+  });
 
   final ValueNotifier<bool> _isObscure = ValueNotifier(true);
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      borderRadius: BorderRadius.circular(radius ?? 8),
-      child: ValueListenableBuilder(
-          valueListenable: _isObscure,
-          builder: (context, bool isObscure, _) {
-            if (!isPassword) {
-              isObscure = false;
-            }
-            return IntrinsicHeight(
-              child: TextFormField(
-                readOnly: readOnly,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16.sp,
-                  color: AppColors.primaryColor,
-                  letterSpacing: 0.5,
+    return ValueListenableBuilder(
+        valueListenable: _isObscure,
+        builder: (context, bool isObscure, _) {
+          if (!isPassword) {
+            isObscure = false;
+          }
+          return TextFormField(
+            readOnly: readOnly,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 16.sp,
+              color: AppColors.primaryColor,
+              letterSpacing: 0.5,
+            ),
+            onTap: onTap,
+            obscureText: isObscure,
+            obscuringCharacter: '*',
+            onChanged: onChanged,
+            controller: controller,
+            maxLines: maxLine,
+            maxLength: maxLength,
+            keyboardType: keyboardType,
+            validator: validator,
+            focusNode: focusNode,
+            cursorColor: cursorColor,
+            textAlign: textAlign ?? TextAlign.start,
+            enabled: enabled,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4.r),
+              ),
+              prefix: prefixWidget,
+              suffix: suffixWidget,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 16.0,
+              ),
+              isDense: true,
+              prefixIcon: prefix,
+              suffixIcon: suffix == null && isPassword
+                  ? IconButton(
+                      icon: Icon(
+                        isObscure
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        _isObscure.value = !isObscure;
+                      },
+                    )
+                  : suffix,
+              counterText: "",
+              // contentPadding: const EdgeInsets.all(12),
+              hintText: hintText,
+              hintStyle: TextStyle(
+                color: AppColors.blackColor.withOpacity(0.4),
+                fontWeight: FontWeight.w400,
+                fontSize: 15.sp,
+                letterSpacing: 0.5,
+              ),
+              filled: true,
+              fillColor: AppColors.backgroundColor,
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(radius ?? 4.r)),
+                borderSide: BorderSide(color: AppColors.backgroundColor),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(radius ?? 4.r)),
+                borderSide:
+                    BorderSide(color: enableColor ?? AppColors.backgroundColor),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(radius ?? 4.r)),
+                borderSide: BorderSide(
+                    color: focusedColor ?? AppColors.backgroundColor),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(radius ?? 4.r),
                 ),
-                onTap: onTap,
-                obscureText: isObscure,
-                obscuringCharacter: '*',
-                onChanged: onChanged,
-                controller: controller,
-                maxLines: maxLine,
-                maxLength: maxLength,
-                keyboardType: keyboardType,
-                focusNode: focusNode,
-                cursorColor: cursorColor,
-                textAlign: textAlign ?? TextAlign.start,
-                enabled: enabled,
-                decoration: InputDecoration(
-                  prefix: prefixWidget,
-                  suffix: suffixWidget,
-                  contentPadding: contentPadding,
-                  isDense: true,
-                  prefixIcon: prefix,
-                  suffixIcon: suffix == null && isPassword
-                      ? IconButton(
-                          icon: Icon(
-                            isObscure ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                            color: Colors.grey,
-                          ),
-                          onPressed: () {
-                            _isObscure.value = !isObscure;
-                          },
-                        )
-                      : suffix,
-                  counterText: "",
-                  // contentPadding: const EdgeInsets.all(12),
-                  hintText: hintText,
-                  hintStyle: TextStyle(
-                    color: AppColors.blackColor.withOpacity(0.4),
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16.sp,
-                    letterSpacing: 0.5,
-                  ),
-                  filled: true,
-                  fillColor: AppColors.backgroundColor,
-                  disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(radius ?? 4.r)),
-                    borderSide: BorderSide(color: AppColors.backgroundColor),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(radius ?? 4.r)),
-                    borderSide: BorderSide(color: enableColor ?? AppColors.backgroundColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(radius ?? 4.r)),
-                    borderSide: BorderSide(color: focusedColor ?? AppColors.backgroundColor),
-                  ),
+                borderSide: BorderSide(
+                  color: Colors.red,
+                  width: 1.w,
                 ),
               ),
-            );
-          }),
-    );
+              focusedErrorBorder: const OutlineInputBorder(
+                borderSide: BorderSide(width:1.2, color: Colors.red),
+              ),
+            ),
+          );
+        });
   }
 }

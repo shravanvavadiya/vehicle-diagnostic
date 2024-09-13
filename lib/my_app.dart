@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_template/generated/l10n.dart';
 import 'package:flutter_template/language_change_provider.dart';
+import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/navigation_utils/routes.dart';
 import 'package:flutter_template/utils/utils.dart';
@@ -23,6 +25,18 @@ class MyApp extends StatelessWidget {
           splitScreenMode: true,
           builder: (_, child) {
             return GetMaterialApp(
+              theme: ThemeData(
+                  useMaterial3: false,
+                  splashColor: Colors.transparent,
+                  splashFactory: NoSplash.splashFactory,
+                  disabledColor: Colors.transparent,
+                  scaffoldBackgroundColor: Colors.white,
+                  checkboxTheme: CheckboxThemeData(
+                      side: BorderSide(width: 0, color: AppColors.whiteColor),
+                      checkColor:
+                          WidgetStatePropertyAll(AppColors.primaryColor),
+                      fillColor:
+                          WidgetStatePropertyAll(AppColors.backgroundColor))),
               debugShowCheckedModeBanner: false,
               locale: Provider.of<LanguageChangeProvider>(context).currentLocal,
               localizationsDelegates: const [
@@ -37,6 +51,7 @@ class MyApp extends StatelessWidget {
               getPages: Routes.pages,
               builder: (context, child) {
                 return Scaffold(
+                  backgroundColor: AppColors.whiteColor,
                   resizeToAvoidBottomInset: false,
                   body: GestureDetector(
                     onTap: () {

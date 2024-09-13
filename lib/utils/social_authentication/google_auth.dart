@@ -1,11 +1,40 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter/material.dart';
+import 'package:flutter_template/widget/app_snackbar.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../modules/personal_information_view/get_started_screen.dart';
+import '../navigation_utils/navigation.dart';
+
 class GoogleSignInAuth {
-  static FirebaseAuth auth = FirebaseAuth.instance;
-  static Future<User?> signInWithGoogle({required BuildContext context}) async {
+  //static FirebaseAuth auth = FirebaseAuth.instance;
+
+  static Future<String?> signInWithGoogle() async {
+    GoogleSignInAccount? googleUser;
+    GoogleSignInAuthentication? googleAuth;
+    try {
+      googleUser = await GoogleSignIn(
+        clientId:
+        '984326484531-if526hqnml5hdvvb1paovglkbihfqenb.apps.googleusercontent.com',
+        scopes: ['email'],
+      ).signIn();
+      googleAuth = await googleUser?.authentication;
+      if (googleUser != null && (googleAuth?.idToken?.isNotEmpty ?? false)) {
+      } else {
+        log("Something went Wrong");
+      }
+      await GoogleSignIn().signOut();
+      Navigation.push(const GetStartedScreen());
+      return googleUser?.email;
+    } on Exception catch (e, st) {
+      AppSnackBar.showErrorSnackBar(message: "Something went Wrong", title: 'error');
+      rethrow;
+    }
+  }
+
+ /* static Future<User?> signInWithGoogle({required BuildContext context}) async {
     User? user;
 
     if (kIsWeb) {
@@ -59,5 +88,5 @@ class GoogleSignInAuth {
     } catch (e) {
       //...
     }
-  }
+  }*/
 }

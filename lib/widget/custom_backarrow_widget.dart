@@ -7,12 +7,13 @@ import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:get/get.dart';
 
 class CustomBackArrowWidget extends StatelessWidget {
-  CustomBackArrowWidget({super.key});
+  final VoidCallback? onTap;
+  const CustomBackArrowWidget({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: onTap?? (){
         Navigation.pop();
       },
       child: Container(

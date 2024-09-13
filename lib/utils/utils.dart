@@ -38,11 +38,15 @@ class Utils {
           CupertinoActionSheetAction(
             child: Text(
               'Choose from Gallery',
-              style: TextStyle(color: AppColors.blackColor, fontSize: 18.sp, fontWeight: FontWeight.w400),
+              style: TextStyle(
+                  color: AppColors.blackColor,
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w400),
             ),
             onPressed: () async {
               Get.back();
-              selectImage = await Utils.imagePicker(source: ImageSource.gallery);
+              selectImage =
+                  await Utils.imagePicker(source: ImageSource.gallery);
               if (selectImage?.path.isNotEmpty ?? false) {
                 image?.value = selectImage?.path ?? "";
               }
@@ -51,7 +55,11 @@ class Utils {
           CupertinoActionSheetAction(
             child: Text(
               'Choose from Camera',
-              style: TextStyle(color: AppColors.blackColor, fontSize: 18.sp, fontWeight: FontWeight.w400),
+              style: TextStyle(
+                color: AppColors.blackColor,
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w400,
+              ),
             ),
             onPressed: () async {
               Get.back();
@@ -65,7 +73,11 @@ class Utils {
         cancelButton: CupertinoActionSheetAction(
           child: Text(
             "Cancel",
-            style: TextStyle(color: AppColors.textColor, fontSize: 18.sp, fontWeight: FontWeight.w400),
+            style: TextStyle(
+              color: AppColors.textColor,
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w400,
+            ),
           ),
           onPressed: () {
             Get.back();

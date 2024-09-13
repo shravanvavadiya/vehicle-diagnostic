@@ -15,12 +15,12 @@ class SignUpController extends GetxController {
   final RxBool isDisable = true.obs;
   final RxBool isCheck = true.obs;
 
-  bool checkError() {
+/*  bool checkError() {
     if (!controller.text.isValidEmail() || !passwordController.text.isValidPassword()) {
       return false;
     }
     return true;
-  }
+  }*/
 
   Future<void> signUp() async {
     try {

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static Color textColor = const Color(0xFF666C7A);
+  static Color grey60 = const Color(0xff4b4b4b);
+  static Color grey50 = const Color(0xffF1EBE9);
   static Color appThemeColor = const Color(0xFF436FEE);
   static Color backgroundColor = const Color(0xFFF5F5F5);
   static Color disableButtonColor = const Color(0xFFC4C4C4);
@@ -11,4 +13,10 @@ class AppColors {
   static Color accentColor = const Color(0xFF00BCD4);
   static Color successColor = const Color(0xFF4CAF50);
   static Color blackColor = const Color(0xFF0A0A0A);
+  static Color whiteColor = const Color(0xFFFFFFFF);
+  static Color logoutColor = const Color(0xFFCC2929);
+  static Color borderColor = const Color(0xFFC8C5CB);
+  static Color titleColor = const Color(0xFF4A4C62);
+  static Color transparent =  Colors.transparent;
+  static Color redColor =  Colors.red;
 }

@@ -18,12 +18,12 @@ class SignInController extends GetxController {
   RxBool isEmail = true.obs;
   final ValueNotifier<Country?> selectedDialogCountry = ValueNotifier(CountryPickerUtils.getCountryByPhoneCode('91'));
 
-  bool checkError() {
+ /* bool checkError() {
     if ((isEmail.value ? !controller.text.isValidEmail() : !controller.text.isValidMobile()) || !passwordController.text.isValidPassword()) {
       return false;
     }
     return true;
-  }
+  }*/
 
   Future<void> signIn() async {
     try {

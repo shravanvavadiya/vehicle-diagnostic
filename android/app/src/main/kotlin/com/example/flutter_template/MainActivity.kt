@@ -1,4 +1,4 @@
-package com.example.flutter_template
+package com.vehicle.diagnostic
 
 import io.flutter.embedding.android.FlutterActivity
 

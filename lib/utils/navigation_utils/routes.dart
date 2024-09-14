@@ -43,7 +43,7 @@ mixin Routes {
     ),
     GetPage<dynamic>(
       name: signIn,
-      page: () => const SignInScreen(),
+      page: () => SignInScreen(),
       transition: defaultTransition,
     ),
     GetPage<dynamic>(

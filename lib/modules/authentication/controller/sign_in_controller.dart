@@ -18,6 +18,10 @@ class SignInController extends GetxController {
   RxBool isEmail = true.obs;
   final ValueNotifier<Country?> selectedDialogCountry = ValueNotifier(CountryPickerUtils.getCountryByPhoneCode('91'));
 
+  RxString appleEmail = ''.obs;
+  RxString appleId = ''.obs;
+  RxBool appleLoading= false.obs;
+
  /* bool checkError() {
     if ((isEmail.value ? !controller.text.isValidEmail() : !controller.text.isValidMobile()) || !passwordController.text.isValidPassword()) {
       return false;

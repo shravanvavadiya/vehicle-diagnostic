@@ -1,76 +1,112 @@
-import 'dart:convert';
-import 'dart:math';
 
-import 'package:crypto/crypto.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:developer';
+import 'package:get/get.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import '../../modules/personal_information_view/get_started_screen.dart';
+import '../navigation_utils/navigation.dart';
 
-class AppleSignInAuth {
-  static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  static Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
+class AppleSignInAuth extends GetxController{
+  RxString appleEmail = ''.obs;
+  RxString appleId = ''.obs;
+  RxBool appleLoading= false.obs;
 
-  static Future<void> signOut() async {
-    await _firebaseAuth.signOut();
-  }
-
-  /// Generates a cryptographically secure random nonce, to be included in a
-  /// credential request.
-  static String generateNonce([int length = 32]) {
-    const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
-    final random = Random.secure();
-    return List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
-  }
-
-  /// Returns the sha256 hash of [input] in hex notation.
-  static String sha256ofString(String input) {
-    final bytes = utf8.encode(input);
-    final digest = sha256.convert(bytes);
-    return digest.toString();
-  }
-
-  static Future<User?> signInWithApple() async {
-    // To prevent replay attacks with the credential returned from Apple, we
-    // include a nonce in the credential request. When signing in in with
-    // Firebase, the nonce in the id token returned by Apple, is expected to
-    // match the sha256 hash of `rawNonce`.
-    final rawNonce = generateNonce();
-    final nonce = sha256ofString(rawNonce);
-
+  Future<String?> appleLogin() async {
+    AuthorizationCredentialAppleID? credential;
     try {
-      // Request credential for the currently signed in Apple account.
-      final appleCredential = await SignInWithApple.getAppleIDCredential(
+     appleLoading.value = true;
+      credential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
         ],
-        nonce: nonce,
       );
-
-      print(appleCredential.authorizationCode);
-
-      // Create an `OAuthCredential` from the credential returned by Apple.
-      final oauthCredential = OAuthProvider("apple.com").credential(
-        idToken: appleCredential.identityToken,
-        rawNonce: rawNonce,
-      );
-
-      // Sign in the user with Firebase. If the nonce we generated earlier does
-      // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-      final authResult = await _firebaseAuth.signInWithCredential(oauthCredential);
-
-      final displayName = '${appleCredential.givenName} ${appleCredential.familyName}';
-      final userEmail = '${appleCredential.email}';
-
-      final firebaseUser = authResult.user;
-      print(displayName);
-      await firebaseUser?.updateDisplayName(displayName);
-      await firebaseUser?.updateEmail(userEmail);
-
-      return firebaseUser;
-    } catch (exception) {
-      print(exception);
+      print("credential :: $credential");
+      print("credential.email :: ${credential.email}");
+      print("credential.givenName :: ${credential.givenName}");
+      print("credential.familyName :: ${credential.familyName ?? ''}");
+      print("credential.userIdentifier :: ${credential.userIdentifier}");
+      print("credential.authorizationCode :: ${credential.authorizationCode}");
+      print("credential.identityToken :: ${credential.identityToken}");
+      appleEmail.value = credential.email ?? '';
+      appleId.value = credential.userIdentifier ?? '';
+     Navigation.push(const GetStartedScreen());
+    } catch (e) {
+      log('apple auth error :: $e');
+    } finally {
+      appleLoading.value = false;
     }
-    return null;
+    appleLoading.value = false;
+    return credential?.identityToken;
   }
+
+ /* Future<void> appleAuthentication(String token, String email, String appleId) async {
+    try {
+      appleLoading.value = true;
+      var result = await AuthService.appleSignInService(email, token, appleId);
+      LogUtils.debugLog('appleAuthentication result ::$result');
+      await AppPreference.setUserToken(result.apiResponse?.data?.token ?? '');
+      await AppPreference.setString('profile_image_link', result.apiResponse?.data?.profileUrl ?? "");
+      await AppPreference.setString('user_name', result.apiResponse?.data?.name ?? "");
+      await AppPreference.setUserRegister(result.apiResponse?.data?.verified ?? false);
+      OtpVerificationModel otpVerificationModel = OtpVerificationModel(
+        navigationType: NavigationType.loginWithEmail,
+      );
+      await AppPreference.setModelData(result);
+      await AppPreference.setUserMantra(result.apiResponse?.data?.personalMantra ?? '');
+      await AppPreference.setUserName(result.apiResponse?.data?.name ?? '');
+      await AppPreference.setCurrentOccupation(result.apiResponse?.data?.currentOccupation ?? '');
+      await AppPreference.firebaseUserData(result.apiResponse?.data ?? RegisterData());
+      await AppPreference.setLoginUserId(result.apiResponse?.data?.id ?? '');
+
+      String menuItem = "";
+      if (result.apiResponse?.data?.backgroundColor == AppTheme.pinkColor.value) {
+        menuItem = AppString.pretty;
+      } else if (result.apiResponse?.data?.backgroundColor == AppTheme.blueColor.value) {
+        menuItem = AppString.blueCollared;
+      } else if (result.apiResponse?.data?.backgroundColor == AppTheme.redColor.value) {
+        menuItem = AppString.redCollared;
+      } else if (result.apiResponse?.data?.backgroundColor == AppTheme.yellowColor.value) {
+        menuItem = AppString.lamborghiniYellow;
+      } else if (result.apiResponse?.data?.backgroundColor == AppTheme.greyColor.value) {
+        menuItem = AppString.electricGray;
+      } else {
+        menuItem = AppString.executive;
+      }
+      AppColors.themeColor(themeName: menuItem);
+
+      if (result.apiResponse?.data?.verified ?? false) {
+        AppPreference.setVisionGuideDialogToFalse();
+        AppPreference.setSettingsGuideDialogToFalse();
+        final getUserData = await FirebaseService.userPath(userID: result.apiResponse?.data?.id ?? '').get();
+        LogUtils.debugLog('getUserData :: LOGIN WITH APPLE :: ${getUserData.data()}');
+        var appleModel = result.apiResponse?.data;
+        appleModel?.fcmToken = Constants.firebaseToken;
+        appleModel?.friendsList = <String>[...getUserData.data()?['friendsList'] ?? []];
+        FirebaseService.userPath(userID: result.apiResponse?.data?.id ?? '')
+            .set(
+          appleModel?.toJson() ?? {},
+          SetOptions(merge: true),
+        )
+            .then((value) => LogUtils.successLog('FirebaseService  appleAuth ====>success::'))
+            .onError((error, stackTrace) => LogUtils.errorLog('FirebaseService  appleAuth ====>error :: $error'));
+
+        if (AppPreference.getOnBoarding()) {
+          AppPreference.setOnBoarding(value: true);
+          Navigation.replaceAll(Routes.homeScreen);
+        } else {
+          AppPreference.setHome(value: true);
+          Navigation.replaceAll(Routes.onBoarding);
+        }
+      } else {
+        Navigation.pushNamed(Routes.userProfileScreen, arg: otpVerificationModel);
+      }
+      appleLoading.value = false;
+    } catch (e, st) {
+      LogUtils.debugLog('apple login API error :: $e :: st :: $st');
+    } finally {
+      appleLoading.value = false;
+    }
+  }*/
 }
+

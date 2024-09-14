@@ -7,14 +7,16 @@ import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/assets.dart';
 import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:flutter_template/utils/navigation_utils/routes.dart';
+import 'package:flutter_template/utils/social_authentication/apple_auth.dart';
 import 'package:flutter_template/utils/social_authentication/google_auth.dart';
 import 'package:flutter_template/widget/annotated_region.dart';
 import 'package:flutter_template/widget/custom_button.dart';
 import 'package:get/get.dart';
 
 class SignInScreen extends StatelessWidget {
-  const SignInScreen({super.key});
+   SignInScreen({super.key});
 
+  final AppleSignInAuth appleSignInAuthController = Get.put(AppleSignInAuth());
   @override
   Widget build(BuildContext context) {
     return CustomAnnotatedRegions(
@@ -40,7 +42,8 @@ class SignInScreen extends StatelessWidget {
               CustomButton(
                 height: 52.h,
                 onTap: () {
-                  Navigation.push(const GetStartedScreen());
+                  appleSignInAuthController.appleLogin();
+                  //Navigation.push(const GetStartedScreen());
                 },
                 buttonColor: AppColors.backgroundColor,
                 text: AppString.continueWithApple,

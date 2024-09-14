@@ -9,6 +9,26 @@ import 'package:flutter_template/modules/authentication/models/user_data_respons
 import 'package:flutter_template/utils/api_constants.dart';
 
 class AuthService {
+
+ /* static Future<RegisterResponseModel> appleSignInService(String email, String appleToken, String appleId) async {
+    try {
+      var result = await Api().post(
+        ApiConstants.appLogin,
+        queryData: {
+          'email': email,
+          'appletoken': appleToken,
+          'appleid': appleId,
+        },
+      );
+      LogUtils.successLog("appleSignInService status :: ${result.statusCode} :: body :: ${result.body}");
+      await ResponseHandler.checkResponseError(result);
+      return RegisterResponseModel.fromJson(jsonDecode(result.body));
+    } catch (e, st) {
+      LogUtils.errorLog('appleSignInService error :: $e :: ST :: $st');
+      rethrow;
+    }
+  }*/
+
   static Future signUp(SignUpFormData request) async {
     try {
       var result = await Api().post(ApiConstants.signUp, bodyData: request.toJson());

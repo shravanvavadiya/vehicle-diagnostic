@@ -8,44 +8,28 @@ import 'package:flutter_template/modules/authentication/models/signup_form_data.
 import 'package:flutter_template/modules/authentication/models/user_data_response.dart';
 import 'package:flutter_template/utils/api_constants.dart';
 
-class AuthService {
+import '../models/authapi_res.dart';
 
- /* static Future<RegisterResponseModel> appleSignInService(String email, String appleToken, String appleId) async {
-    try {
-      var result = await Api().post(
-        ApiConstants.appLogin,
-        queryData: {
-          'email': email,
-          'appletoken': appleToken,
-          'appleid': appleId,
-        },
-      );
-      LogUtils.successLog("appleSignInService status :: ${result.statusCode} :: body :: ${result.body}");
-      await ResponseHandler.checkResponseError(result);
-      return RegisterResponseModel.fromJson(jsonDecode(result.body));
-    } catch (e, st) {
-      LogUtils.errorLog('appleSignInService error :: $e :: ST :: $st');
-      rethrow;
-    }
-  }*/
+class AuthService {
 
   static Future signUp(SignUpFormData request) async {
     try {
       var result = await Api().post(ApiConstants.signUp, bodyData: request.toJson());
       log("status: ${result.statusCode} body:${result.body}");
       await ResponseHandler.checkResponseError(result);
-      return UserDataResponse.fromJson(jsonDecode(utf8.decode(result.bodyBytes))["apiresponse"]).data?.userExist ?? false;
+      return AuthApiRes.fromJson(jsonDecode(utf8.decode(result.bodyBytes)));
     } catch (e) {
       log("error : E $e");
       rethrow;
     }
   }
 
-  static Future signIn(SignInFormData request) async {
+  static Future googleTokenVerify(Map<String,dynamic> request) async {
     try {
-      var result = await Api().post(ApiConstants.signIn, bodyData: request.toJson());
+      var result = await Api().post(ApiConstants.googleTokenVerify, bodyData: request);
       log("status: ${result.statusCode} body:${result.body}");
       await ResponseHandler.checkResponseError(result);
+      return AuthApiRes.fromJson(jsonDecode(utf8.decode(result.bodyBytes)));
     } catch (e) {
       log("error : E $e");
       rethrow;

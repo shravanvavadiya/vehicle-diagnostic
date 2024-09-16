@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_template/modules/authentication/controller/sign_in_controller.dart';
 import 'package:flutter_template/modules/authentication/widget/story_view_screen.dart';
 import 'package:flutter_template/modules/personal_information_view/get_started_screen.dart';
 import 'package:flutter_template/utils/app_colors.dart';
@@ -16,7 +17,7 @@ import 'package:get/get.dart';
 class SignInScreen extends StatelessWidget {
    SignInScreen({super.key});
 
-  final AppleSignInAuth appleSignInAuthController = Get.put(AppleSignInAuth());
+  final SignInController signInController = Get.put(SignInController());
   @override
   Widget build(BuildContext context) {
     return CustomAnnotatedRegions(
@@ -30,10 +31,7 @@ class SignInScreen extends StatelessWidget {
               ),
               CustomButton(
                 height: 52.h,
-                onTap: () {
-                  GoogleSignInAuth.signInWithGoogle();
-                 // Navigation.push(const GetStartedScreen());
-                },
+                onTap: signInController.continueWithGoogle,
                 buttonColor: AppColors.backgroundColor,
                 text: AppString.continueWithGoogle,
                 textColor: AppColors.primaryColor,
@@ -41,10 +39,7 @@ class SignInScreen extends StatelessWidget {
               ).paddingSymmetric(horizontal: 16.w),
               CustomButton(
                 height: 52.h,
-                onTap: () {
-                  appleSignInAuthController.appleLogin();
-                  //Navigation.push(const GetStartedScreen());
-                },
+                // onTap:signInController.appleLogin,
                 buttonColor: AppColors.backgroundColor,
                 text: AppString.continueWithApple,
                 textColor: AppColors.primaryColor,

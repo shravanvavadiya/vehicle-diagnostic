@@ -4,55 +4,55 @@ import 'package:country_pickers/country_pickers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_template/modules/authentication/models/signin_form_data.dart';
 import 'package:flutter_template/modules/authentication/service/auth_service.dart';
+import 'package:flutter_template/modules/authentication/service/social_service.dart';
+import 'package:flutter_template/modules/personal_information_view/get_started_screen.dart';
+import 'package:flutter_template/utils/api_constants.dart';
+import 'package:flutter_template/utils/common_api_caller.dart';
+import 'package:flutter_template/utils/constants.dart';
+import 'package:flutter_template/utils/loading_mixin.dart';
 import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:flutter_template/utils/navigation_utils/routes.dart';
 import 'package:flutter_template/utils/validation_utils.dart';
 import 'package:get/get.dart';
 
-class SignInController extends GetxController {
-  RxBool isLoading = false.obs;
-  final TextEditingController controller = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  FocusNode phoneTextFieldFocusNode = FocusNode();
-  RxBool isDisable = true.obs;
-  RxBool isEmail = true.obs;
-  final ValueNotifier<Country?> selectedDialogCountry = ValueNotifier(CountryPickerUtils.getCountryByPhoneCode('91'));
+class SignInController extends GetxController
+    with LoadingMixin, LoadingApiMixin {
+  Future<void> continueWithGoogle() async {
+    handleLoading(true);
+    processApi(
+      () => SocialLoginService.signInWithGoogle(),
+      error: (error, stack) => handleLoading(false),
+      result: (data) {
+        processApi(
+          () => AuthService.googleTokenVerify({
+            ApiKeyConstants.deviceType: Constants.android,
+            ApiKeyConstants.token: data
+          }),
+          result: (data) {
+            Navigation.push(const GetStartedScreen());
+          },
+          loading: handleLoading,
+        );
+      },
+    );
+  }
 
-  RxString appleEmail = ''.obs;
-  RxString appleId = ''.obs;
-  RxBool appleLoading= false.obs;
-
- /* bool checkError() {
-    if ((isEmail.value ? !controller.text.isValidEmail() : !controller.text.isValidMobile()) || !passwordController.text.isValidPassword()) {
-      return false;
-    }
-    return true;
-  }*/
-
-  Future<void> signIn() async {
+/*  Future<void> appleLogin() async {
     try {
       isLoading.value = true;
-      await AuthService.signIn(SignInFormData(
-        email: controller.text,
-        password: passwordController.text,
-        countryCode: !(isEmail.value) ? selectedDialogCountry.value?.phoneCode : null,
-      ));
-      isLoading.value = false;
-      Navigation.replaceAll(Routes.homeScreen);
+
+      final token = await SocialLoginService.appleLogin();
+
+      AuthService.googleTokenVerify({
+        ApiKeyConstants.deviceType: Constants.android,
+        ApiKeyConstants.token: token
+      });
+
+      Navigation.push(const GetStartedScreen());
     } catch (e) {
       isLoading.value = false;
     } finally {
       if (isLoading.value) isLoading.value = false;
     }
-  }
-
-  void handleButtonDisable() {
-    isDisable.value = (controller.text == "" || controller.text.isEmpty) || (passwordController.text == "" || passwordController.text.isEmpty);
-  }
-
-// @override
-// void onInit() {
-//   FirebaseAnalyticsUtils().sendCurrentScreen(FirebaseAnalyticsUtils.signIn);
-//   super.onInit();
-// }
+  }*/
 }

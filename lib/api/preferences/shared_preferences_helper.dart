@@ -1,7 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../modules/authentication/models/authapi_res.dart';
+import '../../modules/authentication/widget/story_view_screen.dart';
+import '../../utils/constants.dart';
 
 class SharedPreferencesHelper {
   static final SharedPreferencesHelper _instance = SharedPreferencesHelper._();
@@ -25,6 +30,8 @@ class SharedPreferencesHelper {
     return;
   }
 
+
+
   Future setString(String key, String value) async {
     await prefs?.setString(key, value);
   }
@@ -41,6 +48,22 @@ class SharedPreferencesHelper {
   bool getBoolean(String key) {
     final bool? value = prefs?.getBool(key);
     return value ?? false;
+  }
+
+   Future setUserToken(String token) async {
+    await prefs?.setString(Constants.keyToken, token);
+  }
+
+   Future setUser(AuthApiRes? user) async {
+    await prefs?.setString(Constants.keyUser, jsonEncode(user));
+  }
+
+   String? getUserToken() {
+    return prefs?.get(Constants.keyToken) as String?;
+  }
+
+   AuthApiRes getUser() {
+    return AuthApiRes.fromJson(jsonDecode(prefs?.get(Constants.keyUser) as String? ?? ""));
   }
 
   Future setLong(String key, double value) async {

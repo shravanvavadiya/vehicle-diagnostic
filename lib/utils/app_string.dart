@@ -33,7 +33,7 @@ class AppString {
   static const String subscriptionsPlan = "Subscriptions Plan";
   static const String updateProfile = "Update Profile";
   static const String profile = "Profile";
-  static const String logout = "logout";
+  static const String logout = "Logout";
   static const String myVehicle = "My Vehicle";
   static const String newVehicle = "New Vehicle";
   static const String goodMorning = "Good Morning!";

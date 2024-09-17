@@ -4,7 +4,9 @@ import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/utils/app_text.dart';
 import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../../api/preferences/shared_preferences_helper.dart';
 import '../../../utils/navigation_utils/routes.dart';
 
 void showCustomDialog(
@@ -50,8 +52,10 @@ void showCustomDialog(
                 right: 16.w,
               ),
               GestureDetector(
-                onTap: () {
+                onTap: (){
+                  SharedPreferencesHelper.instance.clearSharedPreferences();
                   Navigation.replaceAll(Routes.signIn);
+                   GoogleSignIn().signOut();
                 },
                 child: Container(
                   width: double.infinity,

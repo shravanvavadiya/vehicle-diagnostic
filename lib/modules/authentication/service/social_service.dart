@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter_template/utils/constants.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class SocialLoginService {
@@ -18,8 +19,8 @@ class SocialLoginService {
         // scopes: scopes,
       ).signIn();
       String? idToken = (await googleUser?.authentication)?.idToken;
-      print("idTOken::$idToken");
-      print("idToken --->${idToken}");
+      log("idToken:: --->${idToken}");
+      print("idToken::$idToken");
       if (idToken?.isEmpty ?? true) {
         throw Exception('IDToken not found');
       }

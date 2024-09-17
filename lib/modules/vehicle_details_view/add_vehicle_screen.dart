@@ -16,12 +16,13 @@ class AddVehicleScreen extends StatelessWidget {
     return CustomAnnotatedRegions(
       child: Scaffold(
         body: SafeArea(
+
           child: LetsStartWidget(
             image: ImagesAsset.addVehicle,
             title: "Yey! ”Jerry” now that we know you, lets get your vehicle details.",
             description: "Hello [firstname]! Now we know more about you, tell me about your vehicle(s)",
             buttonText: AppString.addVehicleDetails,
-            bottom: 50.h,
+            bottom: 40.h,
             onTap: () {
               Navigation.pushNamed(Routes.addVehicleDetail);
             },

@@ -78,6 +78,7 @@ class ProfileScreen extends StatelessWidget {
                   onTap: () {
                     showCustomDialog();
                   },
+
                   height: 52.h,
                   fontSize: 15.h,
                   text: AppString.logout,
@@ -99,7 +100,7 @@ class ProfileComponent extends StatelessWidget {
 
   final ProfileController profileController = Get.find();
   final PersonalInformationController personalInformationController =
-      Get.find();
+      Get.put(PersonalInformationController());
 
   @override
   Widget build(BuildContext context) {

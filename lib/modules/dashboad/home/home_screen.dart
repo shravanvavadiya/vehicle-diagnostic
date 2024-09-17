@@ -17,7 +17,7 @@ import '../../authentication/controller/video_detail_controller.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  final VehicleDetailController vehicleDetailController = Get.find();
+  final VehicleDetailController vehicleDetailController = Get.put(VehicleDetailController());
 
   @override
   Widget build(BuildContext context) {

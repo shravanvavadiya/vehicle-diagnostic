@@ -11,10 +11,12 @@ import 'package:flutter_template/utils/api_constants.dart';
 import '../models/authapi_res.dart';
 
 class AuthService {
-
   static Future signUp(SignUpFormData request) async {
     try {
-      var result = await Api().post(ApiConstants.signUp, bodyData: request.toJson());
+      var result = await Api().post(
+        url: ApiConstants.signUp,
+        bodyData: request.toJson(),
+      );
       log("status: ${result.statusCode} body:${result.body}");
       await ResponseHandler.checkResponseError(result);
       return AuthApiRes.fromJson(jsonDecode(utf8.decode(result.bodyBytes)));
@@ -24,10 +26,13 @@ class AuthService {
     }
   }
 
-  static Future googleTokenVerify(Map<String,dynamic> request) async {
+  static Future<AuthApiRes> googleTokenVerify(Map<String, dynamic> request) async {
     try {
-      var result = await Api().post(ApiConstants.googleTokenVerify, bodyData: request);
-      log("statusssss: ${result.statusCode} body:${result.body}");
+      print("request $request");
+      var result = await Api().post(
+        url: ApiConstants.googleTokenVerify,
+        queryData: request,
+      );
       await ResponseHandler.checkResponseError(result);
       return AuthApiRes.fromJson(jsonDecode(utf8.decode(result.bodyBytes)));
     } catch (e) {
@@ -36,9 +41,12 @@ class AuthService {
     }
   }
 
-  static Future appleTokenVerify(Map<String,dynamic> request) async {
+  static Future<AuthApiRes> appleTokenVerify(Map<String, dynamic> request) async {
     try {
-      var result = await Api().post(ApiConstants.appleTokenVerify, bodyData: request);
+      var result = await Api().post(
+        bodyData: request,
+        url: ApiConstants.appleTokenVerify,
+      );
       log("status: ${result.statusCode} body:${result.body}");
       await ResponseHandler.checkResponseError(result);
       return AuthApiRes.fromJson(jsonDecode(utf8.decode(result.bodyBytes)));

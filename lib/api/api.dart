@@ -34,16 +34,18 @@ class Api {
   Api._();
 
   Future<http.Response> post(
-    String url, {
+      {required String url,
     Map<String, dynamic>? queryData,
     Map<String, dynamic>? bodyData,
   }) async {
     log("post ${await headers()}}");
+    log("post url::::: ${getUrl(url, queryParameters: queryData)}");
     final response = await dio.post(
       getUrl(url, queryParameters: queryData),
       body: jsonEncode(bodyData),
       headers: await headers(),
     );
+    print("response $response");
     return response;
   }
 

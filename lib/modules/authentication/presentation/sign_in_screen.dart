@@ -42,8 +42,7 @@ class SignInScreen extends StatelessWidget {
               ).paddingSymmetric(horizontal: 16.w),
               CustomButton(
                 height: 52.h,
-                onTap: SocialLoginService.signInWithApple,
-                // onTap:signInController.appleLogin,
+                 onTap:signInController.continueWithApple,
                 buttonColor: AppColors.backgroundColor,
                 text: AppString.continueWithApple,
                 textColor: AppColors.primaryColor,

@@ -11,7 +11,7 @@ class PersonalInformationService {
   static Future<PersonalInformation> personalInformation(
       {required Map<String, dynamic> bodyData}) async {
     try {
-      var result = await Api().post(ApiConstants.user, bodyData: bodyData);
+      var result = await Api().post(bodyData: bodyData, url: ApiConstants.user);
       await ResponseHandler.checkResponseError(result);
       return PersonalInformation.fromJson(jsonDecode(result.body));
     } catch (exception, s) {

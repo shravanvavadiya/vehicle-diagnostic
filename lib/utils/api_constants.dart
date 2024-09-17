@@ -6,7 +6,7 @@ class ApiConstants {
   static const String user = "user/";
 }
 class ApiKeyConstants {
-  static const String deviceType = "deviceType/";
+  static const String deviceType = "deviceType";
   static const String token = "token";
   static const String appleId = "appleid";
   static const String appleToken  = "appletoken";

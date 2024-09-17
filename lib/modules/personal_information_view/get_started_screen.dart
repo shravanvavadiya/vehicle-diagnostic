@@ -24,7 +24,7 @@ class GetStartedScreen extends StatelessWidget {
               title: AppString.welcomeFriendLetsGetStartedToKnowYou,
               description: AppString.beforeWeGetStarted,
               buttonText: AppString.letsGetStarted,
-              bottom: 70.h,
+              bottom: 60.h,
               onTap: () {
                 Navigation.pushNamed(Routes.personalInformation);
               },

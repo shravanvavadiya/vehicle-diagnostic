@@ -27,7 +27,7 @@ class AuthService {
   static Future googleTokenVerify(Map<String,dynamic> request) async {
     try {
       var result = await Api().post(ApiConstants.googleTokenVerify, bodyData: request);
-      log("status: ${result.statusCode} body:${result.body}");
+      log("statusssss: ${result.statusCode} body:${result.body}");
       await ResponseHandler.checkResponseError(result);
       return AuthApiRes.fromJson(jsonDecode(utf8.decode(result.bodyBytes)));
     } catch (e) {

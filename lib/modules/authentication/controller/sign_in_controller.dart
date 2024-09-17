@@ -2,11 +2,13 @@ import 'dart:async';
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_pickers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_template/api/preferences/shared_preferences_helper.dart';
 import 'package:flutter_template/modules/authentication/models/signin_form_data.dart';
 import 'package:flutter_template/modules/authentication/service/auth_service.dart';
 import 'package:flutter_template/modules/authentication/service/social_service.dart';
 import 'package:flutter_template/modules/personal_information_view/get_started_screen.dart';
 import 'package:flutter_template/utils/api_constants.dart';
+import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/common_api_caller.dart';
 import 'package:flutter_template/utils/constants.dart';
 import 'package:flutter_template/utils/loading_mixin.dart';
@@ -24,11 +26,14 @@ class SignInController extends GetxController
       error: (error, stack) => handleLoading(false),
       result: (data) {
         processApi(
-          () => AuthService.googleTokenVerify({
-            ApiKeyConstants.deviceType: Constants.android,
-            ApiKeyConstants.token: data
-          }),
-          result: (data) {
+          () {
+           return  AuthService.googleTokenVerify({
+              ApiKeyConstants.deviceType: Constants.android,
+              ApiKeyConstants.token: data
+            });
+          },
+          result: (data) async {
+            await SharedPreferencesHelper.instance.setString(AppString.authToken, "");
             Navigation.push(const GetStartedScreen());
           },
           loading: handleLoading,

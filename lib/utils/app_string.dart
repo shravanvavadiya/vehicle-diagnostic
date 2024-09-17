@@ -80,4 +80,9 @@ class AppString {
   static const String selectVehicleModel = "Please select vehicle model";
   static const String selectTransmissionType = "Please select transmission type";
   static const String selectFuelType = "Please select fuel type";
+
+
+  /// SharedPreferences :::
+  static const String authToken = "authToken";
+
 }

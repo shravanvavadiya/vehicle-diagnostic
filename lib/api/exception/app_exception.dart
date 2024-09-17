@@ -43,7 +43,18 @@ class AppException implements Exception {
       AppException(message: "Something went wrong", errorCode: 0).show();
     }
   }
-
+  static dynamic exceptionHandler(exception, [stackTrace]) {
+    if (exception is AppException) {
+      throw exception;
+    } else if (exception is SocketException) {
+      throw AppException(message: "No Internet connection", errorCode: exception.osError?.errorCode ?? 0);
+    } else if (exception is HttpException) {
+      throw AppException(message: "Couldn't find the requested data", errorCode: 0);
+    } else if (exception is FormatException) {
+      throw AppException(message: "Bad response format", errorCode: 0);
+    }
+    throw AppException(message: "Unknown error", errorCode: 0);
+  }
   void show() {
     AppSnackBar.showErrorSnackBar(message: message, title: 'Error');
   }

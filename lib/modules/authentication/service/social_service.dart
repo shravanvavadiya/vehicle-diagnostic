@@ -15,9 +15,10 @@ class SocialLoginService {
       await GoogleSignIn().signOut();
       GoogleSignInAccount? googleUser = await GoogleSignIn(
         clientId: Constants.clientId,
-        scopes: scopes,
+        // scopes: scopes,
       ).signIn();
       String? idToken = (await googleUser?.authentication)?.idToken;
+      print("idTOken::$idToken");
       print("idToken --->${idToken}");
       if (idToken?.isEmpty ?? true) {
         throw Exception('IDToken not found');

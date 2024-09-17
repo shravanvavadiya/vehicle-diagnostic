@@ -4,6 +4,7 @@ import 'package:flutter_template/modules/authentication/service/auth_service.dar
 import 'package:flutter_template/modules/authentication/service/social_service.dart';
 import 'package:flutter_template/modules/personal_information_view/get_started_screen.dart';
 import 'package:flutter_template/utils/api_constants.dart';
+import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/common_api_caller.dart';
 import 'package:flutter_template/utils/constants.dart';
 import 'package:flutter_template/utils/loading_mixin.dart';
@@ -25,11 +26,14 @@ class SignInController extends GetxController
       error: (error, stack) => handleLoading(false),
       result: (data) {
         processApi(
-          () => AuthService.googleTokenVerify({
-            ApiKeyConstants.deviceType: Constants.android,
-            ApiKeyConstants.token: data
-          }),
-          result: (data) {
+          () {
+           return  AuthService.googleTokenVerify({
+              ApiKeyConstants.deviceType: Constants.android,
+              ApiKeyConstants.token: data
+            });
+          },
+          result: (data) async {
+            await SharedPreferencesHelper.instance.setString(AppString.authToken, "");
             Navigation.push(const GetStartedScreen());
           },
           loading: handleLoading,

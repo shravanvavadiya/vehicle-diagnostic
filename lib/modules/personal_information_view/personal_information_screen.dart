@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_template/modules/authentication/controller/personal_information_controller.dart';
+import 'package:flutter_template/modules/personal_information_view/controller/personal_information_controller.dart';
 import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/app_text.dart';
@@ -118,7 +118,6 @@ class PersonalInformationScreen extends StatelessWidget {
                   : null,*/
               buttonColor: AppColors.highlightedColor,
               disableTextColor: AppColors.whiteColor,
-              //: AppColors.highlightedColor.withOpacity(0.5),
               height: 52.h,
               width: 113.w,
               endSvgHeight: 16.h,

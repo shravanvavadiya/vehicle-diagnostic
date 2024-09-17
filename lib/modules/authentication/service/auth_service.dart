@@ -26,7 +26,8 @@ class AuthService {
     }
   }
 
-  static Future<AuthApiRes> googleTokenVerify(Map<String, dynamic> request) async {
+  static Future<AuthApiRes> googleTokenVerify(
+      Map<String, dynamic> request) async {
     try {
       print("request $request");
       var result = await Api().post(
@@ -34,14 +35,19 @@ class AuthService {
         queryData: request,
       );
       await ResponseHandler.checkResponseError(result);
-      return AuthApiRes.fromJson(jsonDecode(utf8.decode(result.bodyBytes)));
-    } catch (e) {
-      log("error : E $e");
+      return AuthApiRes.fromJson(
+        jsonDecode(
+          utf8.decode(result.bodyBytes),
+        ),
+      );
+    } catch (e, st) {
+      log("error : E $e $st");
       rethrow;
     }
   }
 
-  static Future<AuthApiRes> appleTokenVerify(Map<String, dynamic> request) async {
+  static Future<AuthApiRes> appleTokenVerify(
+      Map<String, dynamic> request) async {
     try {
       var result = await Api().post(
         bodyData: request,

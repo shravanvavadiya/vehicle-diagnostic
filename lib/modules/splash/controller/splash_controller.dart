@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:flutter_template/modules/authentication/models/authapi_res.dart';
 import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:flutter_template/utils/navigation_utils/routes.dart';
 import 'package:get/get.dart';
@@ -13,20 +16,15 @@ class SplashController extends GetxController {
   }
 
   Future<void> navigateFurther() async {
-    String? token = SharedPreferencesHelper.instance.getUserToken();
-    bool? isProfileCompleted = SharedPreferencesHelper.instance
-        .getUser()
-        .apiresponse
-        ?.data
-        ?.profileCompleted;
-    if (token != null && token.isNotEmpty) {
-      if (isProfileCompleted == false) {
-        Navigation.replaceAll(Routes.getStarted);
+      String? token = SharedPreferencesHelper.instance.getUserToken();
+      if (token != null && token.isNotEmpty) {
+        if (SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.profileCompleted??false) {
+          Navigation.replaceAll(Routes.homeScreen);
+        } else {
+          Navigation.replaceAll(Routes.homeScreen);
+        }
       } else {
-        Navigation.replaceAll(Routes.homeScreen);
+        Navigation.replaceAll(Routes.signIn);
       }
-    } else {
-      Navigation.replaceAll(Routes.signIn);
     }
-  }
 }

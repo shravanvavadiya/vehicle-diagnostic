@@ -4,6 +4,7 @@ class ApiConstants {
   static const String googleTokenVerify = "auth/googleTokenVerify";
   static const String appleTokenVerify = "auth/appletokenVerify";
   static const String user = "user/";
+  static const String getAllVehicle = "vehicle/all";
 }
 class ApiKeyConstants {
   static const String deviceType = "deviceType";

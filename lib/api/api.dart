@@ -2,14 +2,20 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_template/api/logger_interceptor.dart';
+import 'package:flutter_template/api/preferences/shared_preferences_helper.dart';
 import 'package:flutter_template/utils/api_constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_interceptor/http_interceptor.dart';
 
 Future<Map<String, String>> headers() async {
   final Map<String, String> headers = <String, String>{};
-  headers["Content-Type"] = "application/json";
-
+  headers["accept"] = "*/*";
+  log("user token :: ${SharedPreferencesHelper.instance.getUserToken()}");
+  if (SharedPreferencesHelper.instance.getUserToken()?.isNotEmpty ?? false) {
+    headers["Authorization"] =
+        '${SharedPreferencesHelper.instance.getUserToken()}';
+    log("headers ::: $headers");
+  }
   return headers;
 }
 
@@ -33,8 +39,8 @@ class Api {
 
   Api._();
 
-  Future<http.Response> post(
-      {required String url,
+  Future<http.Response> post({
+    required String url,
     Map<String, dynamic>? queryData,
     Map<String, dynamic>? bodyData,
   }) async {

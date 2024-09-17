@@ -62,7 +62,7 @@ class SharedPreferencesHelper {
     return prefs?.get(Constants.keyToken) as String?;
   }
 
-   AuthApiRes getUser() {
+    AuthApiRes? getUser() {
     return AuthApiRes.fromJson(jsonDecode(prefs?.get(Constants.keyUser) as String? ?? ""));
   }
 

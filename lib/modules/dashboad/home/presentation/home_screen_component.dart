@@ -3,13 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_template/utils/assets.dart';
 import 'package:get/get.dart';
 
-import '../../../utils/app_colors.dart';
-import '../../../utils/app_text.dart';
-import '../../../utils/navigation_utils/navigation.dart';
-import '../../../utils/navigation_utils/routes.dart';
+import '../../../../utils/app_colors.dart';
+import '../../../../utils/app_text.dart';
+import '../../../../utils/navigation_utils/navigation.dart';
+import '../../../../utils/navigation_utils/routes.dart';
+import '../models/get_vehicle_data_model.dart';
 
 class HomeScreenComponent extends StatelessWidget {
-  const HomeScreenComponent({super.key});
+  final VehicleData? getVehicleData;
+  const HomeScreenComponent({super.key, required this.getVehicleData});
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +55,13 @@ class HomeScreenComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppText(
-                  text: "VU69 YDE",
+                  text: "${getVehicleData?.vehicleNumber}",
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
                 AppText(
-                    text: "Car",
+                    text: "${getVehicleData?.vehicleMake}",
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
                     color: Colors.white)

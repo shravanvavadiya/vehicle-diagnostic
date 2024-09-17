@@ -2,22 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_template/modules/dashboad/home/home_screen_component.dart';
+import 'package:flutter_template/modules/dashboad/home/controller/home_controller.dart';
+import 'package:flutter_template/modules/dashboad/home/presentation/home_screen_component.dart';
 import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/app_text.dart';
 import 'package:get/get.dart';
-import '../../../utils/assets.dart';
-import '../../../utils/navigation_utils/navigation.dart';
-import '../../../utils/navigation_utils/routes.dart';
-import '../../../widget/annotated_region.dart';
-import '../../../widget/custom_button.dart';
-import '../../authentication/controller/video_detail_controller.dart';
+import '../../../../utils/assets.dart';
+import '../../../../utils/navigation_utils/navigation.dart';
+import '../../../../utils/navigation_utils/routes.dart';
+import '../../../../widget/annotated_region.dart';
+import '../../../../widget/custom_button.dart';
+import '../../../authentication/controller/video_detail_controller.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  final VehicleDetailController vehicleDetailController = Get.put(VehicleDetailController());
+  final VehicleDetailController vehicleDetailController =
+      Get.put(VehicleDetailController());
+  final HomeController homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -113,8 +116,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(65.r),
-                          child:
-                          Image.asset(
+                          child: Image.asset(
                             ImagesAsset.user,
                             height: 20,
                           ),
@@ -160,9 +162,13 @@ class HomeScreen extends StatelessWidget {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.only(bottom: 8.h),
-                  itemCount: 3,
+                  itemCount:homeController
+                      .vehicleModel.value.apiresponse?.data?.length,
                   itemBuilder: (context, index) {
-                    return const HomeScreenComponent();
+                    return HomeScreenComponent(
+                      getVehicleData: homeController
+                          .vehicleModel.value.apiresponse?.data?[index]
+                    );
                   },
                 )
               ],

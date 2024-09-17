@@ -14,10 +14,13 @@ import 'package:flutter_template/widget/annotated_region.dart';
 import 'package:flutter_template/widget/custom_button.dart';
 import 'package:get/get.dart';
 
+import '../service/social_service.dart';
+
 class SignInScreen extends StatelessWidget {
-   SignInScreen({super.key});
+  SignInScreen({super.key});
 
   final SignInController signInController = Get.put(SignInController());
+
   @override
   Widget build(BuildContext context) {
     return CustomAnnotatedRegions(
@@ -39,6 +42,7 @@ class SignInScreen extends StatelessWidget {
               ).paddingSymmetric(horizontal: 16.w),
               CustomButton(
                 height: 52.h,
+                onTap: SocialLoginService.signInWithApple,
                 // onTap:signInController.appleLogin,
                 buttonColor: AppColors.backgroundColor,
                 text: AppString.continueWithApple,

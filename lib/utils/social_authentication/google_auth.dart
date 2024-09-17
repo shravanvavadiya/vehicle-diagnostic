@@ -1,8 +1,6 @@
 import 'dart:developer';
 import 'package:flutter_template/widget/app_snackbar.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../../modules/personal_information_view/get_started_screen.dart';
-import '../navigation_utils/navigation.dart';
 
 class GoogleSignInAuth {
   //static FirebaseAuth auth = FirebaseAuth.instance;

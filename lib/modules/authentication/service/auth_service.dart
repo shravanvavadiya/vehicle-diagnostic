@@ -35,4 +35,16 @@ class AuthService {
       rethrow;
     }
   }
+
+  static Future appleTokenVerify(Map<String,dynamic> request) async {
+    try {
+      var result = await Api().post(ApiConstants.appleTokenVerify, bodyData: request);
+      log("status: ${result.statusCode} body:${result.body}");
+      await ResponseHandler.checkResponseError(result);
+      return AuthApiRes.fromJson(jsonDecode(utf8.decode(result.bodyBytes)));
+    } catch (e) {
+      log("error : E $e");
+      rethrow;
+    }
+  }
 }

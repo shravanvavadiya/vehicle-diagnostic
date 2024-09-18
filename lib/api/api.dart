@@ -10,6 +10,7 @@ import 'package:http_interceptor/http_interceptor.dart';
 Future<Map<String, String>> headers() async {
   final Map<String, String> headers = <String, String>{};
   headers["accept"] = "*/*";
+  headers["Content-Type"] = "application/json";
   log("user token :: ${SharedPreferencesHelper.instance.getUserToken()}");
   if (SharedPreferencesHelper.instance.getUserToken()?.isNotEmpty ?? false) {
     headers["Authorization"] =

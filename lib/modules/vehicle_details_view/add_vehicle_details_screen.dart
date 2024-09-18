@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_template/modules/authentication/controller/video_detail_controller.dart';
-import 'package:flutter_template/modules/personal_information_view/personal_information_screen.dart';
+import 'package:flutter_template/modules/personal_information_view/presentation/personal_information_screen.dart';
 import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/app_text.dart';

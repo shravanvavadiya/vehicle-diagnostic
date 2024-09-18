@@ -16,7 +16,7 @@ import 'package:flutter_template/widget/info_text_widget.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/validation_utils.dart';
-import '../../personal_information_view/personal_information_screen.dart';
+import '../../personal_information_view/presentation/personal_information_screen.dart';
 import '../controller/profile_controller.dart';
 
 class AccountInformationScreen extends StatelessWidget {

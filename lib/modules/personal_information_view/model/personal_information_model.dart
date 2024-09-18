@@ -1,9 +1,9 @@
-class PersonalInformation {
+class PersonalInformationModel {
   Apiresponse? apiResponse;
 
-  PersonalInformation({this.apiResponse});
+  PersonalInformationModel({this.apiResponse});
 
-  PersonalInformation.fromJson(Map<String, dynamic> json) {
+  PersonalInformationModel.fromJson(Map<String, dynamic> json) {
     apiResponse = json['apiresponse'] != null
         ? Apiresponse.fromJson(json['apiresponse'])
         : null;

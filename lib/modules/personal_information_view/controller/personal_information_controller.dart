@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_template/api/preferences/shared_preferences_helper.dart';
+import 'package:flutter_template/modules/personal_information_view/model/personal_information_model.dart';
 import 'package:flutter_template/modules/personal_information_view/service/personal_information_service.dart';
 import 'package:flutter_template/widget/app_snackbar.dart';
 import 'package:get/get.dart';
@@ -15,7 +16,9 @@ class PersonalInformationController extends GetxController {
   final TextEditingController email = TextEditingController();
   final TextEditingController postCode = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  Rx<PersonalInformationModel> personalInformationModel = PersonalInformationModel().obs;
   RxBool isValidateName = false.obs;
+  RxBool isPersonalInformation = false.obs;
   RxBool isValidateLastName = false.obs;
   RxBool isValidateEmail = false.obs;
   RxBool isValidatePostCode = false.obs;
@@ -36,30 +39,26 @@ class PersonalInformationController extends GetxController {
 
   /// Personal Information API::
 
-  Future<void> personalInformationAPI({required String gender}) async {
+  Future<void> personalInformationAPI({required String email,required String firstname,required String lastname,required String postCode}) async {
     try {
+      isPersonalInformation.value = true;
       if (formKey.currentState!.validate()) {
-        final response = await PersonalInformationService.personalInformation(
+        personalInformationModel.value = await PersonalInformationService.personalInformation(
           bodyData: {
-            'email': email.text,
-            'firstName': firstname.text,
-            'lastName': lastname.text,
-            'postCode': postCode.text,
+            'email': email,
+            'firstName': firstname,
+            'lastName': lastname,
+            'postCode': postCode,
           },
         );
-        //  if (response.statusCode == 201 || response.statusCode == 200) {
-        // await SharedPreferencesHelper.instance.setString(AppString.cookie, response.cookie![3].toString());
-        // await SharedPreferencesHelper.instance.setBoolean(AppString.isCustomer, value: true);
-        // await SharedPreferencesHelper.instance.setString(AppString.customerID, response.data?.id.toString() ?? "");
-        //  AppSnackBar.showErrorSnackBar(message: "${response.message}", title: "${response.message}");
-        //Navigator.pushReplacementNamed(Get.context!, Routes.bottombarScreen);
-        //  }
-        //debugPrint("response-personalInformationAPI-->${response.statusCode} // ${response.message}");
       }
     } catch (e) {
       log("Exception in personalInformationAPI---->$e");
+      isPersonalInformation.value = false;
       AppSnackBar.showErrorSnackBar(message: "Something went wrong", title: "Error");
-    } finally {}
+    } finally {
+      isPersonalInformation.value = false;
+    }
   }
 
   Future<void> nextBtn() async {

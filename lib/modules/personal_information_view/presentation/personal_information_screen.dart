@@ -12,15 +12,14 @@ import 'package:flutter_template/widget/custom_textfeild.dart';
 import 'package:flutter_template/widget/info_text_widget.dart';
 import 'package:get/get.dart';
 
-import '../../utils/navigation_utils/navigation.dart';
-import '../../utils/navigation_utils/routes.dart';
-import '../../utils/validation_utils.dart';
+import '../../../utils/navigation_utils/navigation.dart';
+import '../../../utils/navigation_utils/routes.dart';
+import '../../../utils/validation_utils.dart';
 
 class PersonalInformationScreen extends StatelessWidget {
   PersonalInformationScreen({super.key});
 
-  final PersonalInformationController personalInformationController =
-      Get.put(PersonalInformationController());
+  final PersonalInformationController personalInformationController = Get.put(PersonalInformationController());
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +50,8 @@ class PersonalInformationScreen extends StatelessWidget {
                   ),
                   customTextFormField(
                     onChanged: (p0) {
-                      personalInformationController.isValidateName.value=personalInformationController.firstname.text.isNotEmpty;
+                      personalInformationController.isValidateName.value =
+                          personalInformationController.firstname.text.isNotEmpty;
                     },
                     text: AppString.firstName,
                     hintText: AppString.firstName,
@@ -60,7 +60,8 @@ class PersonalInformationScreen extends StatelessWidget {
                   ).paddingOnly(top: 24.h, bottom: 16.h),
                   customTextFormField(
                     onChanged: (p0) {
-                      personalInformationController.isValidateLastName.value=personalInformationController.lastname.text.isNotEmpty;
+                      personalInformationController.isValidateLastName.value =
+                          personalInformationController.lastname.text.isNotEmpty;
                     },
                     text: AppString.lastName,
                     hintText: AppString.lastName,
@@ -68,9 +69,8 @@ class PersonalInformationScreen extends StatelessWidget {
                     controller: personalInformationController.lastname,
                   ),
                   customTextFormField(
-
                     onChanged: (p0) {
-                      personalInformationController.isValidateEmail.value=personalInformationController.email.text.isNotEmpty;
+                      personalInformationController.isValidateEmail.value = personalInformationController.email.text.isNotEmpty;
                     },
                     text: AppString.email,
                     hintText: AppString.emailEx,
@@ -80,7 +80,8 @@ class PersonalInformationScreen extends StatelessWidget {
                   ).paddingSymmetric(vertical: 16.h),
                   customTextFormField(
                     onChanged: (p0) {
-                      personalInformationController.isValidatePostCode.value=personalInformationController.postCode.text.isNotEmpty;
+                      personalInformationController.isValidatePostCode.value =
+                          personalInformationController.postCode.text.isNotEmpty;
                     },
                     text: AppString.postCode,
                     keyboardType: TextInputType.number,
@@ -96,12 +97,16 @@ class PersonalInformationScreen extends StatelessWidget {
           floatingActionButton: Obx(
             () => CustomButton(
               onTap: () async {
-                if (personalInformationController.formKey.currentState
-                        ?.validate() ??
-                    false) {
+                if (personalInformationController.formKey.currentState?.validate() ?? false) {
+                  await personalInformationController.personalInformationAPI(
+                      email: personalInformationController.email.text,
+                      firstname: personalInformationController.firstname.text,
+                      lastname: personalInformationController.lastname.text,
+                      postCode: personalInformationController.postCode.text);
                   Navigation.pushNamed(Routes.addVehicle);
                 }
               },
+              isLoader: personalInformationController.isPersonalInformation.value,
               isDisabled: (personalInformationController.isValidateName.value &&
                       personalInformationController.isValidateLastName.value &&
                       personalInformationController.isValidateEmail.value &&
@@ -150,7 +155,7 @@ Widget customTextFormField({
         fontSize: 14.sp,
       ).paddingOnly(bottom: 6.h),
       CustomTextField(
-         onChanged: onChanged,
+        onChanged: onChanged,
         controller: controller,
         hintText: hintText,
         validator: validator,

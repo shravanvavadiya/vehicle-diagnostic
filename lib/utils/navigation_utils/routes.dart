@@ -3,7 +3,7 @@ import 'package:flutter_template/modules/authentication/presentation/sign_up_scr
 import 'package:flutter_template/modules/dashboad/home/presentation/home_screen.dart';
 import 'package:flutter_template/modules/dashboad/vehicle_details/presentation/vehicle_details_screen.dart';
 import 'package:flutter_template/modules/personal_information_view/get_started_screen.dart';
-import 'package:flutter_template/modules/personal_information_view/personal_information_screen.dart';
+import 'package:flutter_template/modules/personal_information_view/presentation/personal_information_screen.dart';
 import 'package:flutter_template/modules/profile/presentation/profile_screen.dart';
 import 'package:flutter_template/modules/subscriptions/presentation/subscriptions_summery_screen.dart';
 import 'package:flutter_template/modules/vehicle_details_view/add_vehicle_screen.dart';

@@ -8,12 +8,12 @@ import 'package:flutter_template/utils/api_constants.dart';
 
 /// Personal Information ::
 class PersonalInformationService {
-  static Future<PersonalInformation> personalInformation(
+  static Future<PersonalInformationModel> personalInformation(
       {required Map<String, dynamic> bodyData}) async {
     try {
       var result = await Api().post(bodyData: bodyData, url: ApiConstants.user);
       await ResponseHandler.checkResponseError(result);
-      return PersonalInformation.fromJson(jsonDecode(result.body));
+      return PersonalInformationModel.fromJson(jsonDecode(result.body));
     } catch (exception, s) {
       log("exception in personalInformation : E $exception , $s");
       throw AppException.exceptionHandler(exception);

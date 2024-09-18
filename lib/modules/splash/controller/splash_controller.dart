@@ -16,15 +16,20 @@ class SplashController extends GetxController {
   }
 
   Future<void> navigateFurther() async {
-      String? token = SharedPreferencesHelper.instance.getUserToken();
-      if (token != null && token.isNotEmpty) {
-        if (SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.profileCompleted??false) {
-          Navigation.replaceAll(Routes.homeScreen);
-        } else {
-          Navigation.replaceAll(Routes.homeScreen);
-        }
+    String? token = SharedPreferencesHelper.instance.getUserToken();
+    if (token != null && token.isNotEmpty) {
+      if (SharedPreferencesHelper.instance
+              .getUser()
+              ?.apiresponse
+              ?.data
+              ?.profileCompleted ??
+          false) {
+        Navigation.replaceAll(Routes.homeScreen);
       } else {
-        Navigation.replaceAll(Routes.signIn);
+        Navigation.replaceAll(Routes.homeScreen);
       }
+    } else {
+      Navigation.replaceAll(Routes.signIn);
     }
+  }
 }

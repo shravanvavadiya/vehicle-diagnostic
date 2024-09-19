@@ -6,8 +6,8 @@ import 'package:flutter_template/modules/personal_information_view/get_started_s
 import 'package:flutter_template/modules/personal_information_view/presentation/personal_information_screen.dart';
 import 'package:flutter_template/modules/profile/presentation/profile_screen.dart';
 import 'package:flutter_template/modules/subscriptions/presentation/subscriptions_summery_screen.dart';
-import 'package:flutter_template/modules/vehicle_details_view/add_vehicle_screen.dart';
-import 'package:flutter_template/modules/vehicle_details_view/add_vehicle_details_screen.dart';
+import 'package:flutter_template/modules/vehicle_details_view/presentation/add_vehicle_screen.dart';
+import 'package:flutter_template/modules/vehicle_details_view/presentation/add_vehicle_details_screen.dart';
 import 'package:flutter_template/modules/splash/presentation/splash_screen.dart';
 import 'package:get/get.dart';
 import '../../modules/add_vehicle_information/presentation/vehicle_diagnosis_screen.dart';

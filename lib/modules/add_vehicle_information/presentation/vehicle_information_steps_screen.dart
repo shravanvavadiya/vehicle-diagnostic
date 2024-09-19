@@ -185,7 +185,10 @@ class _VehicleInformationStepsScreenState
                     _currentSegment < _totalSegments - 1) {
                   _updateProgress(1);
                 } else {
+                  log("message");
+
                   Navigation.pushNamed(Routes.homeScreen);
+
                 }
               }
             },

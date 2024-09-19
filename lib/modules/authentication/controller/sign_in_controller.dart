@@ -36,6 +36,7 @@ class SignInController extends GetxController
                 .setString("email", data.apiresponse?.data?.email ?? "");
             await SharedPreferencesHelper.instance.setUser(data);
             Navigation.replaceAll(Routes.getStarted);
+
           },
           loading: handleLoading,
         );

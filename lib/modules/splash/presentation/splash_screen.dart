@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
+  // SplashController splashController =Get.put(SplashController);
 
   @override
   Widget build(BuildContext context) {

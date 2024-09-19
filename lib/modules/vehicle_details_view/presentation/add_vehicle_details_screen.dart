@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_template/modules/authentication/controller/video_detail_controller.dart';
+import 'package:flutter_template/modules/vehicle_details_view/controller/vehicle_detail_controller.dart';
 import 'package:flutter_template/modules/personal_information_view/presentation/personal_information_screen.dart';
 import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/utils/app_string.dart';
@@ -16,12 +16,11 @@ import 'package:flutter_template/utils/validation_utils.dart';
 import 'package:flutter_template/widget/annotated_region.dart';
 import 'package:flutter_template/widget/custom_backarrow_widget.dart';
 import 'package:flutter_template/widget/custom_button.dart';
-import 'package:flutter_template/widget/custom_dropdown_field.dart';
 import 'package:flutter_template/widget/info_text_widget.dart';
 import 'package:get/get.dart';
 
-import '../../utils/navigation_utils/navigation.dart';
-import '../../utils/navigation_utils/routes.dart';
+import '../../../utils/navigation_utils/navigation.dart';
+import '../../../utils/navigation_utils/routes.dart';
 
 class AddVehicleDetailsScreen extends StatefulWidget {
   const AddVehicleDetailsScreen({super.key});
@@ -39,13 +38,6 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    /* WidgetsBinding.instance.addPostFrameCallback((_) {
-      scrollController.animateTo(
-        scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeOut,
-      );
-    });*/
     return CustomAnnotatedRegions(
       child: Scaffold(
         appBar: AppBar(
@@ -63,7 +55,8 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                   title: AppString.addYourVehicleDetails,
                   titleFontSize: 24.sp,
                   titleFontWeight: FontWeight.w600,
-                  description: AppString.addYourVehicleInformationForBetterSearch,
+                  description:
+                      AppString.addYourVehicleInformationForBetterSearch,
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                 ),
@@ -86,13 +79,13 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                           child: GestureDetector(
                             onTap: () async {
                               await Utils().imagePickerModel(
-                                  selectImage: vehicleDetailController.imagePath,
+                                  selectImage:
+                                      vehicleDetailController.imagePath,
                                   image: vehicleDetailController.image);
                               setState(() {
                                 vehicleDetailController.isValidateImage.value =
-                                true;
+                                    true;
                               });
-
                             },
                             child: Container(
                               height: 195.h,
@@ -105,23 +98,26 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                                   .paddingAll(85.h),
                             ),
                           ),
-                        ).paddingOnly(top: 24.h, bottom: 8.h)
+                        ).paddingOnly(
+                          top: 24.h,
+                          bottom: 8.h,
+                        )
                       : GestureDetector(
                           onTap: () async {
                             await Utils().imagePickerModel(
                                 selectImage: vehicleDetailController.imagePath,
                                 image: vehicleDetailController.image);
                             setState(() {
-                              if (vehicleDetailController.image.value.isNotEmpty) {
+                              if (vehicleDetailController
+                                  .image.value.isNotEmpty) {
                                 vehicleDetailController.isValidateImage.value =
-                                true;
+                                    true;
                               } else {
                                 // Set validation to false if no image is selected
                                 vehicleDetailController.isValidateImage.value =
-                                false;
+                                    false;
                               }
                             });
-
                           },
                           child: Container(
                             height: 195.h,
@@ -224,8 +220,10 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                   child: Obx(
                     () => CustomButton(
                       onTap: () async {
-                        if (vehicleDetailController.formKey.currentState?.validate() ?? false) {
-                          Navigation.pushNamed(Routes.vehicleDiagnosisScreen);
+                        if (vehicleDetailController.formKey.currentState
+                                ?.validate() ??
+                            false) {
+                          await vehicleDetailController.addVehicleApi();
 
                         }
                       },
@@ -237,8 +235,8 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                               vehicleDetailController.isValidateVType.value &&
                               vehicleDetailController.isValidateVType.value &&
                               vehicleDetailController.isValidateVFuelT.value
-                             /* vehicleDetailController.isValidateImage.value*/
-                      )
+                          /* vehicleDetailController.isValidateImage.value*/
+                          )
                           ? false
                           : true,
                       height: 52.h,

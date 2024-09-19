@@ -13,7 +13,7 @@ import '../../../../utils/navigation_utils/navigation.dart';
 import '../../../../utils/navigation_utils/routes.dart';
 import '../../../../widget/annotated_region.dart';
 import '../../../../widget/custom_button.dart';
-import '../../../authentication/controller/video_detail_controller.dart';
+import '../../../vehicle_details_view/controller/vehicle_detail_controller.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -162,8 +162,9 @@ class HomeScreen extends StatelessWidget {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.only(bottom: 8.h),
-                  itemCount:homeController
-                      .vehicleModel.value.apiresponse?.data?.length,
+                 itemCount: 3,
+                 /* itemCount:homeController
+                      .vehicleModel.value.apiresponse?.data?.length,*/
                   itemBuilder: (context, index) {
                     return HomeScreenComponent(
                       getVehicleData: homeController

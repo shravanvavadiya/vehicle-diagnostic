@@ -3,6 +3,8 @@ import 'dart:developer';
 
 import 'package:flutter_template/api/logger_interceptor.dart';
 import 'package:flutter_template/api/preferences/shared_preferences_helper.dart';
+import 'package:flutter_template/modules/vehicle_details_view/model/add_vehicle_model.dart';
+import 'package:flutter_template/modules/vehicle_details_view/model/my_vehicle_model.dart';
 import 'package:flutter_template/utils/api_constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_interceptor/http_interceptor.dart';
@@ -118,7 +120,38 @@ class Api {
     );
     return response;
   }
+
+  Future<http.StreamedResponse?> multiPartRequestAddVehicle(String endpoint, {required MyVehicleData addProfileFormData, String? imagePath}) async {
+    try {
+      var headers = {'accept': '*/*', 'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'};
+      var request = http.MultipartRequest('POST', Uri.parse('${ApiConstants.baseUrl}${ApiConstants.addVehicle}'));
+      final body = {
+        'fuelType': "${addProfileFormData.fuelType}",
+        'transmissionType': "${addProfileFormData.transmissionType}",
+        'userId': "${addProfileFormData.id}",
+        'vehicleMake': "${addProfileFormData.vehicleMake}",
+        'vehicleModel': "${addProfileFormData.vehicleModel}",
+        'vehicleNumber': "${addProfileFormData.vehicleNumber}",
+        'vehicleYear': "${addProfileFormData.vehicleYear}",
+      };
+      request.fields.addAll(body);
+      if (imagePath?.isNotEmpty ?? false) {
+        request.files.add(await http.MultipartFile.fromPath('photo', imagePath ?? ""));
+      }
+      log("body $body");
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      if (response.statusCode == 200) {
+        return response;
+      }
+    } catch (e, st) {
+      log('multiPartRequest Error :: $e ::: $st');
+    }
+    return null;
+  }
 }
+
+
 
 Uri getUrl(String endpoint, {Map<String, dynamic>? queryParameters}) {
   String url = "${ApiConstants.baseUrl}$endpoint";

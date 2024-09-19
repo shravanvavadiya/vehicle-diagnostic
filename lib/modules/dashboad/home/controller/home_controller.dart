@@ -17,7 +17,7 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
   void onInit() {
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
-        getAllVehicles();
+       //getAllVehicles();
       },
     );
     super.onInit();

@@ -11,7 +11,7 @@ import 'package:flutter_template/widget/custom_button.dart';
 import 'package:flutter_template/widget/custom_textfeild.dart';
 import 'package:flutter_template/widget/info_text_widget.dart';
 import 'package:get/get.dart';
-
+import '../../../api/preferences/shared_preferences_helper.dart';
 import '../../../utils/navigation_utils/navigation.dart';
 import '../../../utils/navigation_utils/routes.dart';
 import '../../../utils/validation_utils.dart';
@@ -23,6 +23,7 @@ class PersonalInformationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    personalInformationController.email.text = SharedPreferencesHelper.instance.getString("email");
     return SafeArea(
       child: CustomAnnotatedRegions(
         child: Scaffold(
@@ -69,14 +70,15 @@ class PersonalInformationScreen extends StatelessWidget {
                     controller: personalInformationController.lastname,
                   ),
                   customTextFormField(
-                    onChanged: (p0) {
+                    readOnly: true,
+                  /*  onChanged: (p0) {
                       personalInformationController.isValidateEmail.value = personalInformationController.email.text.isNotEmpty;
-                    },
+                    },*/
                     text: AppString.email,
                     hintText: AppString.emailEx,
                     controller: personalInformationController.email,
                     keyboardType: TextInputType.emailAddress,
-                    validator: AppValidation.emailValidator,
+                   // validator: AppValidation.emailValidator,
                   ).paddingSymmetric(vertical: 16.h),
                   customTextFormField(
                     onChanged: (p0) {
@@ -103,13 +105,13 @@ class PersonalInformationScreen extends StatelessWidget {
                       firstname: personalInformationController.firstname.text,
                       lastname: personalInformationController.lastname.text,
                       postCode: personalInformationController.postCode.text);
-                  Navigation.pushNamed(Routes.addVehicle);
+
                 }
               },
               isLoader: personalInformationController.isPersonalInformation.value,
               isDisabled: (personalInformationController.isValidateName.value &&
                       personalInformationController.isValidateLastName.value &&
-                      personalInformationController.isValidateEmail.value &&
+                      //personalInformationController.isValidateEmail.value &&
                       personalInformationController.isValidatePostCode.value)
                   ? false
                   : true,
@@ -142,7 +144,8 @@ Widget customTextFormField({
   String? Function(String?)? validator,
   required String text,
   required String hintText,
-  required Function(String)? onChanged,
+   bool? readOnly,
+   Function(String)? onChanged,
   required TextEditingController controller,
   TextInputType keyboardType = TextInputType.text,
 }) {
@@ -155,6 +158,7 @@ Widget customTextFormField({
         fontSize: 14.sp,
       ).paddingOnly(bottom: 6.h),
       CustomTextField(
+        readOnly: readOnly??false ,
         onChanged: onChanged,
         controller: controller,
         hintText: hintText,

@@ -55,13 +55,15 @@ class HomeScreenComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppText(
-                  text: "${getVehicleData?.vehicleNumber}",
+                  text: "RM35689",
+                  //text: "${getVehicleData?.vehicleNumber}",
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
                 AppText(
-                    text: "${getVehicleData?.vehicleMake}",
+                    text: "Tata Motors",
+                    //text: "${getVehicleData?.vehicleMake}",
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
                     color: Colors.white)

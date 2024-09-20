@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_template/api/preferences/shared_preferences_helper.dart';
 import 'package:flutter_template/modules/profile/models/get_user_model.dart';
 import 'package:flutter_template/modules/profile/models/profile_model.dart';
+import 'package:flutter_template/modules/profile/models/update_user_model.dart';
 import 'package:flutter_template/modules/profile/service/profile_service.dart';
 import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/common_api_caller.dart';
@@ -20,6 +21,7 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
   final TextEditingController postCode = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   Rx<GetUserProfileModel> getUserProfileModel = GetUserProfileModel().obs;
+  Rx<UpdateUserModel> updateUserProfileModel = UpdateUserModel().obs;
   RxBool isValidateName = false.obs;
   RxBool isValidateLastName = false.obs;
   RxBool isValidateEmail = false.obs;
@@ -30,12 +32,6 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
     lastname.clear();
     email.clear();
     postCode.clear();
-  }
-
-  @override
-  void onInit() {
-    getUserProfileAPI();
-    super.onInit();
   }
 
   final List<ProfileModel> profileDataList = [
@@ -61,19 +57,36 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
 
   Future<void> getUserProfileAPI() async {
     int userId = SharedPreferencesHelper.instance.getInt(Constants.keyUserId);
-    handleLoading(true);
     processApi(
-          () => ProfileService.getUserAPI(userId: userId),
-      error: (error, stack) => handleLoading(false),
+      () => ProfileService.getUserAPI(userId: userId),
       loading: handleLoading,
       result: (data) {
         getUserProfileModel.value = data;
-        firstname.text = getUserProfileModel.value.profileResponse?.profileData?.firstName.toString() ?? "";
-        lastname.text = getUserProfileModel.value.profileResponse?.profileData?.lastName.toString() ?? "";
-        email.text = getUserProfileModel.value.profileResponse?.profileData?.email.toString() ?? "";
-        postCode.text = getUserProfileModel.value.profileResponse?.profileData?.postCode.toString() ?? "";
+        final profileData = getUserProfileModel.value.profileResponse?.profileData;
+        firstname.text = profileData?.firstName.toString() ?? "";
+        lastname.text = profileData?.lastName.toString() ?? "";
+        email.text = profileData?.email.toString() ?? "";
+        postCode.text = profileData?.postCode.toString() ?? "";
       },
     );
-   handleLoading(false);
+  }
+
+  /// Update User API::
+
+  Future<void> updateUserProfileAPI({
+    required String firstName,
+    required String lastName,
+    required String postCode,
+  }) async {
+    int userId = SharedPreferencesHelper.instance.getInt(Constants.keyUserId);
+    processApi(
+      () => ProfileService.updateUserAPI(
+        bodyData: {'email': email.text, 'firstName': firstName, 'id': userId, 'lastName': lastName, 'postCode': postCode},
+      ),
+      loading: handleLoading,
+      result: (data) {
+        updateUserProfileModel.value = data;
+      },
+    );
   }
 }

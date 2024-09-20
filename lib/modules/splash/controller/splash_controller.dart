@@ -25,10 +25,9 @@ class SplashController extends GetxController {
   Future<void> navigateFurther() async {
     log("get user token ---->${SharedPreferencesHelper.instance.getUserToken()}");
     String? token = SharedPreferencesHelper.instance.getUserToken();
-    AuthApiRes? authApiRes;
-     authApiRes =  SharedPreferencesHelper.instance.getUser();
-    log("authApiRes :: ${authApiRes?.toJson()}");
     if (token != null && token.isNotEmpty) {
+      AuthApiRes? authApiRes;
+      authApiRes =  SharedPreferencesHelper.instance.getUser();
       if (authApiRes?.apiresponse?.data?.profileCompleted ??
           false) {
         Navigation.replaceAll(Routes.signIn);

@@ -123,6 +123,12 @@ class VehicleDetailController extends GetxController
       },
       result: (result) async {
         Navigation.pushNamed(Routes.vehicleDiagnosisScreen);
+        if (result?.statusCode == 200 || result?.statusCode == 201) {
+          /*  String? body = await result?.stream.bytesToString();
+          final AddVehicleModel vehicleModel =
+              AddVehicleModel.fromJson(jsonDecode(body ?? ""));*/
+         // Navigation.pushNamed(Routes.vehicleDiagnosisScreen);
+        }
       },
     );
     handleLoading(false);

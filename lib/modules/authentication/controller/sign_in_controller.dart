@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_template/modules/authentication/service/auth_service.dart';
 import 'package:flutter_template/modules/authentication/service/social_service.dart';
@@ -30,6 +31,7 @@ class SignInController extends GetxController
             });
           },
           result: (data) async {
+            log("${data.apiresponse?.data?.token}");
             await SharedPreferencesHelper.instance
                 .setUserToken(data.apiresponse?.data?.token ?? "");
             await SharedPreferencesHelper.instance

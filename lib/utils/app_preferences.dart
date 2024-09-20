@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_template/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../modules/authentication/models/authapi_res.dart';
 
 class AppPreference {
   static late SharedPreferences _prefs;
@@ -51,9 +54,29 @@ class AppPreference {
     return value ?? 0;
   }
 
-  static Future setUserToken(String token) async {
+  static Future setUserToken({required String token}) async {
     await _prefs.setString(Constants.keyToken, token);
   }
+
+  static Future setEmail({required String email}) async {
+    await _prefs.setString(email, email);
+  }
+
+  static Future setUser(AuthApiRes? user) async {
+    await _prefs.setString(
+      Constants.keyUser,
+      jsonEncode(
+        user,
+      ),
+    );
+  }
+
+  static AuthApiRes? getUser() {
+    return AuthApiRes.fromJson(jsonDecode(_prefs.get(Constants.keyUser)as String ?? ""));
+  }
+
+
+
 
   // static Future setUser(User? user) async {
   //   user?.jwtToken = "";

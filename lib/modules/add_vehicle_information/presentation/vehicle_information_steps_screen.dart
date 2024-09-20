@@ -11,12 +11,10 @@ import '../../../utils/navigation_utils/navigation.dart';
 import '../../../utils/navigation_utils/routes.dart';
 import '../../../widget/custom_backarrow_widget.dart';
 import '../../../widget/custom_button.dart';
+import '../controller/add_vehicle_information_controller.dart';
 import '../models/vehicle_information_step_model.dart';
 
-int _currentSegment = 0;
-int _currentFormIndex = 0;
-const int _totalFormsPerSegment = 4;
-const int _totalSegments = 3;
+
 
 class VehicleInformationStepsScreen extends StatefulWidget {
   const VehicleInformationStepsScreen({super.key});
@@ -30,14 +28,30 @@ class _VehicleInformationStepsScreenState
     extends State<VehicleInformationStepsScreen> {
   final PageController _pageController = PageController();
 
+  final AddVehicleInformationController addVehicleQueController =
+      Get.put(AddVehicleInformationController());
 
-  int get _currentStep =>
-      (_currentSegment * _totalFormsPerSegment) + _currentFormIndex + 1;
+  int _currentSegment = 0;
+  int _currentFormIndex = 0;
+   final int _totalFormsPerSegment = 4;
+
+   final int _totalSegments = 3;
+
+  int get _currentStep {
+    int step = (_currentSegment * _totalFormsPerSegment) + _currentFormIndex + 1;
+    int maxSteps = addVehicleQueController.getAllVehicleQueList.length;
+
+    // Ensure the step doesn't exceed the total number of steps
+    return step > maxSteps ? maxSteps : step;
+  }
+ /* int get _currentStep =>
+      (_currentSegment * _totalFormsPerSegment) + _currentFormIndex + 1;*/
 
   void _updateProgress(int direction) {
     setState(() {
       // Update form index within the current segment
       _currentFormIndex += direction;
+
 
       // Handle boundaries for form navigation
       if (_currentFormIndex >= _totalFormsPerSegment) {
@@ -45,12 +59,22 @@ class _VehicleInformationStepsScreenState
         if (_currentSegment < _totalSegments - 1) {
           _currentSegment++;
         }
+      /*  if (_currentSegment < _totalSegments - 1) {
+          _currentSegment++;
+        }*/
       } else if (_currentFormIndex < 0) {
         _currentFormIndex = _totalFormsPerSegment - 1;
         if (_currentSegment > 0) {
+
           _currentSegment--;
         }
+        /*_currentFormIndex = _totalFormsPerSegment - 1;
+        if (_currentSegment > 0) {
+          _currentSegment--;
+        }*/
       }
+
+    //  _currentSegment=_currentFormIndex ~/ _totalFormsPerSegment;
 
       // Navigate between segments when required
       _pageController.animateToPage(
@@ -62,11 +86,27 @@ class _VehicleInformationStepsScreenState
   }
 
   double _getSegmentProgress(int segment) {
+    // Get the start index for the current segment
+    int startIndex = segment * _totalFormsPerSegment;
+
+    // Calculate the progress for the current segment
+    if (segment == _currentSegment) {
+      int formsInThisSegment = _totalFormsPerSegment;
+      // Make sure not to go out of bounds
+      if (startIndex + formsInThisSegment > addVehicleQueController.getAllVehicleQueList.length) {
+        formsInThisSegment = addVehicleQueController.getAllVehicleQueList.length - startIndex;
+      }
+      return (_currentFormIndex + 1) / formsInThisSegment;
+    }
+    return segment < _currentSegment ? 1.0 : 0.0;
+  }
+
+/*  double _getSegmentProgress(int segment) {
     if (segment == _currentSegment) {
       return (_currentFormIndex + 1) / _totalFormsPerSegment;
     }
     return segment < _currentSegment ? 1.0 : 0.0;
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -88,29 +128,32 @@ class _VehicleInformationStepsScreenState
             backgroundColor: AppColors.whiteColor,
             elevation: 0,
             actions: [
-              Center(
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: '$_currentStep',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18.sp,
-                          color: AppColors.blackColor,
+              Obx(
+                () => Center(
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '$_currentStep',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18.sp,
+                            color: AppColors.blackColor,
+                          ),
                         ),
-                      ),
-                      TextSpan(
-                        text: '/12 Steps',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14.sp,
-                          color: AppColors.grey60.withOpacity(0.6),
+                        TextSpan(
+                          text:
+                              "/${addVehicleQueController.getAllVehicleQueList.length} Steps",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.sp,
+                            color: AppColors.grey60.withOpacity(0.6),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ).paddingSymmetric(horizontal: 16.h),
+                      ],
+                    ),
+                  ).paddingSymmetric(horizontal: 16.h),
+                ),
               )
             ],
           ),
@@ -128,24 +171,41 @@ class _VehicleInformationStepsScreenState
                         backgroundColor: Colors.deepOrange.withOpacity(0.2),
                         color: Colors.deepOrange,
                         minHeight: 2.h,
+                        
                       ),
                     ),
                   ),
                 ),
               ).paddingSymmetric(horizontal: 8.w, vertical: 16.h),
               const SizedBox(height: 16),
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: List.generate(_totalSegments, (index) {
-                    log("_currentFormIndex -===$_currentFormIndex");
-                    return BuildFormView(
-                      formStepData: formStepsList[_currentFormIndex],
 
-                    );
-                  }),
-                ),
+
+                 Expanded(
+                  child: PageView(
+                    controller: _pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: List.generate(_totalSegments, (index) {
+                      int startFormIndex = index * _totalFormsPerSegment;
+                      int endFormIndex = startFormIndex + _totalFormsPerSegment;
+
+                      endFormIndex = endFormIndex > addVehicleQueController.getAllVehicleQueList.length
+                          ? addVehicleQueController.getAllVehicleQueList.length
+                          : endFormIndex;
+
+
+                      List<QueData> segmentForms = addVehicleQueController.getAllVehicleQueList
+                          .sublist(startFormIndex, endFormIndex);
+                      return   BuildFormView(
+                                formStepData:  segmentForms[_currentFormIndex % _totalFormsPerSegment],
+                                // addVehicleQueController
+                                //     .getAllVehicleQueList[_currentFormIndex % _totalFormsPerSegment]
+
+                                // formStepsList[_currentFormIndex],
+
+
+                      );
+                    }),
+                  ),
               ),
 
               ///next and previous button coding
@@ -177,7 +237,8 @@ class _VehicleInformationStepsScreenState
               ),*/
             ],
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.endContained,
           floatingActionButton: CustomButton(
             onTap: () {
               {
@@ -188,7 +249,6 @@ class _VehicleInformationStepsScreenState
                   log("message");
 
                   Navigation.pushNamed(Routes.homeScreen);
-
                 }
               }
             },
@@ -198,23 +258,24 @@ class _VehicleInformationStepsScreenState
             fontSize: 15.h,
             endSvg: IconAsset.forwardArrow,
             text: _currentFormIndex < _totalFormsPerSegment - 1 ||
-                _currentSegment < _totalSegments - 1?AppString.next:"Finish",
+                    _currentSegment < _totalSegments - 1
+                ? AppString.next
+                : "Finish",
             borderRadius: BorderRadius.circular(46),
           ).paddingOnly(bottom: 25.h),
         ),
       ),
     );
-
   }
 }
 
 class BuildFormView extends StatefulWidget {
-  final FormStepData formStepData;
+  final QueData formStepData;
 
-  const BuildFormView(
-      {super.key,
-      required this.formStepData,
-      });
+  const BuildFormView({
+    super.key,
+    required this.formStepData,
+  });
 
   @override
   State<BuildFormView> createState() => _BuildFormViewState();
@@ -227,7 +288,8 @@ class _BuildFormViewState extends State<BuildFormView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          widget.formStepData.question,
+          "${widget.formStepData.question}",
+          // widget.formStepData.question,
           style: TextStyle(
               fontSize: 24.sp,
               height: 1.35.h,
@@ -235,46 +297,46 @@ class _BuildFormViewState extends State<BuildFormView> {
               color: AppColors.primaryColor),
         ),
         SizedBox(height: 10.h),
-        Text(
+        /* Text(
           widget.formStepData.subtitle,
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w400,
             color: AppColors.grey60,
           ),
-        ),
+        ),*/
         Expanded(
           child: ListView.separated(
             padding: EdgeInsets.only(top: 24.h),
-            itemCount: widget.formStepData.optionsList.length,
+            itemCount: widget.formStepData.answers?.length ?? 0,
             itemBuilder: (context, index) {
-              return
-                CheckboxListTile(
-                  checkColor: AppColors.primaryColor,
-                  side: BorderSide(color: AppColors.transparent),
-                  checkboxShape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(3.r),
-                    side: BorderSide(color: AppColors.whiteColor, width: 0),
+              return CheckboxListTile(
+                checkColor: AppColors.primaryColor,
+                side: BorderSide(color: AppColors.transparent),
+                checkboxShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(3.r),
+                  side: BorderSide(color: AppColors.whiteColor, width: 0),
+                ),
+                visualDensity: VisualDensity.standard,
+                contentPadding: EdgeInsets.zero,
+                title: Text(
+                  "${widget.formStepData.answers?[index]}",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    letterSpacing: 0.2,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primaryColor,
                   ),
-                  visualDensity: VisualDensity.standard,
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(
-                    "${widget.formStepData.optionsList[index]["option"]}",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      letterSpacing: 0.2,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.primaryColor,
-                    ),
-                  ),
-                  // value: _selectedOptions.contains(option),
-                  value: widget.formStepData.optionsList[index]["isSelected"],
-                  onChanged: (bool? selected) {
-                    setState(() {
-                      widget.formStepData.optionsList[index]["isSelected"] =
-                          selected;
-                    });
-                    /* setState(() {
+                ),
+                // value: _selectedOptions.contains(option),
+                value: false,
+                // value: widget.formStepData.optionsList[index]["isSelected"],
+                onChanged: (bool? selected) {
+                  setState(() {
+                    /*  widget.formStepData.optionsList[index]["isSelected"] =
+                        selected;*/
+                  });
+                  /* setState(() {
                     if (selected == true) {
                    //   _selectedOptions.add(option);
                     } else {
@@ -282,8 +344,8 @@ class _BuildFormViewState extends State<BuildFormView> {
                     }
                     widget.onValuesChanged(_selectedOptions);
                   });*/
-                  },
-                );
+                },
+              );
             },
             separatorBuilder: (BuildContext context, int index) {
               return Divider(

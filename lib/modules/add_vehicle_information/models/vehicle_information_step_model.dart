@@ -1,3 +1,119 @@
+class VehicleInformationModel {
+  Apiresponse? apiresponse;
+
+  VehicleInformationModel({this.apiresponse});
+
+  VehicleInformationModel.fromJson(Map<String, dynamic> json) {
+    apiresponse = json['apiresponse'] != null
+        ? new Apiresponse.fromJson(json['apiresponse'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.apiresponse != null) {
+      data['apiresponse'] = this.apiresponse!.toJson();
+    }
+    return data;
+  }
+}
+
+class Apiresponse {
+  Null? dataArray;
+  List<QueData>? data;
+  int? timestamp;
+
+  Apiresponse({this.dataArray, this.data, this.timestamp});
+
+  Apiresponse.fromJson(Map<String, dynamic> json) {
+    dataArray = json['dataArray'];
+    if (json['data'] != null) {
+      data = <QueData>[];
+      json['data'].forEach((v) {
+        data!.add(new QueData.fromJson(v));
+      });
+    }
+    timestamp = json['timestamp'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['dataArray'] = this.dataArray;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    data['timestamp'] = this.timestamp;
+    return data;
+  }
+}
+
+class QueData {
+  int? creationDate;
+  int? lastModifiedDate;
+  int? id;
+  String? question;
+  List<String>? answers;
+  String? key;
+
+  QueData(
+      {this.creationDate,
+        this.lastModifiedDate,
+        this.id,
+        this.question,
+        this.answers,
+        this.key});
+
+  QueData.fromJson(Map<String, dynamic> json) {
+    creationDate = json['creationDate'];
+    lastModifiedDate = json['lastModifiedDate'];
+    id = json['id'];
+    question = json['question'];
+    answers = json['answers'].cast<String>();
+    key = json['key'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['creationDate'] = this.creationDate;
+    data['lastModifiedDate'] = this.lastModifiedDate;
+    data['id'] = this.id;
+    data['question'] = this.question;
+    data['answers'] = this.answers;
+    data['key'] = this.key;
+    return data;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class FormStepData {
   final String question;
   final String subtitle;
@@ -20,7 +136,7 @@ class FormStepData {
   });
 }*/
 
-final List<FormStepData> formStepsList = [
+/*final List<FormStepData> formStepsList = [
   FormStepData(
     question: "What is the main symptom or issue you're experiencing?",
     subtitle: "Add your vehicle information for better search.",
@@ -315,4 +431,4 @@ final List<FormStepData> formStepsList = [
 
     ],
   ),
-];
+];*/

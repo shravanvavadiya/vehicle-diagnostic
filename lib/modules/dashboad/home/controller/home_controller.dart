@@ -10,14 +10,15 @@ import 'package:get/get.dart';
 import '../models/get_vehicle_data_model.dart';
 
 class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
-   Rx<GetVehicleDataModel> vehicleModel = GetVehicleDataModel().obs;
-  //RxList<GetVehicleDataModel> getAllVehicleList = <GetVehicleDataModel>[].obs;
+
+  Rx<GetVehicleDataModel> vehicleModel = GetVehicleDataModel().obs;
+  RxList<Vehicle> getAllVehicleList = <Vehicle>[].obs;
 
   @override
   void onInit() {
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
-       //getAllVehicles();
+       getAllVehicles();
       },
     );
     super.onInit();
@@ -31,8 +32,10 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
       error: (error, stack) => handleLoading(false),
       result: (data) {
         vehicleModel.value = data;
+        getAllVehicleList.addAll(data.apiresponse?.data?.vehicle ?? []);
+        log("getAllVehicleList :: ${getAllVehicleList.toJson()}");
         log("vehicle data :: ${data.apiresponse?.data}");
-        log("vehicle :: ${vehicleModel.value.apiresponse?.data}");
+        log("vehicle :: ${vehicleModel.value.apiresponse?.data?.vehicle?.length}");
       },
     );
     handleLoading(false);

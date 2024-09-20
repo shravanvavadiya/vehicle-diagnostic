@@ -11,7 +11,7 @@ import '../../../utils/api_constants.dart';
 /// Vehicle Information ::
 
 
-class VehicleInformationService {
+class VehicleService {
 
   static Future<StreamedResponse?> createVehicle({required MyVehicleData setUpProfileFormData, String? imagePath}) async {
     try {

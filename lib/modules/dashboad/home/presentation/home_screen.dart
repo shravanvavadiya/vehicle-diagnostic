@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,10 +22,13 @@ class HomeScreen extends StatelessWidget {
 
   final VehicleDetailController vehicleDetailController =
       Get.put(VehicleDetailController());
+
   final HomeController homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
+    log("vehicle length ::${homeController
+        .vehicleModel.value.apiresponse?.data}");
     return SafeArea(
       child: AnnotatedRegion(
         value: SystemUiOverlayStyle(
@@ -158,20 +163,20 @@ class HomeScreen extends StatelessWidget {
                     )
                   ],
                 ).paddingSymmetric(vertical: 16.h),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.only(bottom: 8.h),
-                 itemCount: 3,
-                 /* itemCount:homeController
-                      .vehicleModel.value.apiresponse?.data?.length,*/
-                  itemBuilder: (context, index) {
-                    return HomeScreenComponent(
-                      getVehicleData: homeController
-                          .vehicleModel.value.apiresponse?.data?[index]
-                    );
-                  },
-                )
+                Obx(
+                  () =>  ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.only(bottom: 8.h),
+                        itemCount:homeController
+                          .getAllVehicleList.length,
+                      itemBuilder: (context, index) {
+                        return HomeScreenComponent(
+                            getVehicleData: homeController
+                                .getAllVehicleList[index]);
+                      },
+                    ),
+                ),
               ],
             ).paddingSymmetric(horizontal: 16.w),
           ),

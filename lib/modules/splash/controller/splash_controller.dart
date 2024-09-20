@@ -1,9 +1,10 @@
 import 'dart:developer';
-
+import 'package:flutter_template/modules/authentication/models/authapi_res.dart';
 import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:flutter_template/utils/navigation_utils/routes.dart';
 import 'package:get/get.dart';
 import '../../../api/preferences/shared_preferences_helper.dart';
+import '../../../utils/app_preferences.dart';
 
 class SplashController extends GetxController {
   @override
@@ -13,7 +14,6 @@ class SplashController extends GetxController {
       Future.delayed(const Duration(seconds: 3), () {
         log("onInit===>call 01");
         navigateFurther();
-
       });
     } on Exception catch (e) {
       log("onInit===>call error::$e");
@@ -23,21 +23,17 @@ class SplashController extends GetxController {
   }
 
   Future<void> navigateFurther() async {
+    log("get user token ---->${SharedPreferencesHelper.instance.getUserToken()}");
     String? token = SharedPreferencesHelper.instance.getUserToken();
+    AuthApiRes? authApiRes;
+     authApiRes =  SharedPreferencesHelper.instance.getUser();
+    log("authApiRes :: ${authApiRes?.toJson()}");
     if (token != null && token.isNotEmpty) {
-      if (SharedPreferencesHelper.instance
-              .getUser()
-              ?.apiresponse
-              ?.data
-              ?.profileCompleted ??
+      if (authApiRes?.apiresponse?.data?.profileCompleted ??
           false) {
-        log("profile completed ::${SharedPreferencesHelper.instance
-            .getUser()
-            ?.apiresponse
-            ?.data
-            ?.profileCompleted}");
         Navigation.replaceAll(Routes.signIn);
       } else {
+
         Navigation.replaceAll(Routes.signIn);
       }
     } else {

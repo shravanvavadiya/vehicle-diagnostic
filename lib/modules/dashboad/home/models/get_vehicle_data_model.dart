@@ -20,19 +20,14 @@ class GetVehicleDataModel {
 
 class Apiresponse {
   Null? dataArray;
-  List<VehicleData>? data;
+  VehicleData? data;
   int? timestamp;
 
   Apiresponse({this.dataArray, this.data, this.timestamp});
 
   Apiresponse.fromJson(Map<String, dynamic> json) {
     dataArray = json['dataArray'];
-    if (json['data'] != null) {
-      data = <VehicleData>[];
-      json['data'].forEach((v) {
-        data!.add(new VehicleData.fromJson(v));
-      });
-    }
+    data = json['data'] != null ? new VehicleData.fromJson(json['data']) : null;
     timestamp = json['timestamp'];
   }
 
@@ -40,7 +35,7 @@ class Apiresponse {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['dataArray'] = this.dataArray;
     if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
+      data['data'] = this.data!.toJson();
     }
     data['timestamp'] = this.timestamp;
     return data;
@@ -48,8 +43,32 @@ class Apiresponse {
 }
 
 class VehicleData {
-  int? creationDate;
-  int? lastModifiedDate;
+  List<Vehicle>? vehicle;
+  int? totalCount;
+
+  VehicleData({this.vehicle, this.totalCount});
+
+  VehicleData.fromJson(Map<String, dynamic> json) {
+    if (json['vehicle'] != null) {
+      vehicle = <Vehicle>[];
+      json['vehicle'].forEach((v) {
+        vehicle!.add(new Vehicle.fromJson(v));
+      });
+    }
+    totalCount = json['totalCount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.vehicle != null) {
+      data['vehicle'] = this.vehicle!.map((v) => v.toJson()).toList();
+    }
+    data['totalCount'] = this.totalCount;
+    return data;
+  }
+}
+
+class Vehicle {
   int? id;
   String? photo;
   String? vehicleNumber;
@@ -60,10 +79,8 @@ class VehicleData {
   String? fuelType;
   UserId? userId;
 
-  VehicleData(
-      {this.creationDate,
-        this.lastModifiedDate,
-        this.id,
+  Vehicle(
+      {this.id,
         this.photo,
         this.vehicleNumber,
         this.vehicleYear,
@@ -73,9 +90,7 @@ class VehicleData {
         this.fuelType,
         this.userId});
 
-  VehicleData.fromJson(Map<String, dynamic> json) {
-    creationDate = json['creationDate'];
-    lastModifiedDate = json['lastModifiedDate'];
+  Vehicle.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     photo = json['photo'];
     vehicleNumber = json['vehicleNumber'];
@@ -90,8 +105,6 @@ class VehicleData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['creationDate'] = this.creationDate;
-    data['lastModifiedDate'] = this.lastModifiedDate;
     data['id'] = this.id;
     data['photo'] = this.photo;
     data['vehicleNumber'] = this.vehicleNumber;
@@ -111,11 +124,12 @@ class UserId {
   int? creationDate;
   int? lastModifiedDate;
   int? id;
-  String? firstName;
-  String? lastName;
+  Null? firstName;
+  Null? lastName;
   String? email;
-  String? postCode;
+  Null? postCode;
   bool? profileCompleted;
+  Null? subscriptionPlan;
 
   UserId(
       {this.creationDate,
@@ -125,7 +139,8 @@ class UserId {
         this.lastName,
         this.email,
         this.postCode,
-        this.profileCompleted});
+        this.profileCompleted,
+        this.subscriptionPlan});
 
   UserId.fromJson(Map<String, dynamic> json) {
     creationDate = json['creationDate'];
@@ -136,6 +151,7 @@ class UserId {
     email = json['email'];
     postCode = json['postCode'];
     profileCompleted = json['profileCompleted'];
+    subscriptionPlan = json['subscriptionPlan'];
   }
 
   Map<String, dynamic> toJson() {
@@ -148,6 +164,7 @@ class UserId {
     data['email'] = this.email;
     data['postCode'] = this.postCode;
     data['profileCompleted'] = this.profileCompleted;
+    data['subscriptionPlan'] = this.subscriptionPlan;
     return data;
   }
 }

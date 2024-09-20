@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_template/utils/assets.dart';
 import 'package:get/get.dart';
-
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_text.dart';
 import '../../../../utils/navigation_utils/navigation.dart';
@@ -10,7 +9,7 @@ import '../../../../utils/navigation_utils/routes.dart';
 import '../models/get_vehicle_data_model.dart';
 
 class HomeScreenComponent extends StatelessWidget {
-  final VehicleData? getVehicleData;
+  final Vehicle? getVehicleData;
   const HomeScreenComponent({super.key, required this.getVehicleData});
 
   @override
@@ -55,17 +54,18 @@ class HomeScreenComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppText(
-                  text: "RM35689",
-                  //text: "${getVehicleData?.vehicleNumber}",
+                 // text: "RM35689",
+                 text: "${getVehicleData?.vehicleNumber}",
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
                 AppText(
-                    text: "Tata Motors",
-                    //text: "${getVehicleData?.vehicleMake}",
+                  //text: "Tata Motors",
+                    text: "${getVehicleData?.vehicleMake}",
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
+
                     color: Colors.white)
                     .paddingOnly(top: 4.h),
               ],

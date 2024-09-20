@@ -9,14 +9,26 @@ import 'package:flutter_template/utils/api_constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_interceptor/http_interceptor.dart';
 
-Future<Map<String, String>> headers() async {
+Map<String, String> headers()  {
+  final Map<String, String> headers = <String, String>{};
+  headers["accept"] = "*/*";
+  log("user token :: ${SharedPreferencesHelper.instance.getUserToken()}");
+  if (SharedPreferencesHelper.instance.getUserToken()?.isNotEmpty ?? false) {
+    headers["Authorization"] =
+        '${SharedPreferencesHelper.instance.getUserToken()}';
+    log("headers ::: $headers");
+  }
+  return headers;
+}
+
+Map<String, String> contentHeader()  {
   final Map<String, String> headers = <String, String>{};
   headers["accept"] = "*/*";
   headers["Content-Type"] = "application/json";
   log("user token :: ${SharedPreferencesHelper.instance.getUserToken()}");
   if (SharedPreferencesHelper.instance.getUserToken()?.isNotEmpty ?? false) {
     headers["Authorization"] =
-        '${SharedPreferencesHelper.instance.getUserToken()}';
+    '${SharedPreferencesHelper.instance.getUserToken()}';
     log("headers ::: $headers");
   }
   return headers;
@@ -52,7 +64,7 @@ class Api {
     final response = await dio.post(
       getUrl(url, queryParameters: queryData),
       body: jsonEncode(bodyData),
-      headers: await headers(),
+      headers: queryData==null?contentHeader(): headers(),
     );
     print("response $response");
     return response;
@@ -67,7 +79,7 @@ class Api {
     final response = await dio.put(
       getUrl(url, queryParameters: queryData),
       body: jsonEncode(bodyData),
-      headers: await headers(),
+      headers: queryData==null?contentHeader(): headers()
     );
     return response;
   }
@@ -80,7 +92,7 @@ class Api {
     final response = await dio.patch(
       getUrl(url, queryParameters: queryData),
       body: jsonEncode(bodyData),
-      headers: await headers(),
+      headers: queryData==null?contentHeader(): headers()
     );
     return response;
   }
@@ -93,7 +105,7 @@ class Api {
     final response = await dio.delete(
       getUrl(url, queryParameters: queryData),
       body: jsonEncode(bodyData),
-      headers: await headers(),
+      headers: headers()
     );
     return response;
   }
@@ -113,10 +125,10 @@ class Api {
     String url, {
     Map<String, dynamic>? queryData,
   }) async {
-    log("get ${await headers()}}");
+    log("get ${headers()}}");
     final response = await dio.get(
       getUrl(url, queryParameters: queryData),
-      headers: await headers(),
+      headers: headers(),
     );
     return response;
   }
@@ -139,6 +151,7 @@ class Api {
         request.files.add(await http.MultipartFile.fromPath('photo', imagePath ?? ""));
       }
       log("body $body");
+      log("imagePath :::${imagePath}");
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 200) {

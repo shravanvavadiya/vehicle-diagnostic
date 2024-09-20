@@ -113,7 +113,7 @@ class VehicleDetailController extends GetxController
       id: SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.id,
     );
     await processApi(
-      () => VehicleInformationService.createVehicle(
+      () => VehicleService.createVehicle(
         setUpProfileFormData: addVehicleData,
         imagePath: image.value,
       ),
@@ -122,12 +122,7 @@ class VehicleDetailController extends GetxController
         handleLoading(false);
       },
       result: (result) async {
-        if (result?.statusCode == 200 || result?.statusCode == 201) {
-          /*  String? body = await result?.stream.bytesToString();
-          final AddVehicleModel vehicleModel =
-              AddVehicleModel.fromJson(jsonDecode(body ?? ""));*/
-          Navigation.pushNamed(Routes.vehicleDiagnosisScreen);
-        }
+        Navigation.pushNamed(Routes.vehicleDiagnosisScreen);
       },
     );
     handleLoading(false);

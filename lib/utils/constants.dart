@@ -3,6 +3,8 @@ class Constants {
 
   static String get keyUser => "keyUser";
 
+  static String get keyUserId => "keyUserId";
+
   static String android = 'android';
   static String ios = 'ios';
   static String firebaseToken = '';

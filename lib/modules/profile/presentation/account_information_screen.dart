@@ -7,28 +7,37 @@ import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/app_text.dart';
 import 'package:flutter_template/utils/assets.dart';
 import 'package:flutter_template/utils/navigation_utils/navigation.dart';
-import 'package:flutter_template/utils/navigation_utils/routes.dart';
 import 'package:flutter_template/widget/annotated_region.dart';
-import 'package:flutter_template/widget/custom_backarrow_widget.dart';
 import 'package:flutter_template/widget/custom_button.dart';
-import 'package:flutter_template/widget/custom_textfeild.dart';
-import 'package:flutter_template/widget/info_text_widget.dart';
 import 'package:get/get.dart';
-
 import '../../../utils/validation_utils.dart';
 import '../../personal_information_view/presentation/personal_information_screen.dart';
 import '../controller/profile_controller.dart';
 
-class AccountInformationScreen extends StatelessWidget {
+class AccountInformationScreen extends StatefulWidget {
   AccountInformationScreen({super.key});
 
+  @override
+  State<AccountInformationScreen> createState() => _AccountInformationScreenState();
+}
+
+class _AccountInformationScreenState extends State<AccountInformationScreen> {
   final ProfileController profileController = Get.put(ProfileController());
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        profileController.getUserProfileAPI();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return CustomAnnotatedRegions(
       statusBarColor: AppColors.transparent,
-
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.backgroundColor,
@@ -65,8 +74,7 @@ class AccountInformationScreen extends StatelessWidget {
                         validator: AppValidation.nameValidator,
                         controller: profileController.firstname,
                         onChanged: (String) {
-                          profileController.isValidateName.value =
-                              profileController.firstname.text.isNotEmpty;
+                          profileController.isValidateName.value = profileController.firstname.text.isNotEmpty;
                         },
                       ).paddingOnly(top: 24.h, bottom: 16.h),
                       customTextFormField(
@@ -75,21 +83,19 @@ class AccountInformationScreen extends StatelessWidget {
                         validator: AppValidation.lastNameValidator,
                         controller: profileController.lastname,
                         onChanged: (String) {
-                          profileController.isValidateLastName.value =
-                              profileController.lastname.text.isNotEmpty;
+                          profileController.isValidateLastName.value = profileController.lastname.text.isNotEmpty;
                         },
                       ),
                       customTextFormField(
                         text: AppString.email,
                         hintText: AppString.emailEx,
                         controller: profileController.email,
+                        readOnly: true,
                         keyboardType: TextInputType.emailAddress,
                         validator: AppValidation.emailValidator,
                         onChanged: (String) {
-                          profileController.isValidateEmail.value =
-                              profileController.email.text.isNotEmpty;
+                          profileController.isValidateEmail.value = profileController.email.text.isNotEmpty;
                         },
-
                       ).paddingSymmetric(vertical: 16.h),
                       customTextFormField(
                         text: AppString.postCode,
@@ -97,8 +103,7 @@ class AccountInformationScreen extends StatelessWidget {
                         validator: AppValidation.postCode,
                         controller: profileController.postCode,
                         onChanged: (String) {
-                          profileController.isValidatePostCode.value =
-                              profileController.postCode.text.isNotEmpty;
+                          profileController.isValidatePostCode.value = profileController.postCode.text.isNotEmpty;
                         },
                       ),
                     ],
@@ -109,9 +114,11 @@ class AccountInformationScreen extends StatelessWidget {
             Obx(
               () => CustomButton(
                 onTap: () async {
-                  if (profileController.formKey.currentState?.validate() ??
-                      false) {
-                    Navigation.pop();
+                  if (profileController.formKey.currentState?.validate() ?? false) {
+                    profileController.updateUserProfileAPI(
+                        postCode: profileController.postCode.text,
+                        firstName: profileController.firstname.text,
+                        lastName: profileController.lastname.text);
                   }
                 },
                 isDisabled: (profileController.isValidateName.value &&

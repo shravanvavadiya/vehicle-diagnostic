@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_template/api/preferences/shared_preferences_helper.dart';
 import 'package:flutter_template/modules/personal_information_view/model/personal_information_model.dart';
 import 'package:flutter_template/modules/personal_information_view/service/personal_information_service.dart';
+import 'package:flutter_template/utils/constants.dart';
 import 'package:flutter_template/widget/app_snackbar.dart';
 import 'package:get/get.dart';
 
@@ -12,15 +13,13 @@ import '../../../utils/loading_mixin.dart';
 import '../../../utils/navigation_utils/navigation.dart';
 import '../../../utils/navigation_utils/routes.dart';
 
-class PersonalInformationController extends GetxController
-    with LoadingMixin, LoadingApiMixin {
+class PersonalInformationController extends GetxController with LoadingMixin, LoadingApiMixin {
   final TextEditingController firstname = TextEditingController();
   final TextEditingController lastname = TextEditingController();
   final TextEditingController email = TextEditingController();
   final TextEditingController postCode = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  Rx<PersonalInformationModel> personalInformationModel =
-      PersonalInformationModel().obs;
+  Rx<PersonalInformationModel> personalInformationModel = PersonalInformationModel().obs;
   RxBool isValidateName = false.obs;
   RxBool isPersonalInformation = false.obs;
   RxBool isValidateLastName = false.obs;
@@ -29,14 +28,9 @@ class PersonalInformationController extends GetxController
 
   RxBool isButtonEnabled = false.obs;
 
-
-
-
   void updateButtonState() {
-    isButtonEnabled.value = firstname.text.isNotEmpty &&
-        lastname.text.isNotEmpty &&
-        email.text.isNotEmpty &&
-        postCode.text.isNotEmpty;
+    isButtonEnabled.value =
+        firstname.text.isNotEmpty && lastname.text.isNotEmpty && email.text.isNotEmpty && postCode.text.isNotEmpty;
   }
 
   clearData() {
@@ -56,7 +50,7 @@ class PersonalInformationController extends GetxController
     handleLoading(true);
     if (formKey.currentState!.validate()) {
       await processApi(
-            () => PersonalInformationService.personalInformation(
+        () => PersonalInformationService.personalInformation(
           bodyData: {
             'email': email,
             'firstName': firstname,
@@ -66,22 +60,22 @@ class PersonalInformationController extends GetxController
         ),
         error: (error, stack) {
           log("Exception in personalInformationAPI---->$error");
-          AppSnackBar.showErrorSnackBar(
-              message: "Something went wrong", title: "Error");
+          AppSnackBar.showErrorSnackBar(message: "Something went wrong", title: "Error");
           handleLoading(false);
         },
-        result: (data) async{
+        result: (data) async {
           personalInformationModel.value = data;
-        //  await SharedPreferencesHelper.instance.setUser(data);
+          await SharedPreferencesHelper.instance
+              .setInt(Constants.keyUserId, personalInformationModel.value.apiResponse?.data?.id ?? 0);
+          //  await SharedPreferencesHelper.instance.setUser(data);
           Navigation.pushNamed(Routes.addVehicle);
         },
       );
-
     }
     handleLoading(false);
   }
 
- /* Future<void> personalInformationAPI({
+/* Future<void> personalInformationAPI({
     required String email,
     required String firstname,
     required String lastname,
@@ -110,5 +104,4 @@ class PersonalInformationController extends GetxController
     }
   }
 */
-
 }

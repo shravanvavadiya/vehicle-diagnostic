@@ -7,6 +7,7 @@ class ApiConstants {
   static const String getAllVehicle = "vehicle/all";
   static const String addVehicle = "vehicle/";
   static const String getVehicleQue = "questionanswer/all";
+  static const String submitVehicleRequest = "moreaboutvehicle/";
 }
 class ApiKeyConstants {
   static const String deviceType = "deviceType";

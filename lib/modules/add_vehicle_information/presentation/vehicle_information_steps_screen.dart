@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_template/widget/annotated_region.dart';
@@ -7,14 +6,13 @@ import 'package:get/get.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_string.dart';
 import '../../../utils/assets.dart';
+import '../../../utils/loading_mixin.dart';
 import '../../../utils/navigation_utils/navigation.dart';
 import '../../../utils/navigation_utils/routes.dart';
 import '../../../widget/custom_backarrow_widget.dart';
 import '../../../widget/custom_button.dart';
 import '../controller/add_vehicle_information_controller.dart';
 import '../models/vehicle_information_step_model.dart';
-
-
 
 class VehicleInformationStepsScreen extends StatefulWidget {
   const VehicleInformationStepsScreen({super.key});
@@ -28,23 +26,26 @@ class _VehicleInformationStepsScreenState
     extends State<VehicleInformationStepsScreen> {
   final PageController _pageController = PageController();
 
-  final AddVehicleInformationController addVehicleQueController =
-      Get.put(AddVehicleInformationController());
+  final AddVehicleInformationController addVehicleQueController = Get.find();
+
+  int? vehicleId;
 
   int _currentSegment = 0;
   int _currentFormIndex = 0;
-   final int _totalFormsPerSegment = 4;
+  final int _totalFormsPerSegment = 4;
 
-   final int _totalSegments = 3;
+  final int _totalSegments = 3;
 
   int get _currentStep {
-    int step = (_currentSegment * _totalFormsPerSegment) + _currentFormIndex + 1;
+    int step =
+        (_currentSegment * _totalFormsPerSegment) + _currentFormIndex + 1;
     int maxSteps = addVehicleQueController.getAllVehicleQueList.length;
 
     // Ensure the step doesn't exceed the total number of steps
     return step > maxSteps ? maxSteps : step;
   }
- /* int get _currentStep =>
+
+  /* int get _currentStep =>
       (_currentSegment * _totalFormsPerSegment) + _currentFormIndex + 1;*/
 
   void _updateProgress(int direction) {
@@ -52,20 +53,18 @@ class _VehicleInformationStepsScreenState
       // Update form index within the current segment
       _currentFormIndex += direction;
 
-
       // Handle boundaries for form navigation
       if (_currentFormIndex >= _totalFormsPerSegment) {
         _currentFormIndex = 0;
         if (_currentSegment < _totalSegments - 1) {
           _currentSegment++;
         }
-      /*  if (_currentSegment < _totalSegments - 1) {
+        /*  if (_currentSegment < _totalSegments - 1) {
           _currentSegment++;
         }*/
       } else if (_currentFormIndex < 0) {
         _currentFormIndex = _totalFormsPerSegment - 1;
         if (_currentSegment > 0) {
-
           _currentSegment--;
         }
         /*_currentFormIndex = _totalFormsPerSegment - 1;
@@ -74,7 +73,7 @@ class _VehicleInformationStepsScreenState
         }*/
       }
 
-    //  _currentSegment=_currentFormIndex ~/ _totalFormsPerSegment;
+      //  _currentSegment=_currentFormIndex ~/ _totalFormsPerSegment;
 
       // Navigate between segments when required
       _pageController.animateToPage(
@@ -88,13 +87,18 @@ class _VehicleInformationStepsScreenState
   double _getSegmentProgress(int segment) {
     // Get the start index for the current segment
     int startIndex = segment * _totalFormsPerSegment;
-
     // Calculate the progress for the current segment
     if (segment == _currentSegment) {
       int formsInThisSegment = _totalFormsPerSegment;
       // Make sure not to go out of bounds
-      if (startIndex + formsInThisSegment > addVehicleQueController.getAllVehicleQueList.length) {
-        formsInThisSegment = addVehicleQueController.getAllVehicleQueList.length - startIndex;
+      if (startIndex + formsInThisSegment >
+          addVehicleQueController.getAllVehicleQueList.length) {
+        formsInThisSegment =
+            addVehicleQueController.getAllVehicleQueList.length - startIndex;
+      }
+      // Prevent division by zero
+      if (formsInThisSegment == 0) {
+        return 0.0;
       }
       return (_currentFormIndex + 1) / formsInThisSegment;
     }
@@ -159,53 +163,64 @@ class _VehicleInformationStepsScreenState
           ),
           body: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(
-                  _totalSegments,
-                  (index) => Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: LinearProgressIndicator(
-                        value: _getSegmentProgress(index),
-                        backgroundColor: Colors.deepOrange.withOpacity(0.2),
-                        color: Colors.deepOrange,
-                        minHeight: 2.h,
-                        
+              Obx(
+                () => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: List.generate(
+                    _totalSegments,
+                    (index) => Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: LinearProgressIndicator(
+                          value: _getSegmentProgress(index),
+                          backgroundColor: Colors.deepOrange.withOpacity(0.2),
+                          color: Colors.deepOrange,
+                          minHeight: 2.h,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ).paddingSymmetric(horizontal: 8.w, vertical: 16.h),
+                ).paddingSymmetric(horizontal: 8.w, vertical: 16.h),
+              ),
               const SizedBox(height: 16),
+              Expanded(
+                child: Obx(() {
+                  return addVehicleQueController.isLoading.value
+                      ? CircularProgressIndicator(
+                          color: AppColors.primaryColor,
+                        )
+                      : addVehicleQueController.getAllVehicleQueList.isNotEmpty
+                          ? PageView(
+                              controller: _pageController,
+                              physics: const NeverScrollableScrollPhysics(),
+                              children: List.generate(_totalSegments, (index) {
+                                vehicleId = addVehicleQueController
+                                    .getAllVehicleQueList[index].id;
+                                int startFormIndex =
+                                    index * _totalFormsPerSegment;
+                                int endFormIndex =
+                                    startFormIndex + _totalFormsPerSegment;
+                                endFormIndex = endFormIndex >
+                                        addVehicleQueController
+                                            .getAllVehicleQueList.length
+                                    ? addVehicleQueController
+                                        .getAllVehicleQueList.length
+                                    : endFormIndex;
+                                List<QueData> segmentForms =
+                                    addVehicleQueController.getAllVehicleQueList
+                                        .sublist(startFormIndex, endFormIndex);
+                                return BuildFormView(
+                                  formStepData: segmentForms[_currentFormIndex %
+                                      _totalFormsPerSegment],
+                                  // addVehicleQueController
+                                  //     .getAllVehicleQueList[_currentFormIndex % _totalFormsPerSegment]
 
-
-                 Expanded(
-                  child: PageView(
-                    controller: _pageController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: List.generate(_totalSegments, (index) {
-                      int startFormIndex = index * _totalFormsPerSegment;
-                      int endFormIndex = startFormIndex + _totalFormsPerSegment;
-
-                      endFormIndex = endFormIndex > addVehicleQueController.getAllVehicleQueList.length
-                          ? addVehicleQueController.getAllVehicleQueList.length
-                          : endFormIndex;
-
-
-                      List<QueData> segmentForms = addVehicleQueController.getAllVehicleQueList
-                          .sublist(startFormIndex, endFormIndex);
-                      return   BuildFormView(
-                                formStepData:  segmentForms[_currentFormIndex % _totalFormsPerSegment],
-                                // addVehicleQueController
-                                //     .getAllVehicleQueList[_currentFormIndex % _totalFormsPerSegment]
-
-                                // formStepsList[_currentFormIndex],
-
-
-                      );
-                    }),
-                  ),
+                                  // formStepsList[_currentFormIndex],
+                                );
+                              }),
+                            )
+                          : const Text("No questions available");
+                }),
               ),
 
               ///next and previous button coding
@@ -240,14 +255,17 @@ class _VehicleInformationStepsScreenState
           floatingActionButtonLocation:
               FloatingActionButtonLocation.endContained,
           floatingActionButton: CustomButton(
-            onTap: () {
+            onTap: () async {
               {
                 if (_currentFormIndex < _totalFormsPerSegment - 1 ||
                     _currentSegment < _totalSegments - 1) {
                   _updateProgress(1);
                 } else {
                   log("message");
-
+                  addVehicleQueController.updateSelectedAnswers(
+                      addVehicleQueController.question.value,
+                      addVehicleQueController.selectedAnswers);
+                  await addVehicleQueController.submitForm(vehicleId!);
                   Navigation.pushNamed(Routes.homeScreen);
                 }
               }
@@ -282,6 +300,8 @@ class BuildFormView extends StatefulWidget {
 }
 
 class _BuildFormViewState extends State<BuildFormView> {
+  final AddVehicleInformationController addVehicleQueController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -289,7 +309,6 @@ class _BuildFormViewState extends State<BuildFormView> {
       children: [
         Text(
           "${widget.formStepData.question}",
-          // widget.formStepData.question,
           style: TextStyle(
               fontSize: 24.sp,
               height: 1.35.h,
@@ -310,41 +329,46 @@ class _BuildFormViewState extends State<BuildFormView> {
             padding: EdgeInsets.only(top: 24.h),
             itemCount: widget.formStepData.answers?.length ?? 0,
             itemBuilder: (context, index) {
-              return CheckboxListTile(
-                checkColor: AppColors.primaryColor,
-                side: BorderSide(color: AppColors.transparent),
-                checkboxShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(3.r),
-                  side: BorderSide(color: AppColors.whiteColor, width: 0),
-                ),
-                visualDensity: VisualDensity.standard,
-                contentPadding: EdgeInsets.zero,
-                title: Text(
-                  "${widget.formStepData.answers?[index]}",
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    letterSpacing: 0.2,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primaryColor,
+              String answer = widget.formStepData.answers?[index] ?? '';
+              return Obx(
+                () =>   CheckboxListTile(
+                  checkColor: AppColors.primaryColor,
+                  side: BorderSide(color: AppColors.transparent),
+                  checkboxShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(3.r),
+                    side: BorderSide(color: AppColors.whiteColor, width: 0),
                   ),
+                  visualDensity: VisualDensity.standard,
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(
+                    answer,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      letterSpacing: 0.2,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
+                  // value: _selectedOptions.contains(option),
+                  value: addVehicleQueController.selectedAnswers.contains(answer),
+                  onChanged: (bool? selected) {
+                    log("Checkbox toggled: ${selected.toString()}");
+                    log("Before toggle: ${addVehicleQueController.selectedAnswers}");
+                      if (selected == true) {
+                        if (!addVehicleQueController.selectedAnswers.contains(answer)) {
+                          addVehicleQueController.selectedAnswers.add(answer);
+                        }
+                        log("selected ans ::${addVehicleQueController.selectedAnswers}");
+                      } else {
+                        addVehicleQueController.selectedAnswers.remove(answer);
+                      }
+                      addVehicleQueController.updateSelectedAnswers(
+                        "${widget.formStepData.question}",
+                        addVehicleQueController.selectedAnswers,
+
+                      );
+                  },
                 ),
-                // value: _selectedOptions.contains(option),
-                value: false,
-                // value: widget.formStepData.optionsList[index]["isSelected"],
-                onChanged: (bool? selected) {
-                  setState(() {
-                    /*  widget.formStepData.optionsList[index]["isSelected"] =
-                        selected;*/
-                  });
-                  /* setState(() {
-                    if (selected == true) {
-                   //   _selectedOptions.add(option);
-                    } else {
-                      _selectedOptions.remove(option);
-                    }
-                    widget.onValuesChanged(_selectedOptions);
-                  });*/
-                },
               );
             },
             separatorBuilder: (BuildContext context, int index) {

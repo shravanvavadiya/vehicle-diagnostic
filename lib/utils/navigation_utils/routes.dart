@@ -78,12 +78,12 @@ mixin Routes {
     ),
     GetPage<dynamic>(
       name: vehicleDiagnosisScreen,
-      page: () => const VehicleDiagnosisScreen(),
+      page: () => VehicleDiagnosisScreen(),
       transition: defaultTransition,
     ),
     GetPage<dynamic>(
       name: vehicleInformationStepsScreen,
-      page: () => VehicleInformationStepsScreen(),
+      page: () =>  VehicleInformationStepsScreen(),
       transition: defaultTransition,
     ),
     GetPage<dynamic>(

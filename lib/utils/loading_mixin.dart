@@ -33,7 +33,7 @@ mixin LoadingMixin {
   void _startLoading() {
     if (_dialogRoute != null) return;
     _dialogRoute = _buildDialogRoute(context);
-    context.navigator.push(_dialogRoute!);  }
+    context.navigator.push(_dialogRoute!); }
 
   void _stopLoading() {
     if (_dialogRoute != null) context.navigator.removeRoute(_dialogRoute!);

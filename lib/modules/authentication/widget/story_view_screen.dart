@@ -17,10 +17,13 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
   static final sampleUsers = [
     UserModel(
       [
-        StoryModel("assets/images/onboard1.png", "Diagnose Vehicle Faults", "Your personal AI Mechanic will learn about your vehicles"),
+        StoryModel("assets/images/onboard1.png", "Diagnose Vehicle Faults",
+            "Your personal AI Mechanic will learn about your vehicles"),
         StoryModel(
-            "assets/images/onboard2.png", "Explain the Issues Clearly", "It will give a detailed explanation of the potential faults it finds"),
-        StoryModel("assets/images/onboard3.png", "Resolve or Refer to a Specialist",
+            "assets/images/onboard2.png", "Explain the Issues Clearly",
+            "It will give a detailed explanation of the potential faults it finds"),
+        StoryModel(
+            "assets/images/onboard3.png", "Resolve or Refer to a Specialist",
             "Your AI Mechanic will give you guidance on self repair, or provide an explanation that you can relay to your real mechanic")
       ],
     )
@@ -29,7 +32,8 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
   @override
   void initState() {
     super.initState();
-    indicatorAnimationController = ValueNotifier<IndicatorAnimationCommand>(IndicatorAnimationCommand.resume);
+    indicatorAnimationController = ValueNotifier<IndicatorAnimationCommand>(
+        IndicatorAnimationCommand.resume);
   }
 
   @override
@@ -41,7 +45,8 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StoryPageView(
+      body:
+      StoryPageView(
         indicatorVisitedColor: AppColors.highlightedColor,
         backgroundColor: AppColors.backgroundColor,
         itemBuilder: (context, pageIndex, storyIndex) {
@@ -90,6 +95,34 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
         onPageLimitReached: () {},
         indicatorUnvisitedColor: AppColors.highlightedColor.withOpacity(0.17),
       ),
+    );
+  }
+
+  Widget _buildStoryContent(StoryModel story) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          color: AppColors.backgroundColor,
+          height: 350.h,
+          width: double.infinity,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Image.asset(
+              story.imageUrl,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ).paddingOnly(top: 50.h),
+        InfoTextWidget(
+          title: story.title,
+          titleFontSize: 40.sp,
+          titleFontWeight: FontWeight.w600,
+          description: story.subTitle,
+          fontSize: 15.3.sp,
+          fontWeight: FontWeight.w400,
+        ).paddingSymmetric(horizontal: 16.w),
+      ],
     );
   }
 }

@@ -77,8 +77,8 @@ class Vehicle {
   String? vehicleModel;
   String? transmissionType;
   String? fuelType;
-  String? moreAbout;
-  UserId? userId;
+  List<MoreAboutVehicle>? moreAboutVehicle;
+  int? userId;
 
   Vehicle(
       {this.id,
@@ -89,7 +89,7 @@ class Vehicle {
         this.vehicleModel,
         this.transmissionType,
         this.fuelType,
-        this.moreAbout,
+        this.moreAboutVehicle,
         this.userId});
 
   Vehicle.fromJson(Map<String, dynamic> json) {
@@ -101,9 +101,13 @@ class Vehicle {
     vehicleModel = json['vehicleModel'];
     transmissionType = json['transmissionType'];
     fuelType = json['fuelType'];
-    moreAbout = json['moreAbout'];
-    userId =
-    json['userId'] != null ? new UserId.fromJson(json['userId']) : null;
+    if (json['moreAboutVehicle'] != null) {
+      moreAboutVehicle = <MoreAboutVehicle>[];
+      json['moreAboutVehicle'].forEach((v) {
+        moreAboutVehicle!.add(new MoreAboutVehicle.fromJson(v));
+      });
+    }
+    userId = json['userId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -114,61 +118,35 @@ class Vehicle {
     data['vehicleYear'] = this.vehicleYear;
     data['vehicleMake'] = this.vehicleMake;
     data['vehicleModel'] = this.vehicleModel;
-    data['moreAbout'] = this.moreAbout;
+    if (this.moreAboutVehicle != null) {
+      data['moreAboutVehicle'] =
+          this.moreAboutVehicle!.map((v) => v.toJson()).toList();
+    }
     data['transmissionType'] = this.transmissionType;
     data['fuelType'] = this.fuelType;
-    if (this.userId != null) {
-      data['userId'] = this.userId!.toJson();
-    }
+    data['userId'] = this.userId;
     return data;
   }
 }
 
-class UserId {
-  int? creationDate;
-  int? lastModifiedDate;
+class MoreAboutVehicle {
   int? id;
-  String? firstName;
-  String? lastName;
-  String? email;
-  String? postCode;
-  bool? profileCompleted;
-  bool? subscriptionPlan;
+  String? question;
+  String? answer;
 
-  UserId(
-      {this.creationDate,
-        this.lastModifiedDate,
-        this.id,
-        this.firstName,
-        this.lastName,
-        this.email,
-        this.postCode,
-        this.profileCompleted,
-        this.subscriptionPlan});
+  MoreAboutVehicle({this.id, this.question, this.answer});
 
-  UserId.fromJson(Map<String, dynamic> json) {
-    creationDate = json['creationDate'];
-    lastModifiedDate = json['lastModifiedDate'];
+  MoreAboutVehicle.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    firstName = json['firstName'];
-    lastName = json['lastName'];
-    email = json['email'];
-    postCode = json['postCode'];
-    profileCompleted = json['profileCompleted'];
-    subscriptionPlan = json['subscriptionPlan'];
+    question = json['question'];
+    answer = json['answer'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  Map<String, dynamic>();
-    data['creationDate'] = this.creationDate;
-    data['lastModifiedDate'] = this.lastModifiedDate;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['firstName'] = this.firstName;
-    data['lastName'] = this.lastName;
-    data['email'] = this.email;
-    data['postCode'] = this.postCode;
-    data['profileCompleted'] = this.profileCompleted;
-    data['subscriptionPlan'] = this.subscriptionPlan;
+    data['question'] = this.question;
+    data['answer'] = this.answer;
     return data;
   }
 }

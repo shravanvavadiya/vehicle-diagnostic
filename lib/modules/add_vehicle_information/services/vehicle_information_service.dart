@@ -3,9 +3,7 @@ import 'dart:developer';
 import 'package:flutter_template/api/api.dart';
 import 'package:flutter_template/api/responce_handler.dart';
 import 'package:flutter_template/utils/api_constants.dart';
-
 import '../models/vehicle_information_step_model.dart';
-
 
 class VehicleInformationService {
 

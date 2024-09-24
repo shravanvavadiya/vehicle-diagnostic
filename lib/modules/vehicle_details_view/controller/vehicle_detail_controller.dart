@@ -40,6 +40,8 @@ class VehicleDetailController extends GetxController
   clearController() {
     vehicleNumber.clear();
     vehicleYear.clear();
+    imagePath?.path.isEmpty;
+    image.value.isEmpty;
     selectedValueMake.value = 'Select';
     selectedValueModel.value = 'Select';
     selectedValueTType.value = 'Select';

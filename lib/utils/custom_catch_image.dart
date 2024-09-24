@@ -24,6 +24,9 @@ class CustomCachedImage extends StatelessWidget {
       width: width,
       imageUrl: imageUrl,
       fit: BoxFit.cover,
+      progressIndicatorBuilder: (context, url, progress) {
+        return CircularProgressIndicator();
+      },
       placeholder: (context, url) => placeHolder ?? Image.asset(
         ImagesAsset.user,
         height: 20,

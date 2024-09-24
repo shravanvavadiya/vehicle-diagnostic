@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
     return SafeArea(
       child: AnnotatedRegion(
         value: SystemUiOverlayStyle(
-          statusBarColor: AppColors.highlightedColor.withOpacity(0.08),
+          statusBarColor: AppColors.highlightedColor.withOpacity(0.1),
           statusBarIconBrightness: Brightness.dark,
         ),
         child: Scaffold(
@@ -43,11 +43,12 @@ class HomeScreen extends StatelessWidget {
                 color: AppColors.highlightedColor.withOpacity(0.1),
                 gradient: LinearGradient(
                   colors: [
+                    AppColors.highlightedColor,
                     AppColors.highlightedColor.withOpacity(0.7),
                     AppColors.highlightedColor.withOpacity(0.5),
                     AppColors.whiteColor
                   ],
-                  stops: const [0.3, 0.5, 1],
+                  stops: const [0.3, 0.5,0.8, 1],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
@@ -75,9 +76,9 @@ class HomeScreen extends StatelessWidget {
                 automaticallyImplyLeading: false,
                 bottom: PreferredSize(
                   preferredSize: Size(0, 6.h),
-                  child: Container(
-                    height: 4.h,
-                    color: Colors.grey.withOpacity(0.3),
+                  child:  Container(
+                    height: 6.h,
+                    color: Colors.grey.withOpacity(0.2),
                   ),
                 ),
                 backgroundColor: AppColors.transparent,
@@ -173,55 +174,53 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ).paddingSymmetric(vertical: 16.h),
                 Obx(
-                  () => homeController.isLoading.value
-                      ? Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.highlightedColor,
-                          ),
-                        )
-                      : homeController.getAllVehicleList.isNotEmpty?!homeController.paginationLoading.value
-                          ? Align(
-                              alignment: Alignment.bottomCenter,
-                              child: SizedBox(
-                                height: 24,
-                                width: 24,
-                                child: CircularProgressIndicator(
-                                  color: AppColors.highlightedColor,
-                                ),
-                              ).paddingOnly(bottom: 24, top: 12),
-                            )
-                          : Column(
-                              children: [
-                                ListView.builder(
-                                  controller: homeController.scrollController,
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  padding: EdgeInsets.only(bottom: 8.h),
-                                  itemCount:
-                                      homeController.getAllVehicleList.length,
-                                  itemBuilder: (context, index) {
-                                    return HomeScreenComponent(
-                                        getVehicleData: homeController
-                                            .getAllVehicleList[index]);
-                                  },
-                                ),
-                                !homeController.paginationLoading.value
-                                    ? Center(
-                                  child: const SizedBox(
+                  () =>  homeController.getAllVehicleList.isNotEmpty
+                          ? !homeController.paginationLoading.value
+                              ? Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: SizedBox(
                                     height: 24,
                                     width: 24,
                                     child: CircularProgressIndicator(
-                                      color: Colors.white,
+                                      color: AppColors.highlightedColor,
                                     ),
                                   ).paddingOnly(bottom: 24, top: 12),
                                 )
-                                    : Container(
-                                  height: 60,
-                                ),
-                              ],
-                            ):const Align(
-                      alignment: Alignment.center,
-                      child: Text("No data found")),
+                              : Column(
+                                  children: [
+                                    ListView.builder(
+                                      controller:
+                                          homeController.scrollController,
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      padding: EdgeInsets.only(bottom: 8.h),
+                                      itemCount: homeController
+                                          .getAllVehicleList.length,
+                                      itemBuilder: (context, index) {
+                                        return HomeScreenComponent(
+                                            getVehicleData: homeController
+                                                .getAllVehicleList[index]);
+                                      },
+                                    ),
+                                    !homeController.paginationLoading.value
+                                        ? Center(
+                                            child: const SizedBox(
+                                              height: 24,
+                                              width: 24,
+                                              child: CircularProgressIndicator(
+                                                color: Colors.white,
+                                              ),
+                                            ).paddingOnly(bottom: 24, top: 12),
+                                          )
+                                        : Container(
+                                            height: 60,
+                                          ),
+                                  ],
+                                )
+                          : const Align(
+                              alignment: Alignment.center,
+                              child: Text("No data found")),
                 ),
               ],
             ).paddingSymmetric(horizontal: 16.w),

@@ -10,21 +10,26 @@ import '../services/vehicle_information_service.dart';
 class AddVehicleInformationController extends GetxController
     with LoadingMixin, LoadingApiMixin {
   Rx<VehicleInformationModel> vehicleModel = VehicleInformationModel().obs;
+
   //RxBool isAnyOptionSelected = false.obs;
   RxList<QueData> getAllVehicleQueList = <QueData>[].obs;
   RxBool isLoading = false.obs;
   RxString selectedAnswer = "".obs;
+
   //RxList<Map<String, dynamic>> questionAnswerPairs = <Map<String, dynamic>>[].obs;
-  RxList<Map<String, dynamic>> questionAnswerPair = <Map<String, dynamic>>[].obs;
+  RxList<Map<String, dynamic>> questionAnswerPair =
+      <Map<String, dynamic>>[].obs;
   RxList<bool> isAnyOptionSelected = <bool>[].obs;
-  RxInt currentIndex=0.obs;
+  RxInt currentIndex = 0.obs;
 
   void initializeFormStates(int numberOfForms) {
     isAnyOptionSelected.value = List.generate(numberOfForms, (index) => false);
   }
 
-  void updateSelectedAnswers({required String question, required String answer}) {
-    int existingIndex = questionAnswerPair.indexWhere((element) => element['question'] == question);
+  void updateSelectedAnswers(
+      {required String question, required String answer}) {
+    int existingIndex = questionAnswerPair
+        .indexWhere((element) => element['question'] == question);
     if (existingIndex >= 0) {
       questionAnswerPair[existingIndex]['answer'] = answer;
       log("$questionAnswerPair");
@@ -34,23 +39,23 @@ class AddVehicleInformationController extends GetxController
         'answers': answer,
       });
     }
- //   isAnyOptionSelected.value = answer.isNotEmpty;
+    //   isAnyOptionSelected.value = answer.isNotEmpty;
   }
 
-
- bool checkFormFilledUp() {
+  bool checkFormFilledUp({required String answer}) {
     bool isAnswerSelected = false;
     if (currentIndex.value >= 0) {
       isAnswerSelected =
-          questionAnswerPair[currentIndex.value]['answer'] != "";
+          questionAnswerPair[currentIndex.value]['answer'] ==answer;
+
     }
     log("currentIndex ::${currentIndex}");
     log("isAnswerSelected :::${isAnswerSelected}");
+
     return isAnswerSelected;
   }
 
-
- /* bool checkFormFilledUp() {
+  /* bool checkFormFilledUp() {
     int index = questionAnswerPair.indexWhere((e) {
       return e['answer'] == null && e['answer'] == "";
     });
@@ -58,8 +63,6 @@ class AddVehicleInformationController extends GetxController
     return index == -1.obs;
   }
 */
-
-
 
   /* @override
   void onInit() {

@@ -38,7 +38,10 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    vehicleDetailController.image.isEmpty;
+    vehicleDetailController.imagePath?.path.isEmpty;
     return CustomAnnotatedRegions(
+      statusBarColor: AppColors.whiteColor,
       child: Scaffold(
         appBar: AppBar(
           leading: const CustomBackArrowWidget().paddingAll(11.w),

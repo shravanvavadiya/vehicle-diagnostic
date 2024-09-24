@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_template/modules/dashboad/home/service/home_service.dart';
 import 'package:flutter_template/utils/common_api_caller.dart';
 import 'package:flutter_template/utils/loading_mixin.dart';
@@ -13,7 +14,6 @@ import '../../../../utils/navigation_utils/routes.dart';
 import '../models/get_vehicle_data_model.dart';
 
 class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
-
   Rx<GetVehicleDataModel> vehicleModel = GetVehicleDataModel().obs;
   RxList<Vehicle> getAllVehicleList = <Vehicle>[].obs;
   RxBool isLoading = false.obs;
@@ -22,8 +22,7 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
   RxBool hasMoreData = true.obs;
   RxInt currentPage = 1.obs;
 
-
-  RxBool idDisplayErrorBox =false.obs;
+  RxBool idDisplayErrorBox = false.obs;
 
   List<Map<String, dynamic>> vehicleMoreInfo = [
     {
@@ -78,25 +77,23 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
 
   @override
   void onInit() {
-    WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) {
-        getAllVehicles(currentPage: currentPage.value);
-        scrollController.addListener(() {
-          log("message for pagination");
-          if (((scrollController.position.maxScrollExtent) == scrollController.position.pixels) &&
-              paginationLoading.isFalse &&
-              hasMoreData.value) {
-            paginationLoading.value = true;
-            currentPage.value++;
-            getMoreAllVehicles(currentPage: currentPage.value);
-            // increaseValue();
-          } else {
-            paginationLoading.value = false;
-          }
-        });
-      },
-
-    );
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      getAllVehicles(currentPage: currentPage.value);
+      scrollController.addListener(() {
+        log("message for pagination");
+        if (((scrollController.position.maxScrollExtent) ==
+                scrollController.position.pixels) &&
+            paginationLoading.isFalse &&
+            hasMoreData.value) {
+          paginationLoading.value = true;
+          currentPage.value++;
+          getMoreAllVehicles(currentPage: currentPage.value);
+          // increaseValue();
+        } else {
+          paginationLoading.value = false;
+        }
+      });
+    });
 
     super.onInit();
   }
@@ -125,37 +122,36 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
     paginationLoading.value = true;
     handleLoading(true);
     processApi(
-          () => HomeService.getAllVehicle(currentPage: currentPage),
+      () => HomeService.getAllVehicle(currentPage: currentPage),
       error: (error, stack) => handleLoading(false),
       result: (data) {
         getAllVehicleList.clear();
         vehicleModel.value = data;
         getAllVehicleList.addAll(data.apiresponse?.data?.vehicle ?? []);
-        paginationLoading.value=false;
+        paginationLoading.value = false;
         log("getAllVehicleList :: ${getAllVehicleList.toJson()}");
         log("vehicle data :: ${data.apiresponse?.data}");
         log("vehicle :: ${vehicleModel.value.apiresponse?.data?.vehicle?.length}");
       },
     );
-    hasMoreData.value=false;
-    paginationLoading.value=false;
+    hasMoreData.value = false;
+    paginationLoading.value = false;
     isLoading.value = false;
     handleLoading(false);
   }
 
-
   Future<void> deleteVehicle({required int vehicleId}) async {
     handleLoading(true);
     await processApi(
-          () => HomeService.deleteVehicle(vehicleId: vehicleId),
+      () => HomeService.deleteVehicle(vehicleId: vehicleId),
       error: (error, stack) {
         handleLoading(false);
       },
       result: (data) {
-            getAllVehicles(currentPage: currentPage.value);
-            Navigation.pushNamed(Routes.homeScreen);
+        getAllVehicles(currentPage: currentPage.value);
+        Navigation.pushNamed(Routes.homeScreen);
 
-       // getAllVehicleList.removeWhere((vehicle) => vehicle.id == vehicleId);
+        // getAllVehicleList.removeWhere((vehicle) => vehicle.id == vehicleId);
         //Navigator.pop(context);
         log("Vehicle with ID $vehicleId deleted successfully.");
         log("Updated vehicle list: ${getAllVehicleList.toJson()}");

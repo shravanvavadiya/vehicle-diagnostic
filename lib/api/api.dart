@@ -8,6 +8,7 @@ import 'package:flutter_template/modules/vehicle_details_view/model/my_vehicle_m
 import 'package:flutter_template/utils/api_constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_interceptor/http_interceptor.dart';
+import 'package:image_picker/image_picker.dart';
 
 Map<String, String> headers() {
   final Map<String, String> headers = <String, String>{};
@@ -17,9 +18,8 @@ Map<String, String> headers() {
     ///remove after test
     String token =
         "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzI2ODM1MTk3LCJleHAiOjE3Mjc0Mzk5OTd9.QC8sQqIWJF9G_B1b1nTQXCjgF4ZpaZTajWH9tNxmD0XDmV9jiyUbBbfSRDCRCdXUHsrO3pcxYJDUP9hY9ERDEA";
-   /* headers["Authorization"] = token;*/
-     headers["Authorization"] =
-        '${SharedPreferencesHelper.instance.getUserToken()}';
+    /* headers["Authorization"] = token;*/
+    headers["Authorization"] = '${SharedPreferencesHelper.instance.getUserToken()}';
     log("headers ::: $headers");
   }
   return headers;
@@ -31,8 +31,7 @@ Map<String, String> contentHeader() {
   headers["Content-Type"] = "application/json";
   log("user token :: ${SharedPreferencesHelper.instance.getUserToken()}");
   if (SharedPreferencesHelper.instance.getUserToken()?.isNotEmpty ?? false) {
-    headers["Authorization"] =
-        '${SharedPreferencesHelper.instance.getUserToken()}';
+    headers["Authorization"] = '${SharedPreferencesHelper.instance.getUserToken()}';
     log("headers ::: $headers");
   }
   return headers;
@@ -80,9 +79,8 @@ class Api {
     Map<String, dynamic>? bodyData,
   }) async {
     log("put ${await headers()}}");
-    final response = await dio.put(getUrl(url, queryParameters: queryData),
-        body: jsonEncode(bodyData),
-        headers: queryData == null ? contentHeader() : headers());
+    final response =
+        await dio.put(getUrl(url, queryParameters: queryData), body: jsonEncode(bodyData), headers: queryData == null ? contentHeader() : headers());
     return response;
   }
 
@@ -92,8 +90,7 @@ class Api {
     Map<String, dynamic>? bodyData,
   }) async {
     final response = await dio.patch(getUrl(url, queryParameters: queryData),
-        body: jsonEncode(bodyData),
-        headers: queryData == null ? contentHeader() : headers());
+        body: jsonEncode(bodyData), headers: queryData == null ? contentHeader() : headers());
     return response;
   }
 
@@ -102,8 +99,7 @@ class Api {
     Map<String, dynamic>? queryData,
     Map<String, dynamic>? bodyData,
   }) async {
-    final response = await dio.delete(getUrl(url, queryParameters: queryData),
-        body: jsonEncode(bodyData), headers: headers());
+    final response = await dio.delete(getUrl(url, queryParameters: queryData), body: jsonEncode(bodyData), headers: headers());
     return response;
   }
 
@@ -113,7 +109,7 @@ class Api {
   }) async {
     final response = await dio.head(
       getUrl(url, queryParameters: queryData),
-      headers:  headers(),
+      headers: headers(),
     );
     return response;
   }
@@ -130,15 +126,10 @@ class Api {
     return response;
   }
 
-  Future<http.StreamedResponse?> multiPartRequestAddVehicle(String endpoint,
-      {required MyVehicleData addProfileFormData, String? imagePath}) async {
+  Future<http.StreamedResponse?> multiPartRequestAddVehicle(String endpoint, {required MyVehicleData addProfileFormData, String? imagePath}) async {
     try {
-      var headers = {
-        'accept': '*/*',
-        'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'
-      };
-      var request = http.MultipartRequest('POST',
-          Uri.parse('${ApiConstants.baseUrl}${ApiConstants.addVehicle}'));
+      var headers = {'accept': '*/*', 'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'};
+      var request = http.MultipartRequest('POST', Uri.parse('${ApiConstants.baseUrl}${ApiConstants.addVehicle}'));
       final body = {
         'fuelType': "${addProfileFormData.fuelType}",
         'transmissionType': "${addProfileFormData.transmissionType}",
@@ -150,8 +141,7 @@ class Api {
       };
       request.fields.addAll(body);
       if (imagePath?.isNotEmpty ?? false) {
-        request.files
-            .add(await http.MultipartFile.fromPath('photo', imagePath ?? ""));
+        request.files.add(await http.MultipartFile.fromPath('photo', imagePath ?? ""));
       }
       log("body $body");
       log("imagePath :::${imagePath}");
@@ -159,6 +149,40 @@ class Api {
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 200) {
         return response;
+      }
+    } catch (e, st) {
+      log('multiPartRequest Error :: $e ::: $st');
+    }
+    return null;
+  }
+
+  Future multiPartRequestUserData({
+    required String endPoint,
+    required String email,
+    required String firstName,
+    required String lastName,
+    required String postCode,
+    required String imagePath,
+  }) async {
+    try {
+      var headers = {'accept': '*/*', 'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'};
+      var request = http.MultipartRequest('POST', Uri.parse('${ApiConstants.baseUrl}$endPoint'));
+      final body = {
+        'email': email,
+        'firstName': firstName,
+        'lastName': lastName,
+        'postCode': postCode,
+      };
+
+      request.files.add(await http.MultipartFile.fromPath('photo', imagePath));
+
+      request.fields.addAll(body);
+      request.headers.addAll(headers);
+
+      http.Response response = await http.Response.fromStream(await request.send());
+      if (response.statusCode == 200) {
+        print(response);
+        return response.body;
       }
     } catch (e, st) {
       log('multiPartRequest Error :: $e ::: $st');

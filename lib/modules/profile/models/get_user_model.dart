@@ -4,9 +4,7 @@ class GetUserProfileModel {
   GetUserProfileModel({this.profileResponse});
 
   GetUserProfileModel.fromJson(Map<String, dynamic> json) {
-    profileResponse = json['apiresponse'] != null
-        ? ProfileResponse.fromJson(json['apiresponse'])
-        : null;
+    profileResponse = json['apiresponse'] != null ? ProfileResponse.fromJson(json['apiresponse']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -50,19 +48,21 @@ class ProfileData {
   String? lastName;
   String? email;
   String? postCode;
+  String? photo;
   bool? profileCompleted;
   bool? subscriptionPlan;
 
   ProfileData(
       {this.creationDate,
-        this.lastModifiedDate,
-        this.id,
-        this.firstName,
-        this.lastName,
-        this.email,
-        this.postCode,
-        this.profileCompleted,
-        this.subscriptionPlan});
+      this.lastModifiedDate,
+      this.id,
+      this.firstName,
+      this.lastName,
+      this.email,
+      this.postCode,
+      this.photo,
+      this.profileCompleted,
+      this.subscriptionPlan});
 
   ProfileData.fromJson(Map<String, dynamic> json) {
     creationDate = json['creationDate'];
@@ -72,6 +72,7 @@ class ProfileData {
     lastName = json['lastName'];
     email = json['email'];
     postCode = json['postCode'];
+    photo = json['photo'];
     profileCompleted = json['profileCompleted'];
     subscriptionPlan = json['subscriptionPlan'];
   }
@@ -85,6 +86,7 @@ class ProfileData {
     data['lastName'] = lastName;
     data['email'] = email;
     data['postCode'] = postCode;
+    data['photo'] = photo;
     data['profileCompleted'] = profileCompleted;
     data['subscriptionPlan'] = subscriptionPlan;
     return data;

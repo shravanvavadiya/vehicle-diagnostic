@@ -1,81 +1,92 @@
 class PersonalInformationModel {
-  Apiresponse? apiResponse;
+  Apiresponse? apiresponse;
 
-  PersonalInformationModel({this.apiResponse});
+  PersonalInformationModel({this.apiresponse});
 
   PersonalInformationModel.fromJson(Map<String, dynamic> json) {
-    apiResponse = json['apiresponse'] != null
-        ? Apiresponse.fromJson(json['apiresponse'])
+    apiresponse = json['apiresponse'] != null
+        ? new Apiresponse.fromJson(json['apiresponse'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (apiResponse != null) {
-      data['apiresponse'] = apiResponse!.toJson();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.apiresponse != null) {
+      data['apiresponse'] = this.apiresponse!.toJson();
     }
     return data;
   }
 }
 
 class Apiresponse {
+  Null? dataArray;
   Data? data;
   int? timestamp;
 
-  Apiresponse({this.data, this.timestamp});
+  Apiresponse({this.dataArray, this.data, this.timestamp});
 
   Apiresponse.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    dataArray = json['dataArray'];
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
     timestamp = json['timestamp'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['dataArray'] = this.dataArray;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
-    data['timestamp'] = timestamp;
+    data['timestamp'] = this.timestamp;
     return data;
   }
 }
 
 class Data {
   int? id;
+  String? photo;
   String? firstName;
   String? lastName;
   String? email;
   String? postCode;
   bool? verified;
   bool? profileCompleted;
+  bool? subscriptionPlan;
 
   Data(
       {this.id,
+        this.photo,
         this.firstName,
         this.lastName,
         this.email,
         this.postCode,
         this.verified,
-        this.profileCompleted});
+        this.profileCompleted,
+        this.subscriptionPlan});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    photo = json['photo'];
     firstName = json['firstName'];
     lastName = json['lastName'];
     email = json['email'];
     postCode = json['postCode'];
     verified = json['verified'];
     profileCompleted = json['profileCompleted'];
+    subscriptionPlan = json['subscriptionPlan'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['firstName'] = firstName;
-    data['lastName'] = lastName;
-    data['email'] = email;
-    data['postCode'] = postCode;
-    data['verified'] = verified;
-    data['profileCompleted'] = profileCompleted;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['photo'] = this.photo;
+    data['firstName'] = this.firstName;
+    data['lastName'] = this.lastName;
+    data['email'] = this.email;
+    data['postCode'] = this.postCode;
+    data['verified'] = this.verified;
+    data['profileCompleted'] = this.profileCompleted;
+    data['subscriptionPlan'] = this.subscriptionPlan;
     return data;
   }
 }

@@ -12,6 +12,7 @@ import 'package:flutter_template/utils/constants.dart';
 import 'package:flutter_template/utils/loading_mixin.dart';
 import 'package:flutter_template/utils/navigation_utils/routes.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../utils/assets.dart';
 import '../../../utils/navigation_utils/navigation.dart';
@@ -28,6 +29,9 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
   RxBool isValidateLastName = false.obs;
   RxBool isValidateEmail = false.obs;
   RxBool isValidatePostCode = false.obs;
+  RxBool isValidateImage = false.obs;
+  XFile? imagePath;
+  RxString image = "".obs;
 
   clearData() {
     firstname.clear();
@@ -50,7 +54,7 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
       icon: IconAsset.security,
     ),
     ProfileModel(
-      title: AppString.accountInfo,
+      title: AppString.termsCondition,
       icon: IconAsset.document,
     ),
   ];
@@ -69,6 +73,7 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
         lastname.text = profileData?.lastName.toString() ?? "";
         email.text = profileData?.email.toString() ?? "";
         postCode.text = profileData?.postCode.toString() ?? "";
+        image.value = profileData?.photo ?? "";
       },
     );
   }

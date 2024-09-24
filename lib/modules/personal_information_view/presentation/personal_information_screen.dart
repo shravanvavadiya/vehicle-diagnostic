@@ -1,5 +1,9 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_template/modules/personal_information_view/controller/personal_information_controller.dart';
 import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/utils/app_string.dart';
@@ -14,6 +18,7 @@ import 'package:get/get.dart';
 import '../../../api/preferences/shared_preferences_helper.dart';
 import '../../../utils/navigation_utils/navigation.dart';
 import '../../../utils/navigation_utils/routes.dart';
+import '../../../utils/utils.dart';
 import '../../../utils/validation_utils.dart';
 
 class PersonalInformationScreen extends StatelessWidget {
@@ -49,7 +54,7 @@ class PersonalInformationScreen extends StatelessWidget {
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
                   ),
-                /*  Obx(
+                  /*  Obx(
                         () => ClipOval(
                       child: Container(
                         height: 60.h,
@@ -121,10 +126,86 @@ class PersonalInformationScreen extends StatelessWidget {
                       ),
                     ),
                   ),*/
+
+                  Obx(
+                    () => (personalInformationController.image.value.isNotEmpty)
+                        ? Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              height: 150.h,
+                              width: 150.h,
+                              decoration: BoxDecoration(
+                                color: AppColors.backgroundColor,
+                                borderRadius: BorderRadius.circular(150.r),
+                                image: DecorationImage(
+                                    image: FileImage(
+                                      File(
+                                        personalInformationController.image.value,
+                                      ),
+                                    ),
+                                    fit: BoxFit.cover),
+                              ),
+                              child: GestureDetector(
+                                onTap: () async {
+                                  await Utils().imagePickerModel(
+                                      selectImage: personalInformationController.imagePath, image: personalInformationController.image);
+
+                                  personalInformationController.isValidateImage.value = true;
+                                },
+                                child: Container(
+                                  height: 150.h,
+                                  width: 150.h,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.blackColor.withOpacity(0.4),
+                                    borderRadius: BorderRadius.circular(150.r),
+                                  ),
+                                  child: SvgPicture.asset(IconAsset.editIcon).paddingAll(85.h),
+                                ),
+                              ),
+                            ).paddingOnly(
+                              top: 24.h,
+                              bottom: 8.h,
+                            ),
+                          )
+                        : Align(
+                            alignment: Alignment.center,
+                            child: GestureDetector(
+                              onTap: () async {
+                                await Utils().imagePickerModel(
+                                    selectImage: personalInformationController.imagePath, image: personalInformationController.image);
+
+                                if (personalInformationController.image.value.isNotEmpty) {
+                                  personalInformationController.isValidateImage.value = true;
+                                } else {
+                                  personalInformationController.isValidateImage.value = false;
+                                }
+                              },
+                              child: Container(
+                                height: 150.h,
+                                width: 150.h,
+                                decoration: BoxDecoration(
+                                  color: AppColors.backgroundColor,
+                                  borderRadius: BorderRadius.circular(150.r),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(IconAsset.uploadIcon).paddingOnly(bottom: 6.h),
+                                    AppText(
+                                      text: "Tap to add",
+                                      textAlign: TextAlign.center,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w400,
+                                    ).paddingOnly(top: 5.h)
+                                  ],
+                                ),
+                              ).paddingOnly(top: 24.h, bottom: 8.h),
+                            ),
+                          ),
+                  ),
                   customTextFormField(
                     onChanged: (p0) {
-                      personalInformationController.isValidateName.value =
-                          personalInformationController.firstname.text.isNotEmpty;
+                      personalInformationController.isValidateName.value = personalInformationController.firstname.text.isNotEmpty;
                     },
                     text: AppString.firstName,
                     hintText: AppString.firstName,
@@ -133,8 +214,7 @@ class PersonalInformationScreen extends StatelessWidget {
                   ).paddingOnly(top: 24.h, bottom: 16.h),
                   customTextFormField(
                     onChanged: (p0) {
-                      personalInformationController.isValidateLastName.value =
-                          personalInformationController.lastname.text.isNotEmpty;
+                      personalInformationController.isValidateLastName.value = personalInformationController.lastname.text.isNotEmpty;
                     },
                     text: AppString.lastName,
                     hintText: AppString.lastName,
@@ -143,19 +223,18 @@ class PersonalInformationScreen extends StatelessWidget {
                   ),
                   customTextFormField(
                     readOnly: true,
-                  /*  onChanged: (p0) {
+                    /*  onChanged: (p0) {
                       personalInformationController.isValidateEmail.value = personalInformationController.email.text.isNotEmpty;
                     },*/
                     text: AppString.email,
                     hintText: AppString.emailEx,
                     controller: personalInformationController.email,
                     keyboardType: TextInputType.emailAddress,
-                   // validator: AppValidation.emailValidator,
+                    // validator: AppValidation.emailValidator,
                   ).paddingSymmetric(vertical: 16.h),
                   customTextFormField(
                     onChanged: (p0) {
-                      personalInformationController.isValidatePostCode.value =
-                          personalInformationController.postCode.text.isNotEmpty;
+                      personalInformationController.isValidatePostCode.value = personalInformationController.postCode.text.isNotEmpty;
                     },
                     text: AppString.postCode,
                     keyboardType: TextInputType.number,
@@ -171,19 +250,19 @@ class PersonalInformationScreen extends StatelessWidget {
           floatingActionButton: Obx(
             () => CustomButton(
               onTap: () async {
+                log("image path ${personalInformationController.image.value}");
                 if (personalInformationController.formKey.currentState?.validate() ?? false) {
                   await personalInformationController.personalInformationAPI(
                       email: personalInformationController.email.text,
                       firstname: personalInformationController.firstname.text,
                       lastname: personalInformationController.lastname.text,
-                      postCode: personalInformationController.postCode.text);
-
+                      postCode: personalInformationController.postCode.text,
+                      imagePath: personalInformationController.image.value);
                 }
               },
               isLoader: personalInformationController.isPersonalInformation.value,
               isDisabled: (personalInformationController.isValidateName.value &&
                       personalInformationController.isValidateLastName.value &&
-                      //personalInformationController.isValidateEmail.value &&
                       personalInformationController.isValidatePostCode.value)
                   ? false
                   : true,
@@ -216,8 +295,8 @@ Widget customTextFormField({
   String? Function(String?)? validator,
   required String text,
   required String hintText,
-   bool? readOnly,
-   Function(String)? onChanged,
+  bool? readOnly,
+  Function(String)? onChanged,
   required TextEditingController controller,
   TextInputType keyboardType = TextInputType.text,
 }) {
@@ -230,7 +309,7 @@ Widget customTextFormField({
         fontSize: 14.sp,
       ).paddingOnly(bottom: 6.h),
       CustomTextField(
-        readOnly: readOnly??false ,
+        readOnly: readOnly ?? false,
         onChanged: onChanged,
         controller: controller,
         hintText: hintText,

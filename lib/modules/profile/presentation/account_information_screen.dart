@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +13,7 @@ import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:flutter_template/widget/annotated_region.dart';
 import 'package:flutter_template/widget/custom_button.dart';
 import 'package:get/get.dart';
+import '../../../utils/utils.dart';
 import '../../../utils/validation_utils.dart';
 import '../../personal_information_view/presentation/personal_information_screen.dart';
 import '../controller/profile_controller.dart';
@@ -67,8 +71,37 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                   key: profileController.formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-
+                      // Text("profileController.image.value ${profileController.image.value}"),
+                      // CachedNetworkImage(
+                      //   color: Colors.transparent,
+                      //   imageUrl: profileController.image.value,
+                      //   maxHeightDiskCache: 500000,
+                      //   maxWidthDiskCache: 500000,
+                      //   fit: BoxFit.cover,
+                      //   imageBuilder: (context, imageProvider) => Container(
+                      //     height: 152,
+                      //     width: 152,
+                      //     decoration: BoxDecoration(
+                      //       color: Colors.transparent,
+                      //       borderRadius: BorderRadius.circular(9),
+                      //       image: DecorationImage(
+                      //         image: imageProvider,
+                      //         fit: BoxFit.cover,
+                      //       ),
+                      //     ),
+                      //   ),
+                      //   placeholder: (context, url) => const Center(
+                      //     child: CircularProgressIndicator(
+                      //       color: Colors.white,
+                      //     ),
+                      //   ),
+                      //   errorWidget: (context, url, error) => const Icon(
+                      //     Icons.error,
+                      //     color: Colors.white,
+                      //   ),
+                      // ).paddingAll(4),
                       customTextFormField(
                         text: AppString.firstName,
                         hintText: AppString.firstName,
@@ -93,8 +126,8 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                         controller: profileController.email,
                         readOnly: true,
                         keyboardType: TextInputType.emailAddress,
-                       // validator: AppValidation.emailValidator,
-                       /* onChanged: (String) {
+                        // validator: AppValidation.emailValidator,
+                        /* onChanged: (String) {
                           profileController.isValidateEmail.value = profileController.email.text.isNotEmpty;
                         },*/
                       ).paddingSymmetric(vertical: 16.h),
@@ -112,31 +145,30 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                 ),
               ),
             ),
-          CustomButton(
-                onTap: () async {
-                  if (profileController.formKey.currentState?.validate() ?? false) {
-                    profileController.updateUserProfileAPI(
-                        postCode: profileController.postCode.text,
-                        firstName: profileController.firstname.text,
-                        lastName: profileController.lastname.text);
-                  }
-                },
+            CustomButton(
+              onTap: () async {
+                if (profileController.formKey.currentState?.validate() ?? false) {
+                  profileController.updateUserProfileAPI(
+                      postCode: profileController.postCode.text,
+                      firstName: profileController.firstname.text,
+                      lastName: profileController.lastname.text);
+                }
+              },
               /*  isDisabled: (profileController.isValidateName.value &&
                         profileController.isValidateLastName.value &&
                         profileController.isValidatePostCode.value)
                     ? false
                     : true,*/
-                height: 52.h,
-                buttonColor: AppColors.highlightedColor,
-                fontSize: 15.h,
-                disableTextColor: AppColors.whiteColor,
-                text: AppString.updateProfile,
-                borderRadius: BorderRadius.circular(8.r),
-              ).paddingSymmetric(
-                horizontal: 16.w,
-                vertical: 25.h,
-              ),
-            
+              height: 52.h,
+              buttonColor: AppColors.highlightedColor,
+              fontSize: 15.h,
+              disableTextColor: AppColors.whiteColor,
+              text: AppString.updateProfile,
+              borderRadius: BorderRadius.circular(8.r),
+            ).paddingSymmetric(
+              horizontal: 16.w,
+              vertical: 25.h,
+            ),
           ],
         ),
       ),

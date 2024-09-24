@@ -7,6 +7,7 @@ import 'package:flutter_template/modules/personal_information_view/service/perso
 import 'package:flutter_template/utils/constants.dart';
 import 'package:flutter_template/widget/app_snackbar.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../utils/common_api_caller.dart';
 import '../../../utils/loading_mixin.dart';
@@ -25,12 +26,14 @@ class PersonalInformationController extends GetxController with LoadingMixin, Lo
   RxBool isValidateLastName = false.obs;
   RxBool isValidateEmail = false.obs;
   RxBool isValidatePostCode = false.obs;
+  XFile? imagePath;
+  RxString image = "".obs;
+  RxBool isValidateImage = false.obs;
 
   RxBool isButtonEnabled = false.obs;
 
   void updateButtonState() {
-    isButtonEnabled.value =
-        firstname.text.isNotEmpty && lastname.text.isNotEmpty && email.text.isNotEmpty && postCode.text.isNotEmpty;
+    isButtonEnabled.value = firstname.text.isNotEmpty && lastname.text.isNotEmpty && email.text.isNotEmpty && postCode.text.isNotEmpty;
   }
 
   clearData() {
@@ -46,18 +49,13 @@ class PersonalInformationController extends GetxController with LoadingMixin, Lo
     required String firstname,
     required String lastname,
     required String postCode,
+    required String imagePath,
   }) async {
     handleLoading(true);
     if (formKey.currentState!.validate()) {
       await processApi(
         () => PersonalInformationService.personalInformation(
-          bodyData: {
-            'email': email,
-            'firstName': firstname,
-            'lastName': lastname,
-            'postCode': postCode,
-          },
-        ),
+            email: email, firstName: firstname, lastName: lastname, postCode: postCode, imagePath: imagePath),
         error: (error, stack) {
           log("Exception in personalInformationAPI---->$error");
           AppSnackBar.showErrorSnackBar(message: "Something went wrong", title: "Error");
@@ -65,8 +63,8 @@ class PersonalInformationController extends GetxController with LoadingMixin, Lo
         },
         result: (data) async {
           personalInformationModel.value = data;
-          await SharedPreferencesHelper.instance
-              .setInt(Constants.keyUserId, personalInformationModel.value.apiResponse?.data?.id ?? 0);
+          log("result ${personalInformationModel.value.apiresponse?.data?.email??""}");
+          await SharedPreferencesHelper.instance.setInt(Constants.keyUserId, personalInformationModel.value.apiresponse?.data?.id ?? 0);
           //  await SharedPreferencesHelper.instance.setUser(data);
           Navigation.pushNamed(Routes.addVehicle);
         },

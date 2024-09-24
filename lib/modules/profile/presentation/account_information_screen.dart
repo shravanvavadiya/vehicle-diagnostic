@@ -68,6 +68,7 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+
                       customTextFormField(
                         text: AppString.firstName,
                         hintText: AppString.firstName,
@@ -92,10 +93,10 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                         controller: profileController.email,
                         readOnly: true,
                         keyboardType: TextInputType.emailAddress,
-                        validator: AppValidation.emailValidator,
-                        onChanged: (String) {
+                       // validator: AppValidation.emailValidator,
+                       /* onChanged: (String) {
                           profileController.isValidateEmail.value = profileController.email.text.isNotEmpty;
-                        },
+                        },*/
                       ).paddingSymmetric(vertical: 16.h),
                       customTextFormField(
                         text: AppString.postCode,
@@ -111,8 +112,7 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                 ),
               ),
             ),
-            Obx(
-              () => CustomButton(
+          CustomButton(
                 onTap: () async {
                   if (profileController.formKey.currentState?.validate() ?? false) {
                     profileController.updateUserProfileAPI(
@@ -121,12 +121,11 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                         lastName: profileController.lastname.text);
                   }
                 },
-                isDisabled: (profileController.isValidateName.value &&
+              /*  isDisabled: (profileController.isValidateName.value &&
                         profileController.isValidateLastName.value &&
-                        profileController.isValidateEmail.value &&
                         profileController.isValidatePostCode.value)
                     ? false
-                    : true,
+                    : true,*/
                 height: 52.h,
                 buttonColor: AppColors.highlightedColor,
                 fontSize: 15.h,
@@ -137,7 +136,7 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                 horizontal: 16.w,
                 vertical: 25.h,
               ),
-            ),
+            
           ],
         ),
       ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_template/modules/dashboad/vehicle_details/controller/vehicle_detail_screen_controller.dart';
 import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/app_text.dart';
@@ -10,12 +9,15 @@ import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:flutter_template/widget/annotated_region.dart';
 import 'package:get/get.dart';
 import '../../../../widget/custom_listtile.dart';
+import '../controller/home_controller.dart';
+import '../models/get_vehicle_data_model.dart';
 
 class VehicleDetailScreen extends StatelessWidget {
   VehicleDetailScreen({super.key});
 
-  final VehicleDetailScreenController vehicleDetailScreenController =
-      Get.put(VehicleDetailScreenController());
+  final HomeController homeController = Get.put(HomeController());
+
+  final _args = Get.arguments as Vehicle;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class VehicleDetailScreen extends StatelessWidget {
             leadingWidth: 30,
             elevation: 0,
             title: AppText(
-              text: "VU69 TDE",
+              text: "${_args.vehicleNumber}",
               color: AppColors.blackColor,
               fontWeight: FontWeight.w600,
               fontSize: 17.sp,
@@ -99,8 +101,98 @@ class VehicleDetailScreen extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 5.w),
                     value: 3,
                     onTap: () {
-                      vehicleDetailScreenController.idDisplayErrorBox.value =
-                          true;
+                      showDialog(
+                          context: Get.context!,
+                          builder: (context) {
+                            return Dialog(
+                              backgroundColor: AppColors.whiteColor,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              insetPadding:
+                                  EdgeInsets.symmetric(horizontal: 55.w),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  AppText(
+                                    text: "Delete Vehicle",
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.blackColor,
+                                    fontSize: 18.sp,
+                                    textAlign: TextAlign.center,
+                                  ).paddingOnly(
+                                      left: 14.w, right: 14.w, top: 5.h),
+                                  AppText(
+                                    text:
+                                        "Are you sure you want to delete this vehicle? This action cannot be undone.",
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12.5.sp,
+                                    color: AppColors.grey60,
+                                    letterSpacing: 0.3,
+                                    height: 1.4.h,
+                                    textAlign: TextAlign.center,
+                                  ).paddingOnly(
+                                    top: 20.h,
+                                    bottom: 20.h,
+                                    left: 16.w,
+                                    right: 16.w,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      homeController.deleteVehicle(
+                                          vehicleId: _args.id!);
+                                    },
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.whiteColor,
+                                        border: Border(
+                                          top: BorderSide(
+                                              color: AppColors.borderColor
+                                                  .withOpacity(0.6),
+                                              width: 0.5),
+                                          bottom: BorderSide(
+                                              color: AppColors.borderColor
+                                                  .withOpacity(0.6),
+                                              width: 0.5),
+                                        ),
+                                      ),
+                                      child: AppText(
+                                        textAlign: TextAlign.center,
+                                        text: "Yes",
+                                        color: AppColors.logoutColor,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ).paddingSymmetric(vertical: 12.h),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.whiteColor,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: AppText(
+                                        textAlign: TextAlign.center,
+                                        text: "Cancel",
+                                        color: AppColors.blackColor,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ).paddingSymmetric(vertical: 12.h),
+                                    ),
+                                  ),
+                                ],
+                              ).paddingOnly(top: 20.h),
+                            );
+                          });
+                      // homeController.idDisplayErrorBox.value = true;
                     },
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -142,10 +234,12 @@ class VehicleDetailScreen extends StatelessWidget {
                   children: [
                     Container(
                       height: 210.h,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: AssetImage(ImagesAsset.car),
+                          image: _args.photo != null && _args.photo!.isNotEmpty
+                              ? NetworkImage("${_args.photo}")
+                              : const AssetImage(ImagesAsset.imgPlaceholder),
                         ),
                       ),
                     ),
@@ -168,7 +262,7 @@ class VehicleDetailScreen extends StatelessWidget {
                       left: 15.w,
                       bottom: 15.h,
                       child: AppText(
-                        text: "VU69 YDE",
+                        text: "${_args.vehicleNumber}",
                         fontSize: 19.sp,
                         letterSpacing: 0.25,
                         fontWeight: FontWeight.w600,
@@ -185,32 +279,69 @@ class VehicleDetailScreen extends StatelessWidget {
                       color: AppColors.secondaryColor.withOpacity(0.7),
                       fontWeight: FontWeight.w600,
                       fontSize: 16.sp,
-                    ).paddingOnly(top: 16.h, left: 16.w),
-                    ListView.separated(
-                      itemCount: vehicleDetailScreenController
-                          .vehicleDetailsList.length,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return CustomListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: 8.h),
-                          title:
-                              "${vehicleDetailScreenController.vehicleDetailsList[index]["title"]}",
-                          trailingText:
-                              "${vehicleDetailScreenController.vehicleDetailsList[index]["subTitle"]}",
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return Container(
+                    ).paddingOnly(
+                      top: 16.h,
+                      left: 16.w,
+                      bottom: 10.h,
+                    ),
+                    Column(
+                      children: [
+                        CustomListTile(
+                          contentPadding: EdgeInsets.symmetric(vertical: 4.h),
+                          title: AppString.vehicleNumber,
+                          trailingText: "${_args.vehicleNumber}",
+                        ),
+                        Container(
                           height: 2.h,
                           color: AppColors.backgroundColor,
-                        );
-                      },
-                    ).paddingOnly(top: 16.h, left: 16.w, right: 16.w),
+                        ),
+                        CustomListTile(
+                          contentPadding: EdgeInsets.symmetric(vertical: 4.h),
+                          title: AppString.vehicleYear,
+                          trailingText: "${_args.vehicleYear}",
+                        ),
+                        Container(
+                          height: 2.h,
+                          color: AppColors.backgroundColor,
+                        ),
+                        CustomListTile(
+                          contentPadding: EdgeInsets.symmetric(vertical: 4.h),
+                          title: AppString.vehicleMake,
+                          trailingText: "${_args.vehicleMake}",
+                        ),
+                        Container(
+                          height: 2.h,
+                          color: AppColors.backgroundColor,
+                        ),
+                        CustomListTile(
+                          contentPadding: EdgeInsets.symmetric(vertical: 4.h),
+                          title: AppString.vehicleModel,
+                          trailingText: "${_args.vehicleModel}",
+                        ),
+                        Container(
+                          height: 2.h,
+                          color: AppColors.backgroundColor,
+                        ),
+                        CustomListTile(
+                          contentPadding: EdgeInsets.symmetric(vertical: 4.h),
+                          title: AppString.transmissionType,
+                          trailingText: "${_args.transmissionType}",
+                        ),
+                        Container(
+                          height: 2.h,
+                          color: AppColors.backgroundColor,
+                        ),
+                        CustomListTile(
+                          contentPadding: EdgeInsets.symmetric(vertical: 4.h),
+                          title: AppString.fuelType,
+                          trailingText: "${_args.fuelType}",
+                        ),
+                      ],
+                    ).paddingSymmetric(horizontal: 16.w),
                     Container(
                       height: 7.h,
                       color: AppColors.backgroundColor,
-                    ).paddingOnly(top: 8.h, bottom: 20.h),
+                    ).paddingOnly(top: 4.h, bottom: 20.h),
                     AppText(
                       text: "More about your vehicle",
                       color: AppColors.secondaryColor.withOpacity(0.7),
@@ -218,17 +349,16 @@ class VehicleDetailScreen extends StatelessWidget {
                       fontSize: 16.sp,
                     ).paddingOnly(left: 16.w),
                     ListView.separated(
-                      itemCount:
-                          vehicleDetailScreenController.vehicleMoreInfo.length,
+                      itemCount: homeController.vehicleMoreInfo.length,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return CustomListTile(
                           contentPadding: EdgeInsets.symmetric(vertical: 8.h),
                           title:
-                              "${vehicleDetailScreenController.vehicleMoreInfo[index]["title"]}",
+                              "${homeController.vehicleMoreInfo[index]["title"]}",
                           trailingText:
-                              "${vehicleDetailScreenController.vehicleMoreInfo[index]["subTitle"]}",
+                              "${homeController.vehicleMoreInfo[index]["subTitle"]}",
                         );
                       },
                       separatorBuilder: (context, index) {
@@ -250,9 +380,7 @@ class VehicleDetailScreen extends StatelessWidget {
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
           floatingActionButton: Obx(
-            () =>  vehicleDetailScreenController
-                        .idDisplayErrorBox.value ==
-                    true
+            () => homeController.idDisplayErrorBox.value == true
                 ? Container(
                         height: 58.h,
                         width: Get.width,
@@ -281,19 +409,21 @@ class VehicleDetailScreen extends StatelessWidget {
                             Row(
                               children: [
                                 GestureDetector(
-                                  onTap: (){
-                                    vehicleDetailScreenController
-                                        .idDisplayErrorBox.value=false;
+                                  onTap: () {
+                                    homeController.idDisplayErrorBox.value =
+                                        false;
                                   },
                                   child: Container(
                                     height: 30.h,
                                     width: 55.w,
                                     decoration: BoxDecoration(
-                                        color:
-                                            AppColors.whiteColor.withOpacity(0.2),
-                                        borderRadius: BorderRadius.circular(20.r),
+                                        color: AppColors.whiteColor
+                                            .withOpacity(0.2),
+                                        borderRadius:
+                                            BorderRadius.circular(20.r),
                                         border: Border.all(
-                                            color: AppColors.whiteColor, width: 1)),
+                                            color: AppColors.whiteColor,
+                                            width: 1)),
                                     child: Center(
                                         child: AppText(
                                       text: "No",
@@ -304,18 +434,20 @@ class VehicleDetailScreen extends StatelessWidget {
                                   ),
                                 ),
                                 GestureDetector(
-                                  onTap: (){
-                                    vehicleDetailScreenController
-                                        .idDisplayErrorBox.value=false;
+                                  onTap: () {
+                                    homeController.idDisplayErrorBox.value =
+                                        false;
                                   },
                                   child: Container(
                                     height: 30.h,
                                     width: 55.w,
                                     decoration: BoxDecoration(
                                         color: AppColors.whiteColor,
-                                        borderRadius: BorderRadius.circular(20.r),
+                                        borderRadius:
+                                            BorderRadius.circular(20.r),
                                         border: Border.all(
-                                            color: AppColors.whiteColor, width: 1)),
+                                            color: AppColors.whiteColor,
+                                            width: 1)),
                                     child: Center(
                                       child: AppText(
                                         text: "Yes",
@@ -325,7 +457,6 @@ class VehicleDetailScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ).paddingOnly(left: 10.w),
-
                                 ),
                               ],
                             ),

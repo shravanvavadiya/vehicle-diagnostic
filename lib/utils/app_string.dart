@@ -47,7 +47,7 @@ class AppString {
   static const String warningLights  = "Warning lights";
   static const String mostlyDriving  = "Mostly driving";
   static const String weatherOrTemperatureProblem  = "Weather or temperature problem";
-  static const String repairedRecently  = "repairedRecently";
+  static const String repairedRecently  = "Repaired Recently";
   static const String currentMileage  = "Current mileage";
   static const String edit  = "Edit";
   static const String downloadPDF  = "Download PDF";

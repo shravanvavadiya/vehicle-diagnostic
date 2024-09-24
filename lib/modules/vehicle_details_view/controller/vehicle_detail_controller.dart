@@ -131,6 +131,8 @@ class VehicleDetailController extends GetxController
         }
       },
     );
+    imagePath?.path.isEmpty;
+    image.isEmpty;
     handleLoading(false);
   }
 }

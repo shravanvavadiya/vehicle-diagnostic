@@ -16,7 +16,7 @@ class SocialLoginService {
       await GoogleSignIn().signOut();
       GoogleSignInAccount? googleUser = await GoogleSignIn(
         clientId: Constants.clientId,
-        // scopes: scopes,
+         scopes: scopes,
       ).signIn();
       String? idToken = (await googleUser?.authentication)?.idToken;
       log("idToken:: --->${idToken}");

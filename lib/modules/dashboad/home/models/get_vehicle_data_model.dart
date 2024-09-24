@@ -5,7 +5,7 @@ class GetVehicleDataModel {
 
   GetVehicleDataModel.fromJson(Map<String, dynamic> json) {
     apiresponse = json['apiresponse'] != null
-        ? new Apiresponse.fromJson(json['apiresponse'])
+        ?  Apiresponse.fromJson(json['apiresponse'])
         : null;
   }
 
@@ -77,6 +77,7 @@ class Vehicle {
   String? vehicleModel;
   String? transmissionType;
   String? fuelType;
+  String? moreAbout;
   UserId? userId;
 
   Vehicle(
@@ -88,6 +89,7 @@ class Vehicle {
         this.vehicleModel,
         this.transmissionType,
         this.fuelType,
+        this.moreAbout,
         this.userId});
 
   Vehicle.fromJson(Map<String, dynamic> json) {
@@ -99,6 +101,7 @@ class Vehicle {
     vehicleModel = json['vehicleModel'];
     transmissionType = json['transmissionType'];
     fuelType = json['fuelType'];
+    moreAbout = json['moreAbout'];
     userId =
     json['userId'] != null ? new UserId.fromJson(json['userId']) : null;
   }
@@ -111,6 +114,7 @@ class Vehicle {
     data['vehicleYear'] = this.vehicleYear;
     data['vehicleMake'] = this.vehicleMake;
     data['vehicleModel'] = this.vehicleModel;
+    data['moreAbout'] = this.moreAbout;
     data['transmissionType'] = this.transmissionType;
     data['fuelType'] = this.fuelType;
     if (this.userId != null) {
@@ -124,12 +128,12 @@ class UserId {
   int? creationDate;
   int? lastModifiedDate;
   int? id;
-  Null? firstName;
-  Null? lastName;
+  String? firstName;
+  String? lastName;
   String? email;
-  Null? postCode;
+  String? postCode;
   bool? profileCompleted;
-  Null? subscriptionPlan;
+  bool? subscriptionPlan;
 
   UserId(
       {this.creationDate,
@@ -155,7 +159,7 @@ class UserId {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data =  Map<String, dynamic>();
     data['creationDate'] = this.creationDate;
     data['lastModifiedDate'] = this.lastModifiedDate;
     data['id'] = this.id;

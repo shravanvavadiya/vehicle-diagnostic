@@ -10,13 +10,14 @@ import '../models/get_vehicle_data_model.dart';
 
 class HomeScreenComponent extends StatelessWidget {
   final Vehicle? getVehicleData;
+
   const HomeScreenComponent({super.key, required this.getVehicleData});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        Navigation.pushNamed(Routes.vehicleDetailScreen);
+      onTap: () {
+        Navigation.pushNamed(Routes.vehicleDetailScreen,arg: getVehicleData);
       },
       child: Stack(
         alignment: Alignment.bottomLeft,
@@ -24,9 +25,13 @@ class HomeScreenComponent extends StatelessWidget {
           Container(
             height: 210.h,
             decoration: BoxDecoration(
-              image: const DecorationImage(
+              border: Border.all(color: AppColors.borderColor,width: 0.2),
+              image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage(ImagesAsset.car),
+                image: getVehicleData?.photo != null &&
+                        getVehicleData!.photo!.isNotEmpty
+                    ? NetworkImage("${getVehicleData?.photo}")
+                    : const AssetImage(ImagesAsset.imgPlaceholder),
               ),
               borderRadius: BorderRadius.circular(5.r),
             ),
@@ -54,19 +59,16 @@ class HomeScreenComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppText(
-                 // text: "RM35689",
-                 text: "${getVehicleData?.vehicleNumber}",
+                  text: "${getVehicleData?.vehicleNumber}",
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
                 AppText(
-                  //text: "Tata Motors",
-                    text: "${getVehicleData?.vehicleMake}",
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-
-                    color: Colors.white)
+                        text: "${getVehicleData?.vehicleMake}",
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white)
                     .paddingOnly(top: 4.h),
               ],
             ),

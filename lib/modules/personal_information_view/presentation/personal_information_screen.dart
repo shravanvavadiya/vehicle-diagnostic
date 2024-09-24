@@ -49,6 +49,78 @@ class PersonalInformationScreen extends StatelessWidget {
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
                   ),
+                /*  Obx(
+                        () => ClipOval(
+                      child: Container(
+                        height: 60.h,
+                        width: 55.w,
+                        decoration:
+                        const BoxDecoration(shape: BoxShape.circle),
+                        child: PersonalInformationController.profileImage.isNotEmpty &&
+                            PersonalInformationController.profileImage.value != ""
+                            ? PersonalInformationController.profileImage.value
+                            .contains(".jpeg") ||
+                            PersonalInformationController.profileImage.value
+                                .contains(".jpg") ||
+                            PersonalInformationController.profileImage.value
+                                .contains(".png")
+                            ? Image.network(
+                            PersonalInformationController.profileImage.value,
+                            loadingBuilder: (BuildContext context,
+                                Widget child,
+                                ImageChunkEvent? loadingProgress) {
+                              if (loadingProgress == null)
+                                return child;
+                              return Center(
+                                child: CommonFadingCircleLoader(
+                                  loaderSize: 10,
+                                ),
+                              );
+                            },
+                            width: 60.w,
+                            height: 55.h,
+                            fit: BoxFit.cover,
+                            errorBuilder:
+                                (context, error, stackTrace) =>
+                                Image.file(
+                                  File(profileController
+                                      .profileImage.value),
+                                  fit: BoxFit.cover,
+                                  frameBuilder: (context,
+                                      child,
+                                      frame,
+                                      wasSynchronouslyLoaded) {
+                                    if (frame == null) {
+                                      return CommonFadingCircleLoader(
+                                        loaderSize: 10,
+                                      );
+                                    }
+                                    return child;
+                                  },
+                                ))
+                            : Image.file(
+                          File(profileController
+                              .profileImage.value),
+                          fit: BoxFit.cover,
+                          frameBuilder: (context, child, frame,
+                              wasSynchronouslyLoaded) {
+                            if (frame == null) {
+                              return const CustomLoadingWidget(
+                                size: 20,
+                              );
+                            }
+                            return child;
+                          },
+                        )
+                            : SvgPicture.asset(
+                          IconsAsset.placeHolderIconImage,
+                          width: 60.w,
+                          height: 55.h,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),*/
                   customTextFormField(
                     onChanged: (p0) {
                       personalInformationController.isValidateName.value =

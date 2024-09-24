@@ -1,7 +1,7 @@
 import 'package:flutter_template/modules/authentication/presentation/sign_in_screen.dart';
 import 'package:flutter_template/modules/authentication/presentation/sign_up_screen.dart';
 import 'package:flutter_template/modules/dashboad/home/presentation/home_screen.dart';
-import 'package:flutter_template/modules/dashboad/vehicle_details/presentation/vehicle_details_screen.dart';
+import 'package:flutter_template/modules/dashboad/home/presentation/vehicle_details_screen.dart';
 import 'package:flutter_template/modules/personal_information_view/get_started_screen.dart';
 import 'package:flutter_template/modules/personal_information_view/presentation/personal_information_screen.dart';
 import 'package:flutter_template/modules/profile/presentation/profile_screen.dart';

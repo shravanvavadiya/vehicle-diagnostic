@@ -29,7 +29,7 @@ class CustomListTile extends StatelessWidget {
           AppText(
             text: title,
             color: AppColors.secondaryColor,
-            fontSize: 14.sp,
+            fontSize: 15.sp,
             fontWeight: FontWeight.w600,
           ),
           SizedBox(width: 50.w),

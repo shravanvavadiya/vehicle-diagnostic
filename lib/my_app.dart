@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
               ],
               title: AppString.appName,
               initialBinding: AppBidding(),
-              initialRoute: Routes.vehicleDiagnosisScreen,
+              initialRoute: Routes.splash,
               getPages: Routes.pages,
               builder: (context, child) {
                 return Scaffold(

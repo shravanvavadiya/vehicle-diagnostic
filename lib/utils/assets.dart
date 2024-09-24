@@ -8,6 +8,7 @@ class ImagesAsset {
   static const String car = '${images}car.png';
   static const String person = '${images}user_placeholder.png';
   static const String user = '${images}user.png';
+  static const String imgPlaceholder = '${images}img_placeholder.jpg';
 }
 
 class IconAsset {

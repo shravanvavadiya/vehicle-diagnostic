@@ -17,9 +17,9 @@ Map<String, String> headers() {
     ///remove after test
     String token =
         "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzI2ODM1MTk3LCJleHAiOjE3Mjc0Mzk5OTd9.QC8sQqIWJF9G_B1b1nTQXCjgF4ZpaZTajWH9tNxmD0XDmV9jiyUbBbfSRDCRCdXUHsrO3pcxYJDUP9hY9ERDEA";
-    headers["Authorization"] = token;
-    /* headers["Authorization"] =
-        '${SharedPreferencesHelper.instance.getUserToken()}';*/
+   /* headers["Authorization"] = token;*/
+     headers["Authorization"] =
+        '${SharedPreferencesHelper.instance.getUserToken()}';
     log("headers ::: $headers");
   }
   return headers;
@@ -113,7 +113,7 @@ class Api {
   }) async {
     final response = await dio.head(
       getUrl(url, queryParameters: queryData),
-      headers: await headers(),
+      headers:  headers(),
     );
     return response;
   }
@@ -125,7 +125,7 @@ class Api {
     log("get ${headers()}}");
     final response = await dio.get(
       getUrl(url, queryParameters: queryData),
-      headers: headers(),
+      headers: contentHeader(),
     );
     return response;
   }

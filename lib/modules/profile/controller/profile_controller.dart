@@ -10,9 +10,11 @@ import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/common_api_caller.dart';
 import 'package:flutter_template/utils/constants.dart';
 import 'package:flutter_template/utils/loading_mixin.dart';
+import 'package:flutter_template/utils/navigation_utils/routes.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/assets.dart';
+import '../../../utils/navigation_utils/navigation.dart';
 
 class ProfileController extends GetxController with LoadingMixin, LoadingApiMixin {
   final TextEditingController firstname = TextEditingController();
@@ -86,6 +88,7 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
       loading: handleLoading,
       result: (data) {
         updateUserProfileModel.value = data;
+        Navigation.pushNamed(Routes.homeScreen);
       },
     );
   }

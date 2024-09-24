@@ -41,7 +41,7 @@ class VehicleDiagnosisScreen extends StatelessWidget {
                   Navigation.pushNamed(Routes.vehicleInformationStepsScreen);
                 },
                 noOnTap: () {
-                  Navigation.pushNamed(Routes.vehicleInformationStepsScreen);
+                  Navigation.pushNamed(Routes.homeScreen);
                 }),
           ),
         ),

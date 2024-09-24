@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,13 +11,9 @@ import 'package:flutter_template/utils/assets.dart';
 import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:flutter_template/utils/navigation_utils/routes.dart';
 import 'package:flutter_template/widget/annotated_region.dart';
-import 'package:flutter_template/widget/custom_backarrow_widget.dart';
 import 'package:flutter_template/widget/custom_button.dart';
-import 'package:flutter_template/widget/custom_textfeild.dart';
-import 'package:flutter_template/widget/info_text_widget.dart';
 import 'package:get/get.dart';
 
-import '../../../utils/validation_utils.dart';
 import 'logout_pop_up.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -78,7 +73,6 @@ class ProfileScreen extends StatelessWidget {
                   onTap: () {
                     showCustomDialog();
                   },
-
                   height: 52.h,
                   fontSize: 15.h,
                   text: AppString.logout,
@@ -113,9 +107,9 @@ class ProfileComponent extends StatelessWidget {
           Navigation.pushNamed(Routes.subscriptionsPlanScreen);
           // Navigation.pushNamed(Routes.subscriptionsSummeryScreen);
         } else if (index == 2) {
-          Navigation.pushNamed(Routes.homeScreen);
+         // Navigation.pushNamed(Routes.homeScreen);
         } else {
-          Navigation.pushNamed(Routes.accountInformation);
+          //Navigation.pushNamed(Routes.accountInformation);
         }
       },
       child: Container(

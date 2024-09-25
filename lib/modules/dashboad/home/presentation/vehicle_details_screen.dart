@@ -111,8 +111,7 @@ class VehicleDetailScreen extends StatelessWidget {
                                   Radius.circular(10),
                                 ),
                               ),
-                              insetPadding:
-                                  EdgeInsets.symmetric(horizontal: 55.w),
+                              insetPadding: EdgeInsets.symmetric(horizontal: 55.w),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -122,11 +121,9 @@ class VehicleDetailScreen extends StatelessWidget {
                                     color: AppColors.blackColor,
                                     fontSize: 18.sp,
                                     textAlign: TextAlign.center,
-                                  ).paddingOnly(
-                                      left: 14.w, right: 14.w, top: 5.h),
+                                  ).paddingOnly(left: 14.w, right: 14.w, top: 5.h),
                                   AppText(
-                                    text:
-                                        "Are you sure you want to delete this vehicle? This action cannot be undone.",
+                                    text: "Are you sure you want to delete this vehicle? This action cannot be undone.",
                                     fontWeight: FontWeight.w400,
                                     fontSize: 12.5.sp,
                                     color: AppColors.grey60,
@@ -141,23 +138,16 @@ class VehicleDetailScreen extends StatelessWidget {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.pop(context);
-                                      homeController.deleteVehicle(
-                                          vehicleId: _args.id!);
+                                      // Navigator.pop(context);
+                                      homeController.deleteVehicle(vehicleId: _args.id!);
                                     },
                                     child: Container(
                                       width: double.infinity,
                                       decoration: BoxDecoration(
                                         color: AppColors.whiteColor,
                                         border: Border(
-                                          top: BorderSide(
-                                              color: AppColors.borderColor
-                                                  .withOpacity(0.6),
-                                              width: 0.5),
-                                          bottom: BorderSide(
-                                              color: AppColors.borderColor
-                                                  .withOpacity(0.6),
-                                              width: 0.5),
+                                          top: BorderSide(color: AppColors.borderColor.withOpacity(0.6), width: 0.5),
+                                          bottom: BorderSide(color: AppColors.borderColor.withOpacity(0.6), width: 0.5),
                                         ),
                                       ),
                                       child: AppText(
@@ -349,16 +339,14 @@ class VehicleDetailScreen extends StatelessWidget {
                       fontSize: 16.sp,
                     ).paddingOnly(left: 16.w),
                     ListView.separated(
-                      itemCount: homeController.vehicleMoreInfo.length,
+                      itemCount: _args.moreAboutVehicle?.length ?? 0,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return CustomListTile(
                           contentPadding: EdgeInsets.symmetric(vertical: 8.h),
-                          title:
-                              "${homeController.vehicleMoreInfo[index]["title"]}",
-                          trailingText:
-                              "${homeController.vehicleMoreInfo[index]["subTitle"]}",
+                          title: "${_args.moreAboutVehicle![index].question}",
+                          trailingText: "${_args.moreAboutVehicle![index].answer}",
                         );
                       },
                       separatorBuilder: (context, index) {
@@ -377,8 +365,7 @@ class VehicleDetailScreen extends StatelessWidget {
               ],
             ),
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           floatingActionButton: Obx(
             () => homeController.idDisplayErrorBox.value == true
                 ? Container(
@@ -410,20 +397,15 @@ class VehicleDetailScreen extends StatelessWidget {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    homeController.idDisplayErrorBox.value =
-                                        false;
+                                    homeController.idDisplayErrorBox.value = false;
                                   },
                                   child: Container(
                                     height: 30.h,
                                     width: 55.w,
                                     decoration: BoxDecoration(
-                                        color: AppColors.whiteColor
-                                            .withOpacity(0.2),
-                                        borderRadius:
-                                            BorderRadius.circular(20.r),
-                                        border: Border.all(
-                                            color: AppColors.whiteColor,
-                                            width: 1)),
+                                        color: AppColors.whiteColor.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(20.r),
+                                        border: Border.all(color: AppColors.whiteColor, width: 1)),
                                     child: Center(
                                         child: AppText(
                                       text: "No",
@@ -435,19 +417,15 @@ class VehicleDetailScreen extends StatelessWidget {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    homeController.idDisplayErrorBox.value =
-                                        false;
+                                    homeController.idDisplayErrorBox.value = false;
                                   },
                                   child: Container(
                                     height: 30.h,
                                     width: 55.w,
                                     decoration: BoxDecoration(
                                         color: AppColors.whiteColor,
-                                        borderRadius:
-                                            BorderRadius.circular(20.r),
-                                        border: Border.all(
-                                            color: AppColors.whiteColor,
-                                            width: 1)),
+                                        borderRadius: BorderRadius.circular(20.r),
+                                        border: Border.all(color: AppColors.whiteColor, width: 1)),
                                     child: Center(
                                       child: AppText(
                                         text: "Yes",

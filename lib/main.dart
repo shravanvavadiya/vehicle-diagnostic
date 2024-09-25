@@ -7,7 +7,7 @@ import 'package:flutter_template/utils/app_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
- // await AppPreference.initMySharedPreferences();
+ await AppPreference.initMySharedPreferences();
   await SharedPreferencesHelper().initialAppPreference();
   // await Firebase.initializeApp();
   // await FireBaseNotification().setUpLocalNotification();

@@ -14,9 +14,7 @@ import 'package:get/get.dart';
 
 import '../../../api/preferences/shared_preferences_helper.dart';
 
-class SignInController extends GetxController
-    with LoadingMixin, LoadingApiMixin {
-
+class SignInController extends GetxController with LoadingMixin, LoadingApiMixin {
   Future<void> continueWithGoogle() async {
     handleLoading(true);
     processApi(
@@ -25,20 +23,15 @@ class SignInController extends GetxController
       result: (data) {
         processApi(
           () {
-            return AuthService.googleTokenVerify({
-              ApiKeyConstants.deviceType: Constants.android,
-              ApiKeyConstants.token: data
-            });
+            print("data ${data}");
+            return AuthService.googleTokenVerify({ApiKeyConstants.deviceType: Constants.android, ApiKeyConstants.token: data});
           },
           result: (data) async {
             log("${data.apiresponse?.data?.token}");
-            await SharedPreferencesHelper.instance
-                .setUserToken(data.apiresponse?.data?.token ?? "");
-            await SharedPreferencesHelper.instance
-                .setString("email", data.apiresponse?.data?.email ?? "");
+            await SharedPreferencesHelper.instance.setUserToken(data.apiresponse?.data?.token ?? "");
+            await SharedPreferencesHelper.instance.setString("email", data.apiresponse?.data?.email ?? "");
             await SharedPreferencesHelper.instance.setUser(data);
             Navigation.replaceAll(Routes.getStarted);
-
           },
           loading: handleLoading,
         );
@@ -53,13 +46,10 @@ class SignInController extends GetxController
       error: (error, stack) => handleLoading(false),
       result: (data) {
         processApi(
-          () =>
-              AuthService.appleTokenVerify({ApiKeyConstants.appleToken: data}),
+          () => AuthService.appleTokenVerify({ApiKeyConstants.appleToken: data}),
           result: (data) async {
-            await SharedPreferencesHelper.instance
-                .setUserToken(data.apiresponse?.data?.token ?? "");
-            await SharedPreferencesHelper.instance
-                .setString("email", data.apiresponse?.data?.email ?? "");
+            await SharedPreferencesHelper.instance.setUserToken(data.apiresponse?.data?.token ?? "");
+            await SharedPreferencesHelper.instance.setString("email", data.apiresponse?.data?.email ?? "");
             await SharedPreferencesHelper.instance.setUser(data);
             Navigation.replaceAll(Routes.getStarted);
           },

@@ -126,14 +126,13 @@ class Api {
     return response;
   }
 
-  Future<http.StreamedResponse?> multiPartRequestAddVehicle(String endpoint, {required MyVehicleData addProfileFormData, String? imagePath}) async {
+  Future<String?> multiPartRequestAddVehicle(String endpoint, {required MyVehicleData addProfileFormData, String? imagePath}) async {
     try {
       var headers = {'accept': '*/*', 'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'};
-      var request = http.MultipartRequest('POST', Uri.parse('${ApiConstants.baseUrl}${ApiConstants.addVehicle}'));
+      var request = http.MultipartRequest('POST', Uri.parse('http://103.206.139.86:8070/vehicle/'));
       final body = {
         'fuelType': "${addProfileFormData.fuelType}",
         'transmissionType': "${addProfileFormData.transmissionType}",
-        'userId': "${addProfileFormData.id}",
         'vehicleMake': "${addProfileFormData.vehicleMake}",
         'vehicleModel': "${addProfileFormData.vehicleModel}",
         'vehicleNumber': "${addProfileFormData.vehicleNumber}",
@@ -143,13 +142,13 @@ class Api {
       if (imagePath?.isNotEmpty ?? false) {
         request.files.add(await http.MultipartFile.fromPath('photo', imagePath ?? ""));
       }
-      log("body $body");
-      log("imagePath :::${imagePath}");
+
       request.headers.addAll(headers);
-      http.StreamedResponse response = await request.send();
-      if (response.statusCode == 200) {
-        return response;
+      http.Response response = await http.Response.fromStream(await request.send());
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response.body;
       }
+      log("response ${response.body}");
     } catch (e, st) {
       log('multiPartRequest Error :: $e ::: $st');
     }

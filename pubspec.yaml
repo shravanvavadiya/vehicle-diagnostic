@@ -42,6 +42,7 @@ dependencies:
 
   get: ^4.6.6
   story: ^1.1.0
+  sliver_tools:
   flutter_stories: ^0.3.1
   flutter_screenutil: ^5.9.3
   flutter_svg: ^2.0.10+1

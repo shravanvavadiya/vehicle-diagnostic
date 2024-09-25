@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:flutter_template/utils/app_preferences.dart';
 import 'package:flutter_template/utils/common_api_caller.dart';
 import 'package:flutter_template/utils/loading_mixin.dart';
 import 'package:get/get.dart';
 
+import '../../../utils/navigation_utils/navigation.dart';
+import '../../../utils/navigation_utils/routes.dart';
+import '../models/submit_vehicle_request.dart';
 import '../models/vehicle_information_step_model.dart';
 import '../services/vehicle_information_service.dart';
 
-class AddVehicleInformationController extends GetxController
-    with LoadingMixin, LoadingApiMixin {
+class AddVehicleInformationController extends GetxController with LoadingMixin, LoadingApiMixin {
   Rx<VehicleInformationModel> vehicleModel = VehicleInformationModel().obs;
 
   //RxBool isAnyOptionSelected = false.obs;
@@ -17,8 +20,7 @@ class AddVehicleInformationController extends GetxController
   RxString selectedAnswer = "".obs;
 
   //RxList<Map<String, dynamic>> questionAnswerPairs = <Map<String, dynamic>>[].obs;
-  RxList<Map<String, dynamic>> questionAnswerPair =
-      <Map<String, dynamic>>[].obs;
+  RxList<Map<String, dynamic>> questionAnswerPair = <Map<String, dynamic>>[].obs;
   RxList<bool> isAnyOptionSelected = <bool>[].obs;
   RxInt currentIndex = 0.obs;
 
@@ -26,10 +28,8 @@ class AddVehicleInformationController extends GetxController
     isAnyOptionSelected.value = List.generate(numberOfForms, (index) => false);
   }
 
-  void updateSelectedAnswers(
-      {required String question, required String answer}) {
-    int existingIndex = questionAnswerPair
-        .indexWhere((element) => element['question'] == question);
+  void updateSelectedAnswers({required String question, required String answer}) {
+    int existingIndex = questionAnswerPair.indexWhere((element) => element['question'] == question);
     if (existingIndex >= 0) {
       questionAnswerPair[existingIndex]['answer'] = answer;
       log("$questionAnswerPair");
@@ -45,9 +45,7 @@ class AddVehicleInformationController extends GetxController
   bool checkFormFilledUp({required String answer}) {
     bool isAnswerSelected = false;
     if (currentIndex.value >= 0) {
-      isAnswerSelected =
-          questionAnswerPair[currentIndex.value]['answer'] ==answer;
-
+      isAnswerSelected = questionAnswerPair[currentIndex.value]['answer'] == answer;
     }
     log("currentIndex ::${currentIndex}");
     log("isAnswerSelected :::${isAnswerSelected}");
@@ -101,10 +99,10 @@ class AddVehicleInformationController extends GetxController
   }
 
   //Submit ans for all question
-  Future<void> submitForm(int vehicleId) async {
+  Future<VehicleQuestionAndAns?> submitForm() async {
     final body = {
       "qaVehicleRequests": questionAnswerPair,
-      "vehicleId": vehicleId,
+      "vehicleId": AppPreference.getInt("VEHICLEID"),
     };
     log("body :: ${body.entries}");
     handleLoading(true);
@@ -112,8 +110,11 @@ class AddVehicleInformationController extends GetxController
       () => VehicleInformationService.submitVehicleRequest(body),
       error: (error, stack) => handleLoading(false),
       result: (data) {
+        log("data::: ${data.toJson()}");
+        Navigation.pushNamed(Routes.homeScreen);
         handleLoading(false);
       },
     );
+    return null;
   }
 }

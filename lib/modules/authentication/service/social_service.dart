@@ -9,7 +9,7 @@ class SocialLoginService {
   static Future<String> signInWithGoogle() async {
     List<String> scopes = <String>[
       'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
+      // 'https://www.googleapis.com/auth/contacts.readonly',
     ];
     try {
       await GoogleSignIn().signOut();

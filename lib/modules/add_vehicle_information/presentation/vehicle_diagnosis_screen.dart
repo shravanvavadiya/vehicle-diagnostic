@@ -13,10 +13,9 @@ import '../../../widget/annotated_region.dart';
 import '../controller/add_vehicle_information_controller.dart';
 
 class VehicleDiagnosisScreen extends StatelessWidget {
-   VehicleDiagnosisScreen({super.key});
+  VehicleDiagnosisScreen({super.key});
 
-  final AddVehicleInformationController addVehicleQueController =
-  Get.put(AddVehicleInformationController());
+  final AddVehicleInformationController addVehicleQueController = Get.put(AddVehicleInformationController());
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +27,8 @@ class VehicleDiagnosisScreen extends StatelessWidget {
           child: Scaffold(
             body: LetsStartWidget(
                 image: ImagesAsset.addVehicle,
-                title: "Let's start the diagnosis!",
-                description:
-                    "Our AI Mechanic will ask you questions based on your symptoms and use it's vast knowledge to help diagnose, explain and resolve your faults.",
+                title: AppString.letsStartTheDiagnosis,
+                description: AppString.letsStartTheDiagnosisDes,
                 buttonText: AppString.addVehicleDetails,
                 //bottom: 100.h,
                 bottom: MediaQuery.of(context).size.height * 0.12,

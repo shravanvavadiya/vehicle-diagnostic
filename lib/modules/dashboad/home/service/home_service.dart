@@ -6,16 +6,12 @@ import 'package:flutter_template/utils/api_constants.dart';
 import '../models/get_vehicle_data_model.dart';
 
 class HomeService {
-  static Future<GetVehicleDataModel> getAllVehicle(
-      {required int currentPage}) async {
+  static Future<GetVehicleDataModel> getAllVehicle({required int currentPage}) async {
     try {
-      var result = await Api().get(
-        ApiConstants.getAllVehicle,
-        queryData:{
-          "pageNumber" : currentPage,
-          "pageSize" : 1,
-        }
-      );
+      var result = await Api().get(ApiConstants.getAllVehicle, queryData: {
+        "page": currentPage,
+        "size": 3,
+      });
       await ResponseHandler.checkResponseError(result);
       return GetVehicleDataModel.fromJson(
         jsonDecode(
@@ -28,11 +24,12 @@ class HomeService {
     }
   }
 
-  static Future deleteVehicle(
-      {required int vehicleId,}) async {
+  static Future deleteVehicle({
+    required int vehicleId,
+  }) async {
     try {
       var result = await Api().delete(
-          "${ApiConstants.deleteVehicle}$vehicleId",
+        "${ApiConstants.deleteVehicle}$vehicleId",
       );
       await ResponseHandler.checkResponseError(result);
       return GetVehicleDataModel.fromJson(

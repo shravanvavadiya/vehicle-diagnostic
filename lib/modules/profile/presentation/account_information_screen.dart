@@ -74,34 +74,40 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // Text("profileController.image.value ${profileController.image.value}"),
-                      // CachedNetworkImage(
-                      //   color: Colors.transparent,
-                      //   imageUrl: profileController.image.value,
-                      //   maxHeightDiskCache: 500000,
-                      //   maxWidthDiskCache: 500000,
-                      //   fit: BoxFit.cover,
-                      //   imageBuilder: (context, imageProvider) => Container(
-                      //     height: 152,
-                      //     width: 152,
-                      //     decoration: BoxDecoration(
-                      //       color: Colors.transparent,
-                      //       borderRadius: BorderRadius.circular(9),
-                      //       image: DecorationImage(
-                      //         image: imageProvider,
-                      //         fit: BoxFit.cover,
-                      //       ),
-                      //     ),
-                      //   ),
-                      //   placeholder: (context, url) => const Center(
-                      //     child: CircularProgressIndicator(
-                      //       color: Colors.white,
-                      //     ),
-                      //   ),
-                      //   errorWidget: (context, url, error) => const Icon(
-                      //     Icons.error,
-                      //     color: Colors.white,
-                      //   ),
-                      // ).paddingAll(4),
+                      Align(
+                        alignment: Alignment.center,
+                        child: CachedNetworkImage(
+                          color: Colors.transparent,
+                          imageUrl: profileController.image.value,
+                          maxHeightDiskCache: 500000,
+                          maxWidthDiskCache: 500000,
+                          fit: BoxFit.cover,
+                          imageBuilder: (context, imageProvider) => Container(
+                            height: 152,
+                            width: 152,
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(9),
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          placeholder: (context, url) => const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.black,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => const Icon(
+                            Icons.error,
+                            color: Colors.black,
+                          ),
+                        ).paddingOnly(
+                          top: 25,
+                        ),
+                      ),
+
                       customTextFormField(
                         text: AppString.firstName,
                         hintText: AppString.firstName,
@@ -145,7 +151,7 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                 ),
               ),
             ),
-            CustomButton(
+            /* CustomButton(
               onTap: () async {
                 if (profileController.formKey.currentState?.validate() ?? false) {
                   profileController.updateUserProfileAPI(
@@ -154,11 +160,11 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                       lastName: profileController.lastname.text);
                 }
               },
-              /*  isDisabled: (profileController.isValidateName.value &&
+              */ /*  isDisabled: (profileController.isValidateName.value &&
                         profileController.isValidateLastName.value &&
                         profileController.isValidatePostCode.value)
                     ? false
-                    : true,*/
+                    : true,*/ /*
               height: 52.h,
               buttonColor: AppColors.highlightedColor,
               fontSize: 15.h,
@@ -168,7 +174,7 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
             ).paddingSymmetric(
               horizontal: 16.w,
               vertical: 25.h,
-            ),
+            ),*/
           ],
         ),
       ),

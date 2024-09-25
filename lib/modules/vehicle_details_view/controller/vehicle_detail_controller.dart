@@ -6,8 +6,10 @@ import 'package:flutter_template/modules/vehicle_details_view/model/add_vehicle_
 import 'package:flutter_template/modules/vehicle_details_view/model/my_vehicle_model.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../api/preferences/shared_preferences_helper.dart';
+import '../../../utils/app_preferences.dart';
 import '../../../utils/common_api_caller.dart';
 import '../../../utils/loading_mixin.dart';
 import '../../../utils/navigation_utils/navigation.dart';
@@ -15,8 +17,7 @@ import '../../../utils/navigation_utils/routes.dart';
 import '../../../widget/app_snackbar.dart';
 import '../service/add_vehicle_service.dart';
 
-class VehicleDetailController extends GetxController
-    with LoadingMixin, LoadingApiMixin {
+class VehicleDetailController extends GetxController with LoadingMixin, LoadingApiMixin {
   final TextEditingController vehicleNumber = TextEditingController();
   final TextEditingController vehicleYear = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -124,13 +125,19 @@ class VehicleDetailController extends GetxController
         handleLoading(false);
       },
       result: (result) async {
-        Navigation.pushNamed(Routes.vehicleDiagnosisScreen);
-        if (result?.statusCode == 200 || result?.statusCode == 201) {
-          /*  String? body = await result?.stream.bytesToString();
-          final AddVehicleModel vehicleModel =
-              AddVehicleModel.fromJson(jsonDecode(body ?? ""));*/
-         // Navigation.pushNamed(Routes.vehicleDiagnosisScreen);
-        }
+        // Convert the JSON string into a Dart map
+        Map<String, dynamic> jsonData = jsonDecode(result!);
+
+        // Access the "id" field
+        int id = jsonData['apiresponse']['data']['id'];
+
+        print('Vehicle ID: $id');
+        id == ""
+            ? {}
+            : {
+                AppPreference.setInt("VEHICLEID", id),
+                Navigation.pushNamed(Routes.vehicleDiagnosisScreen),
+              };
       },
     );
     imagePath?.path.isEmpty;

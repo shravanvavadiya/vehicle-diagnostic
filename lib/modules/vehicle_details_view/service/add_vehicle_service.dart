@@ -13,7 +13,7 @@ import '../../../utils/api_constants.dart';
 
 class VehicleService {
 
-  static Future<StreamedResponse?> createVehicle({required MyVehicleData setUpProfileFormData, String? imagePath}) async {
+  static Future<String?> createVehicle({required MyVehicleData setUpProfileFormData, String? imagePath}) async {
     try {
       var response = await Api().multiPartRequestAddVehicle(
         ApiConstants.addVehicle,

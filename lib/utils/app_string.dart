@@ -8,10 +8,12 @@ class AppString {
   static const String beforeWeGetStarted = "Before we get started, let's complete your profile";
   static const String letsGetStarted = 'Lets Get Started';
   static const String mayIInquireAboutYourName = 'May I inquire about your name?';
+  static const String tapToAdd = 'Tap to add';
   static const String iLoveToKnowWhatToCallYou = "I'd love to know what to call you.";
   static const String firstName = "First Name";
   static const String lastName = "Last Name";
   static const String email = "Email";
+  static const String finish = "Finish";
   static const String emailEx = "Some@example.com";
   static const String postCode = "Post Code";
   static const String next = "Next";
@@ -27,6 +29,8 @@ class AppString {
   static const String fuelType = "Fuel Type";
   static const String accountInformation = "Account Information";
   static const String accountInfo = "Account Info";
+  static const String letsStartTheDiagnosis = "Let's start the diagnosis!";
+  static const String letsStartTheDiagnosisDes = "Our AI Mechanic will ask you questions based on your symptoms and use it's vast knowledge to help diagnose, explain and resolve your faults.";
   static const String subscription = "Subscription";
   static const String privacyPolicy = "Privacy Policy";
   static const String termsCondition = "Terms & Condition";

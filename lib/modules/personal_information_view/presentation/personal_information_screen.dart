@@ -192,7 +192,7 @@ class PersonalInformationScreen extends StatelessWidget {
                                   children: [
                                     SvgPicture.asset(IconAsset.uploadIcon).paddingOnly(bottom: 6.h),
                                     AppText(
-                                      text: "Tap to add",
+                                      text: AppString.tapToAdd,
                                       textAlign: TextAlign.center,
                                       fontSize: 12.sp,
                                       fontWeight: FontWeight.w400,
@@ -263,7 +263,8 @@ class PersonalInformationScreen extends StatelessWidget {
               isLoader: personalInformationController.isPersonalInformation.value,
               isDisabled: (personalInformationController.isValidateName.value &&
                       personalInformationController.isValidateLastName.value &&
-                      personalInformationController.isValidatePostCode.value)
+                      personalInformationController.isValidatePostCode.value &&
+                      personalInformationController.image.value.isNotEmpty)
                   ? false
                   : true,
               /*  (){

@@ -13,7 +13,7 @@ class HomeService {
         ApiConstants.getAllVehicle,
         queryData:{
           "pageNumber" : currentPage,
-          "pageSize" : 10,
+          "pageSize" : 1,
         }
       );
       await ResponseHandler.checkResponseError(result);

@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -41,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log("Get user image from shared prefs ::${SharedPreferencesHelper.instance.getString(Constants.userImage)}");
     return GetX<HomeController>(
       init: HomeController(),
       builder: (homeController) => SafeArea(
@@ -114,8 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontSize: 14.sp,
                           ),
                           AppText(
-                            text:
-                                "${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.firstName ?? "demo"}"
+                            text: "${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.firstName ?? "demo"}"
                                 " ${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.lastName ?? "demo"}",
                             color: AppColors.blackColor,
                             fontWeight: FontWeight.w600,
@@ -145,8 +142,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               imageUrl: "${SharedPreferencesHelper.instance.getUserInfo()?.apiresponse?.data?.photo}",
                               fit: BoxFit.cover,
                               imageBuilder: (context, imageProvider) => Container(
-                                height: 152.h,
-                                width: 152.w,
+                                height: 20.h,
+                                width: 20.w,
                                 decoration: BoxDecoration(
                                   color: Colors.transparent,
                                   borderRadius: BorderRadius.circular(9.r),
@@ -211,7 +208,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           CustomButton(
                             onTap: () {
-                              vehicleDetailController.clearController();
                               Navigation.pushNamed(Routes.addVehicleDetail);
                             },
                             height: 38.h,

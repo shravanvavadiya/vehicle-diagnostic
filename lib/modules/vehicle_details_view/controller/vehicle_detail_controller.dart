@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_template/modules/vehicle_details_view/model/add_vehicle_model.dart';
 import 'package:flutter_template/modules/vehicle_details_view/model/my_vehicle_model.dart';
@@ -11,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../api/preferences/shared_preferences_helper.dart';
 import '../../../utils/app_preferences.dart';
+import '../../../utils/app_string.dart';
 import '../../../utils/common_api_caller.dart';
 import '../../../utils/loading_mixin.dart';
 import '../../../utils/navigation_utils/navigation.dart';
@@ -19,6 +19,7 @@ import '../../../widget/app_snackbar.dart';
 import '../service/add_vehicle_service.dart';
 
 class VehicleDetailController extends GetxController with LoadingMixin, LoadingApiMixin {
+  RxString screenName = AppString.addYourVehicleDetails.obs;
   final TextEditingController vehicleNumber = TextEditingController();
   final TextEditingController vehicleYear = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -40,20 +41,16 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
   RxBool isValidateImage = false.obs;
 
   clearController() {
-    vehicleNumber.clear();
-    vehicleYear.clear();
-    imagePath?.path.isEmpty;
-    image.value.isEmpty;
+    vehicleNumber.text = "";
+    vehicleYear.text = "";
+    imagePath = XFile("");
+    image.value = "";
     selectedValueMake.value = 'Select';
     selectedValueModel.value = 'Select';
     selectedValueTType.value = 'Select';
     selectedValueFType.value = 'Select';
   }
 
-/*  var selectedValueMake = ValueNotifier<String>("Select");
-  var selectedValueModel = ValueNotifier<String>("Select");
-  var selectedValueTType = ValueNotifier<String>("Select");
-  var selectedValueFType = ValueNotifier<String>("Select");*/
   final List<String> vehicleMake = [
     'MARUTISUZUKI',
     'TATAMOTORS',
@@ -72,37 +69,6 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
 
   final List<String> transmissionType = ['CAR', 'SUV', 'HYBRID'];
   final List<String> fuelType = ['PETROL', 'DIESEL', 'BIODIESEL'];
-
-  /*Future<void> addVehicle() async {
-    try {
-      isProfileComplete.value = true;
-      final UserDataModel setUpProfileFormData = UserDataModel(
-        caption: captionController.text.trim(),
-        firstName: firstNameController.text.trim(),
-        gender: selectedValue.value,
-        lastName: lastNameController.text.trim(),
-        // email: userData?.data?.email ?? "",
-        country: selectedCountry.value,
-        age: DateFormat('yyyy/MM/dd').format(pickedDate).toString(),
-      );
-      final result = await AuthService.setupProfile(
-        setUpProfileFormData: setUpProfileFormData,
-        imagePath: image.value,
-      );
-      if (result?.statusCode == 200 || result?.statusCode == 201) {
-        String? body = await result?.stream.bytesToString();
-        final UserModel userModel = UserModel.fromJson(jsonDecode(body ?? ""));
-        log("usermodel :: ${userModel.toJson()}");
-        await AppPreference.setUser(userModel);
-        log("Update Profile Successfully");
-        Navigation.replaceAll(Routes.createTeam);
-      }
-      isProfileComplete.value = false;
-    } catch (e, st) {
-      isProfileComplete.value = false;
-      log("UpdateUserProfile error ---> $e --- $st");
-    }
-  }*/
 
   Future<void> addVehicleApi() async {
     handleLoading(true);
@@ -126,26 +92,21 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
         handleLoading(false);
       },
       result: (result) async {
-        log("result ::${result}");
-        // Convert the JSON string into a Dart map
         Map<String, dynamic> jsonData = jsonDecode(result!);
-
-        // Access the "id" field
         int id = jsonData['apiresponse']['data']['id'];
-
-        if (kDebugMode) {
-          print('Vehicle ID: $id');
-        }
-        id == ""
-            ? {}
-            : {
-                AppPreference.setInt("VEHICLEID", id),
-                Navigation.pushNamed(Routes.vehicleDiagnosisScreen),
-              };
+        print('Vehicle ID: $id');
+        id == "" ? {} : {AppPreference.setInt("VEHICLEID", id), Navigation.pushNamed(Routes.vehicleDiagnosisScreen)};
       },
     );
-    imagePath?.path.isEmpty;
-    image.isEmpty;
+    imagePath = XFile("");
+    image.value = "";
+    clearController();
     handleLoading(false);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }

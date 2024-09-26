@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_template/modules/vehicle_details_view/presentation/add_vehicle_details_screen.dart';
 import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/assets.dart';
 import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:flutter_template/utils/navigation_utils/routes.dart';
 import 'package:flutter_template/widget/annotated_region.dart';
 import 'package:flutter_template/widget/lets_start_widget.dart';
+import 'package:get/get.dart';
 
 class AddVehicleScreen extends StatelessWidget {
   const AddVehicleScreen({super.key});
@@ -16,7 +18,6 @@ class AddVehicleScreen extends StatelessWidget {
     return CustomAnnotatedRegions(
       child: Scaffold(
         body: SafeArea(
-
           child: LetsStartWidget(
             image: ImagesAsset.addVehicle,
             title: "Yey! ”Jerry” now that we know you, lets get your vehicle details.",
@@ -24,7 +25,8 @@ class AddVehicleScreen extends StatelessWidget {
             buttonText: AppString.addVehicleDetails,
             bottom: 40.h,
             onTap: () {
-              Navigation.pushNamed(Routes.addVehicleDetail);
+              // Navigation.pushNamed(Routes.addVehicleDetail);
+              Get.offAll(AddVehicleDetailsScreen());
             },
           ),
         ),

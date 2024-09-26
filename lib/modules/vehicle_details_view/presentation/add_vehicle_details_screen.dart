@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -22,49 +23,38 @@ import 'package:get/get.dart';
 import '../../../utils/navigation_utils/navigation.dart';
 import '../../../utils/navigation_utils/routes.dart';
 
-class AddVehicleDetailsScreen extends StatefulWidget {
+class AddVehicleDetailsScreen extends StatelessWidget {
   const AddVehicleDetailsScreen({super.key});
 
   @override
-  State<AddVehicleDetailsScreen> createState() =>
-      _AddVehicleDetailsScreenState();
-}
-
-class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
-  final VehicleDetailController vehicleDetailController =
-      Get.put(VehicleDetailController());
-
-  final ScrollController scrollController = ScrollController();
-
-  @override
   Widget build(BuildContext context) {
-    vehicleDetailController.image.isEmpty;
-    vehicleDetailController.imagePath?.path.isEmpty;
+    // vehicleDetailController.image.isEmpty;
+    // vehicleDetailController.imagePath?.path.isEmpty;
     return CustomAnnotatedRegions(
       statusBarColor: AppColors.whiteColor,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: const CustomBackArrowWidget().paddingAll(11.w),
-          backgroundColor: AppColors.whiteColor,
-          elevation: 0,
-        ),
-        body: SingleChildScrollView(
-          child: Form(
-            key: vehicleDetailController.formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                InfoTextWidget(
-                  title: AppString.addYourVehicleDetails,
-                  titleFontSize: 24.sp,
-                  titleFontWeight: FontWeight.w600,
-                  description:
-                      AppString.addYourVehicleInformationForBetterSearch,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-                Obx(
-                  () => (vehicleDetailController.image.value.isNotEmpty)
+      child: GetX<VehicleDetailController>(
+        init: VehicleDetailController(),
+        builder: (vehicleDetailController) => Scaffold(
+          appBar: AppBar(
+            leading: const CustomBackArrowWidget().paddingAll(11.w),
+            backgroundColor: AppColors.whiteColor,
+            elevation: 0,
+          ),
+          body: SingleChildScrollView(
+            child: Form(
+              key: vehicleDetailController.formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InfoTextWidget(
+                    title: vehicleDetailController.screenName.value,
+                    titleFontSize: 24.sp,
+                    titleFontWeight: FontWeight.w600,
+                    description: AppString.addYourVehicleInformationForBetterSearch,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  (vehicleDetailController.image.value.isNotEmpty)
                       ? Container(
                           height: 195.h,
                           width: double.infinity,
@@ -81,14 +71,9 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                           ),
                           child: GestureDetector(
                             onTap: () async {
-                              await Utils().imagePickerModel(
-                                  selectImage:
-                                      vehicleDetailController.imagePath,
-                                  image: vehicleDetailController.image);
-                              setState(() {
-                                vehicleDetailController.isValidateImage.value =
-                                    true;
-                              });
+                              await Utils().imagePickerModel(selectImage: vehicleDetailController.imagePath, image: vehicleDetailController.image);
+
+                              vehicleDetailController.isValidateImage.value = true;
                             },
                             child: Container(
                               height: 195.h,
@@ -97,30 +82,20 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                                 color: AppColors.blackColor.withOpacity(0.4),
                                 borderRadius: BorderRadius.circular(4.r),
                               ),
-                              child: SvgPicture.asset(IconAsset.editIcon)
-                                  .paddingAll(85.h),
+                              child: SvgPicture.asset(IconAsset.editIcon).paddingAll(85.h),
                             ),
                           ),
-                        ).paddingOnly(
-                          top: 24.h,
-                          bottom: 8.h,
-                        )
+                        ).paddingOnly(top: 24.h, bottom: 8.h)
                       : GestureDetector(
                           onTap: () async {
-                            await Utils().imagePickerModel(
-                                selectImage: vehicleDetailController.imagePath,
-                                image: vehicleDetailController.image);
-                            setState(() {
-                              if (vehicleDetailController
-                                  .image.value.isNotEmpty) {
-                                vehicleDetailController.isValidateImage.value =
-                                    true;
-                              } else {
-                                // Set validation to false if no image is selected
-                                vehicleDetailController.isValidateImage.value =
-                                    false;
-                              }
-                            });
+                            await Utils().imagePickerModel(selectImage: vehicleDetailController.imagePath, image: vehicleDetailController.image);
+
+                            if (vehicleDetailController.image.value.isNotEmpty) {
+                              vehicleDetailController.isValidateImage.value = true;
+                            } else {
+                              // Set validation to false if no image is selected
+                              vehicleDetailController.isValidateImage.value = false;
+                            }
                           },
                           child: Container(
                             height: 195.h,
@@ -132,8 +107,7 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SvgPicture.asset(IconAsset.uploadIcon)
-                                    .paddingOnly(bottom: 6.h),
+                                SvgPicture.asset(IconAsset.uploadIcon).paddingOnly(bottom: 6.h),
                                 AppText(
                                   text: AppString.tapToAddACoverImageForVehicle,
                                   textAlign: TextAlign.center,
@@ -144,102 +118,84 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                             ),
                           ).paddingOnly(top: 24.h, bottom: 8.h),
                         ),
-                ),
-                customTextFormField(
-                  text: AppString.vehicleNumber,
-                  hintText: AppString.vehicleNumber,
-                  controller: vehicleDetailController.vehicleNumber,
-                  validator: AppValidation.vehicleNumberValidator,
-                  onChanged: (String) {
-                    vehicleDetailController.isValidateVName.value =
-                        vehicleDetailController.vehicleNumber.text.isNotEmpty;
-                  },
-                ).paddingSymmetric(vertical: 16.h),
-                customTextFormField(
-                  text: AppString.vehicleYear,
-                  keyboardType: TextInputType.number,
-                  hintText: AppString.vehicleYear,
-                  validator: AppValidation.vehicleYearValidator,
-                  controller: vehicleDetailController.vehicleYear,
-                  onChanged: (String) {
-                    vehicleDetailController.isValidateVYear.value =
-                        vehicleDetailController.vehicleYear.text.isNotEmpty;
-                  },
-                ),
-                /*  CustomDropDownField(
-                    label: 'Vehicle Make',
-                    hintText: 'Select vehicle make',
-                    selectedValue: ,
-                    list: vehicleDetailController.genderItems),*/
-                selectionTextField(
-                  context,
-                  text: "Vehicle Make",
-                  validator: AppValidation.vehicleMakeValidator,
-                  list: vehicleDetailController.vehicleMake,
-                  selectedVal: vehicleDetailController.selectedValueMake,
-                  onChanged: (String) {
-                    vehicleDetailController.isValidateVMake.value =
-                        vehicleDetailController.selectedValueMake.isNotEmpty;
-                  },
-                ).paddingSymmetric(vertical: 16.h),
-                selectionTextField(
-                  context,
-                  validator: AppValidation.vehicleModelValidator,
-                  text: "Vehicle Model",
-                  list: vehicleDetailController.vehicleModel,
-                  selectedVal: vehicleDetailController.selectedValueModel,
-                  onChanged: (String) {
-                    vehicleDetailController.isValidateVModel.value =
-                        vehicleDetailController.selectedValueModel.isNotEmpty;
-                  },
-                ),
-                selectionTextField(
-                  context,
-                  validator: AppValidation.transMissionTypeValidator,
-                  text: "Transmission Type",
-                  list: vehicleDetailController.transmissionType,
-                  selectedVal: vehicleDetailController.selectedValueTType,
-                  onChanged: (String) {
-                    vehicleDetailController.isValidateVType.value =
-                        vehicleDetailController.selectedValueTType.isNotEmpty;
-                  },
-                ).paddingSymmetric(vertical: 16.h),
-                selectionTextField(
-                  context,
-                  validator: AppValidation.fuelType,
-                  text: "Fuel Type",
-                  list: vehicleDetailController.fuelType,
-                  selectedVal: vehicleDetailController.selectedValueFType,
-                  onChanged: (String) {
-                    vehicleDetailController.isValidateVFuelT.value =
-                        vehicleDetailController.selectedValueFType.isNotEmpty;
-                  },
-                ),
-                SizedBox(
-                  height: 110.h,
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Obx(
-                    () => CustomButton(
+                  customTextFormField(
+                    text: AppString.vehicleNumber,
+                    hintText: AppString.vehicleNumber,
+                    controller: vehicleDetailController.vehicleNumber,
+                    validator: AppValidation.vehicleNumberValidator,
+                    onChanged: (String) {
+                      vehicleDetailController.isValidateVName.value = vehicleDetailController.vehicleNumber.text.isNotEmpty;
+                    },
+                  ).paddingSymmetric(vertical: 16.h),
+                  customTextFormField(
+                    text: AppString.vehicleYear,
+                    keyboardType: TextInputType.number,
+                    hintText: AppString.vehicleYear,
+                    validator: AppValidation.vehicleYearValidator,
+                    controller: vehicleDetailController.vehicleYear,
+                    onChanged: (String) {
+                      vehicleDetailController.isValidateVYear.value = vehicleDetailController.vehicleYear.text.isNotEmpty;
+                    },
+                  ),
+                  selectionTextField(
+                    context,
+                    text: "Vehicle Make",
+                    validator: AppValidation.vehicleMakeValidator,
+                    list: vehicleDetailController.vehicleMake,
+                    selectedVal: vehicleDetailController.selectedValueMake,
+                    onChanged: (String) {
+                      vehicleDetailController.isValidateVMake.value = vehicleDetailController.selectedValueMake.isNotEmpty;
+                    },
+                  ).paddingSymmetric(vertical: 16.h),
+                  selectionTextField(
+                    context,
+                    validator: AppValidation.vehicleModelValidator,
+                    text: "Vehicle Model",
+                    list: vehicleDetailController.vehicleModel,
+                    selectedVal: vehicleDetailController.selectedValueModel,
+                    onChanged: (String) {
+                      vehicleDetailController.isValidateVModel.value = vehicleDetailController.selectedValueModel.isNotEmpty;
+                    },
+                  ),
+                  selectionTextField(
+                    context,
+                    validator: AppValidation.transMissionTypeValidator,
+                    text: "Transmission Type",
+                    list: vehicleDetailController.transmissionType,
+                    selectedVal: vehicleDetailController.selectedValueTType,
+                    onChanged: (String) {
+                      vehicleDetailController.isValidateVType.value = vehicleDetailController.selectedValueTType.isNotEmpty;
+                    },
+                  ).paddingSymmetric(vertical: 16.h),
+                  selectionTextField(
+                    context,
+                    validator: AppValidation.fuelType,
+                    text: "Fuel Type",
+                    list: vehicleDetailController.fuelType,
+                    selectedVal: vehicleDetailController.selectedValueFType,
+                    onChanged: (String) {
+                      vehicleDetailController.isValidateVFuelT.value = vehicleDetailController.selectedValueFType.isNotEmpty;
+                    },
+                  ),
+                  SizedBox(
+                    height: 110.h,
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: CustomButton(
                       onTap: () async {
-                        if (vehicleDetailController.formKey.currentState
-                                ?.validate() ??
-                            false) {
+                        if (vehicleDetailController.formKey.currentState?.validate() ?? false) {
                           await vehicleDetailController.addVehicleApi();
-
+                          // log("api calling");
                         }
                       },
-                      isDisabled: (vehicleDetailController
-                                  .isValidateVName.value &&
+                      isDisabled: (vehicleDetailController.isValidateVName.value &&
                               vehicleDetailController.isValidateVYear.value &&
                               vehicleDetailController.isValidateVMake.value &&
                               vehicleDetailController.isValidateVModel.value &&
                               vehicleDetailController.isValidateVType.value &&
                               vehicleDetailController.isValidateVType.value &&
-                              vehicleDetailController.isValidateVFuelT.value
-                          /* vehicleDetailController.isValidateImage.value*/
-                          )
+                              vehicleDetailController.isValidateVFuelT.value)
                           ? false
                           : true,
                       height: 52.h,
@@ -251,9 +207,9 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                       borderRadius: BorderRadius.circular(46),
                     ).paddingOnly(bottom: 25.h),
                   ),
-                ),
-              ],
-            ).paddingSymmetric(horizontal: 16.w),
+                ],
+              ).paddingSymmetric(horizontal: 16.w),
+            ),
           ),
         ),
       ),
@@ -278,16 +234,11 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
           isExpanded: true,
           customButton: Row(
             children: [
-              Obx(
-                () => AppText(
-                  // text: vehicleDetailController.selectedValue.value,
-                  text: selectedVal.value.isNotEmpty
-                      ? selectedVal.value
-                      : 'Select $text',
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.blackColor,
-                ),
+              AppText(
+                text: selectedVal.value.isNotEmpty ? selectedVal.value : 'Select $text',
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w500,
+                color: AppColors.blackColor,
               ),
               const Spacer(),
               SvgPicture.asset(
@@ -331,11 +282,6 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                       decoration: BoxDecoration(
                         border: Border(
                           top: BorderSide(
-                            /*color: vehicleDetailController.genderItems
-                                        .indexOf(item) ==
-                                    0
-                                ? Colors.transparent
-                                :*/
                             color: AppColors.backgroundColor,
                             width: 1,
                           ),

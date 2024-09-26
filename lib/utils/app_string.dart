@@ -9,6 +9,7 @@ class AppString {
   static const String letsGetStarted = 'Lets Get Started';
   static const String mayIInquireAboutYourName = 'May I inquire about your name?';
   static const String tapToAdd = 'Tap to add';
+  static const String vehicleInformation = 'Vehicle information';
   static const String iLoveToKnowWhatToCallYou = "I'd love to know what to call you.";
   static const String firstName = "First Name";
   static const String lastName = "Last Name";
@@ -30,7 +31,8 @@ class AppString {
   static const String accountInformation = "Account Information";
   static const String accountInfo = "Account Info";
   static const String letsStartTheDiagnosis = "Let's start the diagnosis!";
-  static const String letsStartTheDiagnosisDes = "Our AI Mechanic will ask you questions based on your symptoms and use it's vast knowledge to help diagnose, explain and resolve your faults.";
+  static const String letsStartTheDiagnosisDes =
+      "Our AI Mechanic will ask you questions based on your symptoms and use it's vast knowledge to help diagnose, explain and resolve your faults.";
   static const String subscription = "Subscription";
   static const String privacyPolicy = "Privacy Policy";
   static const String termsCondition = "Terms & Condition";
@@ -48,29 +50,27 @@ class AppString {
   static const String mostProblem = "Most problem";
   static const String unusualSmells = "Unusual smells";
   static const String specificSound = "Specific sound";
-  static const String warningLights  = "Warning lights";
-  static const String mostlyDriving  = "Mostly driving";
-  static const String weatherOrTemperatureProblem  = "Weather or temperature problem";
-  static const String repairedRecently  = "Repaired Recently";
-  static const String currentMileage  = "Current mileage";
-  static const String edit  = "Edit";
-  static const String downloadPDF  = "Download PDF";
-  static const String delete  = "Delete";
-  static const String changeSubscriptionPlan  = "Change Subscription Plan";
-  static const String cancelSubscription  = "Cancel Subscription";
-  static const String yourSubscriptionPlan  = "Your Subscription Plan";
-  static const String buyNow  = "Buy Now";
-  static const String privacyAndTerms  = "Privacy and Terms";
-  static const String cancelAnytime  = "Cancel anytime";
-  static const String restore  = "Restore";
+  static const String warningLights = "Warning lights";
+  static const String mostlyDriving = "Mostly driving";
+  static const String weatherOrTemperatureProblem = "Weather or temperature problem";
+  static const String repairedRecently = "Repaired Recently";
+  static const String currentMileage = "Current mileage";
+  static const String edit = "Edit";
+  static const String downloadPDF = "Download PDF";
+  static const String delete = "Delete";
+  static const String changeSubscriptionPlan = "Change Subscription Plan";
+  static const String cancelSubscription = "Cancel Subscription";
+  static const String yourSubscriptionPlan = "Your Subscription Plan";
+  static const String buyNow = "Buy Now";
+  static const String privacyAndTerms = "Privacy and Terms";
+  static const String cancelAnytime = "Cancel anytime";
+  static const String restore = "Restore";
   static const String pleaseEnterVehicleNumber = "Please enter vehicle number";
   static const String pleaseEnterVehicleYear = "Please enter vehicle year";
   static const String pleaseSelectVehicleMake = "Please select vehicle make";
   static const String pleaseSelectVehicleModel = "Please select vehicle model";
   static const String pleaseSelectTransMissionType = "Please select transMission type";
   static const String pleaseSelectFuelType = "Please select fuel type";
-
-
 
   // for validation
   static const String pleaseEnterName = "Please enter name";
@@ -86,8 +86,6 @@ class AppString {
   static const String selectTransmissionType = "Please select transmission type";
   static const String selectFuelType = "Please select fuel type";
 
-
   /// SharedPreferences :::
   static const String authToken = "authToken";
-
 }

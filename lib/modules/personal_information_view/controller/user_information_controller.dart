@@ -23,7 +23,8 @@ class UserInformationController extends GetxController with LoadingMixin, Loadin
   final TextEditingController email = TextEditingController();
   final TextEditingController postCode = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  Rx<PersonalInformationModel> personalInformationModel = PersonalInformationModel().obs;
+  Rx<PersonalInformationModel> personalInformationModel =
+      PersonalInformationModel().obs;
   RxBool isValidateName = false.obs;
   RxBool isPersonalInformation = false.obs;
   RxBool isValidateLastName = false.obs;
@@ -33,6 +34,17 @@ class UserInformationController extends GetxController with LoadingMixin, Loadin
   RxString image = "".obs;
   RxBool isValidateImage = false.obs;
   RxBool isButtonEnabled = false.obs;
+
+  void updateButtonState() {
+    isButtonEnabled.value = firstname.text.isNotEmpty && lastname.text.isNotEmpty && email.text.isNotEmpty && postCode.text.isNotEmpty;
+  }
+
+  clearData() {
+    firstname.clear();
+    lastname.clear();
+    email.clear();
+    postCode.clear();
+  }
 
   /// Personal Information API::
   Future<void> personalInformationAPI({
@@ -46,10 +58,17 @@ class UserInformationController extends GetxController with LoadingMixin, Loadin
     if (formKey.currentState!.validate()) {
       await processApi(
         () => PersonalInformationService.personalInformation(
-            email: email, firstName: firstname, lastName: lastname, postCode: postCode, imagePath: imagePath),
+            email: email,
+            firstName: firstname,
+            lastName: lastname,
+            postCode: postCode,
+            imagePath: imagePath),
         error: (error, stack) {
           log("Exception in personalInformationAPI---->$error");
-          AppSnackBar.showErrorSnackBar(message: "Something went wrong", title: "Error");
+          AppSnackBar.showErrorSnackBar(
+            message: "Something went wrong",
+            title: "Error",
+          );
           handleLoading(false);
         },
         result: (data) async {
@@ -61,6 +80,13 @@ class UserInformationController extends GetxController with LoadingMixin, Loadin
           // await SharedPreferencesHelper.instance.setUser(data);
           SharedPreferencesHelper.instance.setLogInUser(value: userAccountAccess);
           Get.offAll(const AddVehicleScreen());
+          log("result ${personalInformationModel.value.apiresponse?.data?.email ?? ""}");
+          await SharedPreferencesHelper.instance.setInt(Constants.keyUserId,
+              personalInformationModel.value.apiresponse?.data?.id ?? 0);
+          await SharedPreferencesHelper.instance.setString(Constants.userImage,
+              personalInformationModel.value.apiresponse?.data?.photo ?? "");
+            await SharedPreferencesHelper.instance.setUserInfo(data);
+          Navigation.pushNamed(Routes.addVehicle);
         },
       );
     }

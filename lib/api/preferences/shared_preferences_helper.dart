@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter_template/modules/personal_information_view/model/personal_information_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../modules/authentication/models/authapi_res.dart';

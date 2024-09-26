@@ -80,6 +80,7 @@ class AppString {
   static const String emailAddressIsInvalid = "Email address is invalid";
   static const String pleaseEnterPostCode = "Please enter post code";
   static const String postCodeMustBeDigits = "Post code must be 6 digits";
+  static const String pleaseEnterValidVehicleNumber = "Please enter valid vehicle number";
   static const String postCodeMustContainOnlyDigits = "Post code must contain only digits";
   static const String selectVehicleMake = "Please select vehicle make";
   static const String selectVehicleModel = "Please select vehicle model";

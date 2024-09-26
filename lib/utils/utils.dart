@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -47,6 +48,8 @@ class Utils {
               Get.back();
               selectImage =
                   await Utils.imagePicker(source: ImageSource.gallery);
+              log("selectImage ::${selectImage?.path}");
+
               if (selectImage?.path.isNotEmpty ?? false) {
                 image?.value = selectImage?.path ?? "";
               }

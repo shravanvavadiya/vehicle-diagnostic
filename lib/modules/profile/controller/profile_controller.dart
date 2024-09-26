@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_template/api/preferences/shared_preferences_helper.dart';
 import 'package:flutter_template/modules/profile/models/get_user_model.dart';
 import 'package:flutter_template/modules/profile/models/profile_model.dart';
-import 'package:flutter_template/modules/profile/models/update_user_model.dart';
 import 'package:flutter_template/modules/profile/service/profile_service.dart';
 import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/common_api_caller.dart';
@@ -16,15 +15,21 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../utils/assets.dart';
 import '../../../utils/navigation_utils/navigation.dart';
+import '../../authentication/models/authapi_res.dart';
+import '../../personal_information_view/model/personal_information_model.dart';
 
-class ProfileController extends GetxController with LoadingMixin, LoadingApiMixin {
+class ProfileController extends GetxController
+    with LoadingMixin, LoadingApiMixin {
+  RxString screenName = AppString.accountInformation.obs;
   final TextEditingController firstname = TextEditingController();
   final TextEditingController lastname = TextEditingController();
   final TextEditingController email = TextEditingController();
   final TextEditingController postCode = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> updateFormKey = GlobalKey<FormState>();
   Rx<GetUserProfileModel> getUserProfileModel = GetUserProfileModel().obs;
-  Rx<UpdateUserModel> updateUserProfileModel = UpdateUserModel().obs;
+  Rx<PersonalInformationModel> updateUserProfileModel =
+      PersonalInformationModel().obs;
   RxBool isValidateName = false.obs;
   RxBool isValidateLastName = false.obs;
   RxBool isValidateEmail = false.obs;
@@ -67,8 +72,10 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
       () => ProfileService.getUserAPI(userId: userId),
       loading: handleLoading,
       result: (data) {
+        log("profile image ::${data.profileResponse?.profileData?.photo}");
         getUserProfileModel.value = data;
-        final profileData = getUserProfileModel.value.profileResponse?.profileData;
+        final profileData =
+            getUserProfileModel.value.profileResponse?.profileData;
         firstname.text = profileData?.firstName.toString() ?? "";
         lastname.text = profileData?.lastName.toString() ?? "";
         email.text = profileData?.email.toString() ?? "";
@@ -81,18 +88,24 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
   /// Update User API::
 
   Future<void> updateUserProfileAPI({
-    required String firstName,
-    required String lastName,
+    required String firstname,
+    required String lastname,
     required String postCode,
+    required String imagePath,
   }) async {
     int userId = SharedPreferencesHelper.instance.getInt(Constants.keyUserId);
     processApi(
       () => ProfileService.updateUserAPI(
-        bodyData: {'email': email.text, 'firstName': firstName, 'id': userId, 'lastName': lastName, 'postCode': postCode},
-      ),
+          id: "$userId",
+          email: email.text,
+          firstName: firstname,
+          lastName: lastname,
+          postCode: postCode,
+          imagePath: imagePath),
       loading: handleLoading,
       result: (data) {
         updateUserProfileModel.value = data;
+        SharedPreferencesHelper.instance.setUserInfo(data);
         Navigation.pushNamed(Routes.homeScreen);
       },
     );

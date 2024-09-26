@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,6 +13,8 @@ import 'package:get/get.dart';
 
 import '../../../../api/preferences/shared_preferences_helper.dart';
 import '../../../../utils/assets.dart';
+import '../../../../utils/constants.dart';
+import '../../../../utils/custom_catch_image.dart';
 import '../../../../utils/navigation_utils/navigation.dart';
 import '../../../../utils/navigation_utils/routes.dart';
 import '../../../../widget/custom_button.dart';
@@ -26,7 +29,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final VehicleDetailController vehicleDetailController = Get.put(VehicleDetailController());
+  final VehicleDetailController vehicleDetailController =
+      Get.put(VehicleDetailController());
 
   @override
   void initState() {
@@ -37,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log("Get user image from shared prefs ::${SharedPreferencesHelper.instance.getString(Constants.userImage)}");
     return GetX<HomeController>(
       init: HomeController(),
       builder: (homeController) => SafeArea(
@@ -109,7 +114,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontSize: 14.sp,
                           ),
                           AppText(
-                            text: "${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.firstName ?? "demo"}"
+                            text:
+                                "${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.firstName ?? "demo"}"
                                 " ${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.lastName ?? "demo"}",
                             color: AppColors.blackColor,
                             fontWeight: FontWeight.w600,
@@ -123,27 +129,61 @@ class _HomeScreenState extends State<HomeScreen> {
                           setState(() {});
                         },
                         child: Container(
-                          height: 44.h,
-                          width: 44.w,
+                          height: 45.h,
+                          width: 45.w,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(60.r),
                             border: Border.all(
                               color: AppColors.whiteColor,
-                              width: 2.w,
+                              width: 2.5.w,
                             ),
                           ),
-                          child: /*CustomCachedImage(
-                              imageUrl: "${SharedPreferencesHelper.instance.getUser().apiresponse.da}",
-                              height: 44.h,
-                              width: 44.w,
-                            )*/
-                              ClipRRect(
+                          child:ClipRRect(
                             borderRadius: BorderRadius.circular(65.r),
-                            child: Image.asset(
-                              ImagesAsset.user,
-                              height: 20,
+                            child: CachedNetworkImage(
+                              color: Colors.transparent,
+                              imageUrl: "${SharedPreferencesHelper.instance.getUserInfo()?.apiresponse?.data?.photo}",
+                              fit: BoxFit.cover,
+                              imageBuilder: (context, imageProvider) => Container(
+                                height: 152.h,
+                                width: 152.w,
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(9.r),
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              placeholder: (context, url) => Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColors.highlightedColor,
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => ClipRRect(
+                                borderRadius: BorderRadius.circular(65.r),
+                                child: Image.asset(
+                                  ImagesAsset.user,
+                                  height: 20,
+                                ),
+                              ),
                             ),
-                          ),
+                          )
+                            /*  SharedPreferencesHelper.instance
+                                      .getString(Constants.userImage)
+                                      .isNotEmpty
+                                  ? Image.network(
+                                      SharedPreferencesHelper.instance
+                                          .getString(Constants.userImage),
+                                    )
+                                  : ClipRRect(
+                                      borderRadius: BorderRadius.circular(65.r),
+                                      child: Image.asset(
+                                        ImagesAsset.user,
+                                        height: 20,
+                                      ),
+                                    ),*/
                         ),
                       )
                     ],
@@ -163,7 +203,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           AppText(
-                            text: "${AppString.myVehicle} (${homeController.getAllVehicleList?.apiresponse?.data?.vehicle?.length ?? 0})",
+                            text:
+                                "${AppString.myVehicle} (${homeController.getAllVehicleList?.apiresponse?.data?.vehicle?.length ?? 0})",
                             fontSize: 20.sp,
                             fontWeight: FontWeight.w600,
                             color: AppColors.primaryColor,
@@ -189,12 +230,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.only(bottom: 8.h),
-                              itemCount: homeController.getAllVehicleList!.apiresponse!.data!.vehicle!.length,
+                              itemCount: homeController.getAllVehicleList!
+                                  .apiresponse!.data!.vehicle!.length,
                               itemBuilder: (context, index) {
-                                return HomeScreenComponent(getVehicleData: homeController.getAllVehicleList!.apiresponse!.data!.vehicle![index]);
+                                return HomeScreenComponent(
+                                    getVehicleData: homeController
+                                        .getAllVehicleList!
+                                        .apiresponse!
+                                        .data!
+                                        .vehicle![index]);
                               },
                             )
-                          : const Align(alignment: Alignment.center, child: Text("No data found")),
+                          : const Align(
+                              alignment: Alignment.center,
+                              child: Text("No data found")),
                     ],
                   ).paddingSymmetric(horizontal: 16.w),
                 ),

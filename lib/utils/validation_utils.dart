@@ -45,6 +45,8 @@ class AppValidation {
   static String? vehicleNumberValidator(String? value) {
     if (value!.isEmpty) {
       return AppString.pleaseEnterVehicleNumber;
+    } else if (value.length > 17) {
+      return AppString.pleaseEnterValidVehicleNumber;
     }
     return null;
   }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter_template/modules/personal_information_view/model/personal_information_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../modules/authentication/models/authapi_res.dart';
@@ -58,8 +59,16 @@ class SharedPreferencesHelper {
     await prefs?.setString(Constants.keyUser, jsonEncode(user));
   }
 
+  Future setUserInfo(PersonalInformationModel? user) async {
+    await prefs?.setString(Constants.keyUser, jsonEncode(user));
+  }
+
    String? getUserToken() {
     return prefs?.get(Constants.keyToken) as String?;
+  }
+
+  PersonalInformationModel? getUserInfo() {
+    return PersonalInformationModel.fromJson(jsonDecode(prefs?.get(Constants.keyUser) as String? ?? ""));
   }
 
     AuthApiRes? getUser() {

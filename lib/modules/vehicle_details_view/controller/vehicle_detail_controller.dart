@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_template/modules/vehicle_details_view/model/add_vehicle_model.dart';
 import 'package:flutter_template/modules/vehicle_details_view/model/my_vehicle_model.dart';
@@ -125,13 +126,16 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
         handleLoading(false);
       },
       result: (result) async {
+        log("result ::${result}");
         // Convert the JSON string into a Dart map
         Map<String, dynamic> jsonData = jsonDecode(result!);
 
         // Access the "id" field
         int id = jsonData['apiresponse']['data']['id'];
 
-        print('Vehicle ID: $id');
+        if (kDebugMode) {
+          print('Vehicle ID: $id');
+        }
         id == ""
             ? {}
             : {

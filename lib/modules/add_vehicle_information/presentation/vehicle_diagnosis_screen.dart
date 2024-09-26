@@ -1,12 +1,14 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_template/modules/dashboad/home/presentation/home_screen.dart';
 import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/assets.dart';
 import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:flutter_template/utils/navigation_utils/routes.dart';
 import 'package:flutter_template/widget/lets_start_widget.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 
 import '../../../api/preferences/shared_preferences_helper.dart';
 import '../../../widget/annotated_region.dart';
@@ -19,7 +21,7 @@ class VehicleDiagnosisScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log('token  :: ${SharedPreferencesHelper.instance.getUserToken()}');
+    log('token  :: ${SharedPreferencesHelper.instance.getLogInUser()}');
 
     return Scaffold(
       body: SafeArea(
@@ -39,7 +41,7 @@ class VehicleDiagnosisScreen extends StatelessWidget {
                   Navigation.pushNamed(Routes.vehicleInformationStepsScreen);
                 },
                 noOnTap: () {
-                  Navigation.pushNamed(Routes.homeScreen);
+                  Get.offAll(HomeScreen());
                 }),
           ),
         ),

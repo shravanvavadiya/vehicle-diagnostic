@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_template/modules/personal_information_view/controller/personal_information_controller.dart';
+import 'package:flutter_template/modules/personal_information_view/controller/user_information_controller.dart';
 import 'package:flutter_template/modules/profile/controller/profile_controller.dart';
 import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/utils/app_string.dart';
@@ -93,8 +93,8 @@ class ProfileComponent extends StatelessWidget {
   ProfileComponent({super.key, required this.index});
 
   final ProfileController profileController = Get.find();
-  final PersonalInformationController personalInformationController =
-      Get.put(PersonalInformationController());
+  final UserInformationController personalInformationController =
+      Get.put(UserInformationController());
 
   @override
   Widget build(BuildContext context) {

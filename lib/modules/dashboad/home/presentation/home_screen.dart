@@ -18,6 +18,8 @@ import '../../../../widget/custom_button.dart';
 import '../../../vehicle_details_view/controller/vehicle_detail_controller.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
+import '../../../vehicle_details_view/presentation/add_vehicle_details_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
 
@@ -107,8 +109,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontSize: 14.sp,
                           ),
                           AppText(
-                            text: "${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.firstName ?? "demo"}"
-                                " ${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.lastName ?? "demo"}",
+                            // text: "${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.firstName ?? "demo"}"
+                            //     " ${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.lastName ?? "demo"}",
+                            text: "demo",
                             color: AppColors.blackColor,
                             fontWeight: FontWeight.w600,
                             fontSize: 17.sp,
@@ -168,7 +171,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           CustomButton(
                             onTap: () {
-                              Navigation.pushNamed(Routes.addVehicleDetail);
+                              // Navigation.pushNamed(Routes.addVehicleDetail);
+                              Get.to(const AddVehicleDetailsScreen(
+                                screenName: "New Vehicle",
+                              ));
                             },
                             height: 38.h,
                             fontSize: 15.sp,

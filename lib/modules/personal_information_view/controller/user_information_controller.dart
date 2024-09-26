@@ -9,12 +9,15 @@ import 'package:flutter_template/widget/app_snackbar.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../utils/app_string.dart';
 import '../../../utils/common_api_caller.dart';
 import '../../../utils/loading_mixin.dart';
 import '../../../utils/navigation_utils/navigation.dart';
 import '../../../utils/navigation_utils/routes.dart';
+import '../../vehicle_details_view/presentation/add_vehicle_screen.dart';
 
-class PersonalInformationController extends GetxController with LoadingMixin, LoadingApiMixin {
+class UserInformationController extends GetxController with LoadingMixin, LoadingApiMixin {
+  RxString screenName = AppString.mayIInquireAboutYourName.obs;
   final TextEditingController firstname = TextEditingController();
   final TextEditingController lastname = TextEditingController();
   final TextEditingController email = TextEditingController();
@@ -29,19 +32,7 @@ class PersonalInformationController extends GetxController with LoadingMixin, Lo
   XFile? imagePath;
   RxString image = "".obs;
   RxBool isValidateImage = false.obs;
-
   RxBool isButtonEnabled = false.obs;
-
-  void updateButtonState() {
-    isButtonEnabled.value = firstname.text.isNotEmpty && lastname.text.isNotEmpty && email.text.isNotEmpty && postCode.text.isNotEmpty;
-  }
-
-  clearData() {
-    firstname.clear();
-    lastname.clear();
-    email.clear();
-    postCode.clear();
-  }
 
   /// Personal Information API::
   Future<void> personalInformationAPI({
@@ -63,43 +54,23 @@ class PersonalInformationController extends GetxController with LoadingMixin, Lo
         },
         result: (data) async {
           personalInformationModel.value = data;
-          log("result ${personalInformationModel.value.apiresponse?.data?.email??""}");
+          log("user Data ${data}");
+          bool userAccountAccess = personalInformationModel.value.apiresponse?.data?.profileCompleted ?? false;
+          log("userAccountAccess $userAccountAccess");
           await SharedPreferencesHelper.instance.setInt(Constants.keyUserId, personalInformationModel.value.apiresponse?.data?.id ?? 0);
-          //  await SharedPreferencesHelper.instance.setUser(data);
-          Navigation.pushNamed(Routes.addVehicle);
+          // await SharedPreferencesHelper.instance.setUser(data);
+          SharedPreferencesHelper.instance.setLogInUser(value: userAccountAccess);
+          Get.offAll(const AddVehicleScreen());
         },
       );
     }
     handleLoading(false);
   }
 
-/* Future<void> personalInformationAPI({
-    required String email,
-    required String firstname,
-    required String lastname,
-    required String postCode,
-  }) async {
-    try {
-      isPersonalInformation.value = true;
-      if (formKey.currentState!.validate()) {
-        personalInformationModel.value =
-        await PersonalInformationService.personalInformation(
-          bodyData: {
-            'email': email,
-            'firstName': firstname,
-            'lastName': lastname,
-            'postCode': postCode,
-          },
-        );
-      }
-    } catch (e) {
-      log("Exception in personalInformationAPI---->$e");
-      isPersonalInformation.value = false;
-      AppSnackBar.showErrorSnackBar(
-          message: "Something went wrong", title: "Error");
-    } finally {
-      isPersonalInformation.value = false;
-    }
+  @override
+  void onInit() {
+    email.text = SharedPreferencesHelper.instance.getString("email");
+    // TODO: implement onInit
+    super.onInit();
   }
-*/
 }

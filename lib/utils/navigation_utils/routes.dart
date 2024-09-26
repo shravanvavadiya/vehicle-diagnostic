@@ -1,9 +1,8 @@
-import 'package:flutter_template/modules/authentication/presentation/sign_in_screen.dart';
-import 'package:flutter_template/modules/authentication/presentation/sign_up_screen.dart';
+import 'package:flutter_template/modules/authentication/presentation/google_login_screen.dart';
 import 'package:flutter_template/modules/dashboad/home/presentation/home_screen.dart';
 import 'package:flutter_template/modules/dashboad/home/presentation/vehicle_details_screen.dart';
 import 'package:flutter_template/modules/personal_information_view/get_started_screen.dart';
-import 'package:flutter_template/modules/personal_information_view/presentation/personal_information_screen.dart';
+import 'package:flutter_template/modules/personal_information_view/presentation/user_information_screen.dart';
 import 'package:flutter_template/modules/profile/presentation/profile_screen.dart';
 import 'package:flutter_template/modules/subscriptions/presentation/subscriptions_summery_screen.dart';
 import 'package:flutter_template/modules/vehicle_details_view/presentation/add_vehicle_screen.dart';
@@ -21,13 +20,12 @@ mixin Routes {
   // get started
   static const String splash = '/splash';
   static const String homeScreen = '/home';
-  static const String signUp = '/signUp';
   static const String signIn = '/signIn';
   static const String getStarted = '/getStarted';
   static const String personalInformation = '/personalInformation';
   static const String addVehicle = '/addVehicle';
   static const String addVehicleDetail = '/addVehicleDetail';
-  static const String vehicleDiagnosisScreen = '/vehicleDiagnosisScreen';
+  // static const String vehicleDiagnosisScreen = '/vehicleDiagnosisScreen';
   static const String vehicleInformationStepsScreen = '/vehicleInformationStepsScreen';
   static const String accountInformation = '/accountInformation';
   static const String profileScreen = '/profileScreen';
@@ -43,14 +41,10 @@ mixin Routes {
     ),
     GetPage<dynamic>(
       name: signIn,
-      page: () => SignInScreen(),
+      page: () => GoogleLogInScreen(),
       transition: defaultTransition,
     ),
-    GetPage<dynamic>(
-      name: signUp,
-      page: () => const SignUpScreen(),
-      transition: defaultTransition,
-    ),
+
     GetPage<dynamic>(
       name: getStarted,
       page: () => const GetStartedScreen(),
@@ -58,7 +52,7 @@ mixin Routes {
     ),
     GetPage<dynamic>(
       name: personalInformation,
-      page: () => PersonalInformationScreen(),
+      page: () => UserInformationScreen(),
       transition: defaultTransition,
     ),
     GetPage<dynamic>(
@@ -66,21 +60,21 @@ mixin Routes {
       page: () => const AddVehicleScreen(),
       transition: defaultTransition,
     ),
-    GetPage<dynamic>(
-      name: addVehicleDetail,
-      page: () => const AddVehicleDetailsScreen(),
-      transition: defaultTransition,
-    ),
+    // GetPage<dynamic>(
+    //   name: addVehicleDetail,
+    //   page: () => const AddVehicleDetailsScreen(),
+    //   transition: defaultTransition,
+    // ),
     GetPage<dynamic>(
       name: homeScreen,
       page: () =>  HomeScreen(),
       transition: defaultTransition,
     ),
-    GetPage<dynamic>(
-      name: vehicleDiagnosisScreen,
-      page: () => VehicleDiagnosisScreen(),
-      transition: defaultTransition,
-    ),
+    // GetPage<dynamic>(
+    //   name: vehicleDiagnosisScreen,
+    //   page: () => VehicleDiagnosisScreen(),
+    //   transition: defaultTransition,
+    // ),
     GetPage<dynamic>(
       name: vehicleInformationStepsScreen,
       page: () =>  VehicleInformationStepsScreen(),

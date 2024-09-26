@@ -155,6 +155,39 @@ class Api {
     return null;
   }
 
+  Future<String?> multiPartRequestEditVehicle(String endpoint, {required MyVehicleData editProfileFormData, String? imagePath}) async {
+    try {
+      var headers = {'accept': '*/*', 'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'};
+      var request = http.MultipartRequest('POST', Uri.parse('http://103.206.139.86:8070/moreaboutvehicle/update'));
+      final body = {
+        'fuelType': "${editProfileFormData.fuelType}",
+        'transmissionType': "${editProfileFormData.transmissionType}",
+        'vehicleId': "${editProfileFormData.id}",
+        'vehicleMake': "${editProfileFormData.vehicleMake}",
+        'vehicleModel': "${editProfileFormData.vehicleModel}",
+        'vehicleNumber': "${editProfileFormData.vehicleNumber}",
+        'vehicleYear': "${editProfileFormData.vehicleYear}",
+        'moreAboutVehicle[0].answer\n': '',
+        'moreAboutVehicle[0].id\n': '',
+        'moreAboutVehicle[0].question\n': ''
+      };
+      request.fields.addAll(body);
+      if (imagePath?.isNotEmpty ?? false) {
+        request.files.add(await http.MultipartFile.fromPath('photo', imagePath ?? ""));
+      }
+
+      request.headers.addAll(headers);
+      http.Response response = await http.Response.fromStream(await request.send());
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response.body;
+      }
+      log("response ${response.body}");
+    } catch (e, st) {
+      log('multiPartRequest Error :: $e ::: $st');
+    }
+    return null;
+  }
+
   Future multiPartRequestUserData({
     required String endPoint,
     required String email,

@@ -15,7 +15,7 @@ import 'package:flutter_template/widget/custom_button.dart';
 import 'package:get/get.dart';
 import '../../../utils/utils.dart';
 import '../../../utils/validation_utils.dart';
-import '../../personal_information_view/presentation/personal_information_screen.dart';
+import '../../personal_information_view/presentation/user_information_screen.dart';
 import '../controller/profile_controller.dart';
 
 class AccountInformationScreen extends StatefulWidget {

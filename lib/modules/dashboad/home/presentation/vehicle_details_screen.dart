@@ -59,7 +59,7 @@ class VehicleDetailScreen extends StatelessWidget {
                   PopupMenuItem(
                     onTap: () {
                       log("Edit");
-                      Get.to(AddVehicleDetailsScreen());
+                      Get.to(AddVehicleDetailsScreen(screenName: "Edit Screen", vehicleData: _args));
                     },
                     height: 40.h,
                     padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -146,7 +146,6 @@ class VehicleDetailScreen extends StatelessWidget {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      // Navigator.pop(context);
                                       homeController.deleteVehicle(vehicleId: _args.id!);
                                     },
                                     child: Container(

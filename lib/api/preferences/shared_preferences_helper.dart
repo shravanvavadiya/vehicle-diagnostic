@@ -30,8 +30,6 @@ class SharedPreferencesHelper {
     return;
   }
 
-
-
   Future setString(String key, String value) async {
     await prefs?.setString(key, value);
   }
@@ -50,19 +48,28 @@ class SharedPreferencesHelper {
     return value ?? false;
   }
 
-   Future setUserToken(String token) async {
+  Future setUserToken(String token) async {
     await prefs?.setString(Constants.keyToken, token);
   }
 
-   Future setUser(AuthApiRes? user) async {
-    await prefs?.setString(Constants.keyUser, jsonEncode(user));
-  }
-
-   String? getUserToken() {
+  String? getUserToken() {
     return prefs?.get(Constants.keyToken) as String?;
   }
 
-    AuthApiRes? getUser() {
+  Future setLogInUser({required bool value}) async {
+    await prefs?.setBool(Constants.logInUserCheck, value);
+  }
+
+  bool getLogInUser() {
+    final bool? value = prefs?.getBool(Constants.logInUserCheck);
+    return value ?? false;
+  }
+
+  Future setUser(AuthApiRes? user) async {
+    await prefs?.setString(Constants.keyUser, jsonEncode(user));
+  }
+
+  AuthApiRes? getUser() {
     return AuthApiRes.fromJson(jsonDecode(prefs?.get(Constants.keyUser) as String? ?? ""));
   }
 

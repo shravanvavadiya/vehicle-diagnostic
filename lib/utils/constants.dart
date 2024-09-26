@@ -1,5 +1,6 @@
 class Constants {
   static String get keyToken => "keyToken";
+  static String get logInUserCheck => "logInUserCheck";
 
   static String get keyUser => "keyUser";
 

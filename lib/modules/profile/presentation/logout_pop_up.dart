@@ -34,11 +34,10 @@ void showCustomDialog(
                 color: AppColors.blackColor,
                 fontSize: 18.sp,
                 textAlign: TextAlign.center,
-              ).paddingOnly(left: 14.w, right: 14.w,top: 5.h),
+              ).paddingOnly(left: 14.w, right: 14.w, top: 5.h),
               AppText(
                 // text: subTitle,
-                text:
-                    "Ready to say goodbye? Deleting your account will remove all your data from our Car Fixer app.",
+                text: "Ready to say goodbye? Deleting your account will remove all your data from our Car Fixer app.",
                 fontWeight: FontWeight.w400,
                 fontSize: 12.5.sp,
                 color: AppColors.grey60,
@@ -52,22 +51,19 @@ void showCustomDialog(
                 right: 16.w,
               ),
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   SharedPreferencesHelper.instance.clearSharedPreferences();
                   Navigation.replaceAll(Routes.signIn);
-                   GoogleSignIn().signOut();
+                  GoogleSignIn().signOut();
+                  SharedPreferencesHelper.instance.setLogInUser(value: false);
                 },
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: AppColors.whiteColor,
                     border: Border(
-                      top: BorderSide(
-                          color: AppColors.borderColor.withOpacity(0.6),
-                          width: 0.5),
-                      bottom: BorderSide(
-                          color: AppColors.borderColor.withOpacity(0.6),
-                          width: 0.5),
+                      top: BorderSide(color: AppColors.borderColor.withOpacity(0.6), width: 0.5),
+                      bottom: BorderSide(color: AppColors.borderColor.withOpacity(0.6), width: 0.5),
                     ),
                   ),
                   child: AppText(

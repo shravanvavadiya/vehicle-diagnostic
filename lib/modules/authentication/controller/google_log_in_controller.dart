@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter_template/modules/authentication/service/auth_service.dart';
 import 'package:flutter_template/modules/authentication/service/social_service.dart';
@@ -13,9 +14,12 @@ import 'package:flutter_template/utils/navigation_utils/routes.dart';
 import 'package:get/get.dart';
 
 import '../../../api/preferences/shared_preferences_helper.dart';
+import '../../../utils/app_string.dart';
 
 class SignInController extends GetxController with LoadingMixin, LoadingApiMixin {
-  Future<void> continueWithGoogle() async {
+  RxString buttonName = Platform.isAndroid ? AppString.continueWithGoogle.obs : AppString.continueWithApple.obs;
+
+  continueWithGoogle() async {
     handleLoading(true);
     processApi(
       () => SocialLoginService.signInWithGoogle(),
@@ -23,15 +27,15 @@ class SignInController extends GetxController with LoadingMixin, LoadingApiMixin
       result: (data) {
         processApi(
           () {
-            print("data ${data}");
+            print("data $data");
             return AuthService.googleTokenVerify({ApiKeyConstants.deviceType: Constants.android, ApiKeyConstants.token: data});
           },
           result: (data) async {
             log("${data.apiresponse?.data?.token}");
             await SharedPreferencesHelper.instance.setUserToken(data.apiresponse?.data?.token ?? "");
             await SharedPreferencesHelper.instance.setString("email", data.apiresponse?.data?.email ?? "");
+            Get.offAll(const GetStartedScreen());
             await SharedPreferencesHelper.instance.setUser(data);
-            Navigation.replaceAll(Routes.getStarted);
           },
           loading: handleLoading,
         );
@@ -39,7 +43,7 @@ class SignInController extends GetxController with LoadingMixin, LoadingApiMixin
     );
   }
 
-  Future<void> continueWithApple() async {
+  continueWithApple() async {
     handleLoading(true);
     processApi(
       () => SocialLoginService.signInWithApple(),

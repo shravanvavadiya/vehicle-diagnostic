@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_template/modules/dashboad/home/models/get_vehicle_data_model.dart';
 import 'package:flutter_template/modules/vehicle_details_view/controller/vehicle_detail_controller.dart';
-import 'package:flutter_template/modules/personal_information_view/presentation/personal_information_screen.dart';
+import 'package:flutter_template/modules/personal_information_view/presentation/user_information_screen.dart';
 import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/app_text.dart';
@@ -24,16 +25,21 @@ import '../../../utils/navigation_utils/navigation.dart';
 import '../../../utils/navigation_utils/routes.dart';
 
 class AddVehicleDetailsScreen extends StatelessWidget {
-  const AddVehicleDetailsScreen({super.key});
+  final String screenName;
+  final Vehicle? vehicleData;
+
+  const AddVehicleDetailsScreen({
+    super.key,
+    required this.screenName,
+    this.vehicleData,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // vehicleDetailController.image.isEmpty;
-    // vehicleDetailController.imagePath?.path.isEmpty;
     return CustomAnnotatedRegions(
       statusBarColor: AppColors.whiteColor,
       child: GetX<VehicleDetailController>(
-        init: VehicleDetailController(),
+        init: VehicleDetailController(name: screenName, fetchData: screenName == "Edit Screen" ? vehicleData! : Vehicle()),
         builder: (vehicleDetailController) => Scaffold(
           appBar: AppBar(
             leading: const CustomBackArrowWidget().paddingAll(11.w),
@@ -86,38 +92,69 @@ class AddVehicleDetailsScreen extends StatelessWidget {
                             ),
                           ),
                         ).paddingOnly(top: 24.h, bottom: 8.h)
-                      : GestureDetector(
-                          onTap: () async {
-                            await Utils().imagePickerModel(selectImage: vehicleDetailController.imagePath, image: vehicleDetailController.image);
+                      : screenName == "Edit Screen"
+                          ? Container(
+                              height: 195.h,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: AppColors.backgroundColor,
+                                borderRadius: BorderRadius.circular(4.r),
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                      vehicleDetailController.networkImage.value,
+                                    ),
+                                    fit: BoxFit.cover),
+                              ),
+                              child: GestureDetector(
+                                onTap: () async {
+                                  await Utils()
+                                      .imagePickerModel(selectImage: vehicleDetailController.imagePath, image: vehicleDetailController.image);
 
-                            if (vehicleDetailController.image.value.isNotEmpty) {
-                              vehicleDetailController.isValidateImage.value = true;
-                            } else {
-                              // Set validation to false if no image is selected
-                              vehicleDetailController.isValidateImage.value = false;
-                            }
-                          },
-                          child: Container(
-                            height: 195.h,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: AppColors.backgroundColor,
-                              borderRadius: BorderRadius.circular(4.r),
+                                  vehicleDetailController.isValidateImage.value = true;
+                                },
+                                child: Container(
+                                  height: 195.h,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.blackColor.withOpacity(0.4),
+                                    borderRadius: BorderRadius.circular(4.r),
+                                  ),
+                                  child: SvgPicture.asset(IconAsset.editIcon).paddingAll(85.h),
+                                ),
+                              ),
+                            ).paddingOnly(top: 24.h, bottom: 8.h)
+                          : GestureDetector(
+                              onTap: () async {
+                                await Utils().imagePickerModel(selectImage: vehicleDetailController.imagePath, image: vehicleDetailController.image);
+
+                                if (vehicleDetailController.image.value.isNotEmpty) {
+                                  vehicleDetailController.isValidateImage.value = true;
+                                } else {
+                                  // Set validation to false if no image is selected
+                                  vehicleDetailController.isValidateImage.value = false;
+                                }
+                              },
+                              child: Container(
+                                height: 195.h,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: AppColors.backgroundColor,
+                                  borderRadius: BorderRadius.circular(4.r),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(IconAsset.uploadIcon).paddingOnly(bottom: 6.h),
+                                    AppText(
+                                      text: AppString.tapToAddACoverImageForVehicle,
+                                      textAlign: TextAlign.center,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ],
+                                ),
+                              ).paddingOnly(top: 24.h, bottom: 8.h),
                             ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(IconAsset.uploadIcon).paddingOnly(bottom: 6.h),
-                                AppText(
-                                  text: AppString.tapToAddACoverImageForVehicle,
-                                  textAlign: TextAlign.center,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w400,
-                                )
-                              ],
-                            ),
-                          ).paddingOnly(top: 24.h, bottom: 8.h),
-                        ),
                   customTextFormField(
                     text: AppString.vehicleNumber,
                     hintText: AppString.vehicleNumber,
@@ -184,10 +221,7 @@ class AddVehicleDetailsScreen extends StatelessWidget {
                     alignment: Alignment.bottomRight,
                     child: CustomButton(
                       onTap: () async {
-                        if (vehicleDetailController.formKey.currentState?.validate() ?? false) {
-                          await vehicleDetailController.addVehicleApi();
-                          // log("api calling");
-                        }
+                        screenName == "Edit Screen" ? await vehicleDetailController.editVehicleApi() : await vehicleDetailController.addVehicleApi();
                       },
                       isDisabled: (vehicleDetailController.isValidateVName.value &&
                               vehicleDetailController.isValidateVYear.value &&

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_template/modules/vehicle_details_view/model/add_vehicle_model.dart';
 import 'package:flutter_template/modules/vehicle_details_view/model/my_vehicle_model.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,16 +18,53 @@ import '../../../utils/loading_mixin.dart';
 import '../../../utils/navigation_utils/navigation.dart';
 import '../../../utils/navigation_utils/routes.dart';
 import '../../../widget/app_snackbar.dart';
+import '../../add_vehicle_information/presentation/vehicle_diagnosis_screen.dart';
+import '../../dashboad/home/models/get_vehicle_data_model.dart';
 import '../service/add_vehicle_service.dart';
 
 class VehicleDetailController extends GetxController with LoadingMixin, LoadingApiMixin {
-  RxString screenName = AppString.addYourVehicleDetails.obs;
+  RxInt vehicleId = 0.obs;
+  RxInt vehicleUserId = 0.obs;
+
+  VehicleDetailController({required String name, required Vehicle fetchData}) {
+    print(name);
+    name == "Edit Screen"
+        ? {
+            screenName.value = AppString.editYourVehicleDetails,
+            // fetchData.photo = image.value,
+            // fetchData.vehicleNumber = vehicleNumber.text,
+            vehicleNumber.text = fetchData.vehicleNumber!,
+            vehicleYear.text = fetchData.vehicleYear!,
+            selectedValueMake.value = fetchData.vehicleMake!,
+            selectedValueModel.value = fetchData.vehicleModel!,
+            selectedValueTType.value = fetchData.transmissionType!,
+            selectedValueFType.value = fetchData.fuelType!,
+            networkImage.value = fetchData.photo!,
+            vehicleId.value = fetchData.id!,
+            vehicleUserId.value = fetchData.userId!,
+
+            isValidateVName.value = true,
+            isValidateVYear.value = true,
+            isValidateVMake.value = true,
+            isValidateVModel.value = true,
+            isValidateVType.value = true,
+            isValidateVFuelT.value = true,
+            isValidateImage.value = true,
+          }
+        : {
+            screenName.value = AppString.addYourVehicleDetails,
+          };
+  }
+
+  RxString screenName = "".obs;
+
   final TextEditingController vehicleNumber = TextEditingController();
   final TextEditingController vehicleYear = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   Rx<AddVehicleModel> addVehicleModel = AddVehicleModel().obs;
   XFile? imagePath;
   RxString image = "".obs;
+  RxString networkImage = "".obs;
 
   RxString selectedValueMake = 'Select'.obs;
   RxString selectedValueModel = 'Select'.obs;
@@ -92,10 +131,49 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
         handleLoading(false);
       },
       result: (result) async {
+        print("result ${result}");
         Map<String, dynamic> jsonData = jsonDecode(result!);
         int id = jsonData['apiresponse']['data']['id'];
         print('Vehicle ID: $id');
-        id == "" ? {} : {AppPreference.setInt("VEHICLEID", id), Navigation.pushNamed(Routes.vehicleDiagnosisScreen)};
+        AppPreference.setInt("VEHICLEID", id);
+        Get.offAll(VehicleDiagnosisScreen());
+      },
+    );
+    imagePath = XFile("");
+    image.value = "";
+    clearController();
+    handleLoading(false);
+  }
+
+  Future<void> editVehicleApi() async {
+    handleLoading(true);
+    final MyVehicleData editVehicleData = MyVehicleData(
+      fuelType: selectedValueFType.trim(),
+      vehicleYear: vehicleYear.text.trim(),
+      vehicleNumber: vehicleNumber.text.trim(),
+      vehicleModel: selectedValueModel.trim(),
+      vehicleMake: selectedValueMake.value,
+      userId: vehicleUserId.value,
+      transmissionType: selectedValueTType.value,
+      id: vehicleId.value,
+    );
+
+    await processApi(
+      () => VehicleService.editVehicle(
+        setUpProfileFormData: editVehicleData,
+        imagePath: image.value,
+      ),
+      error: (error, stack) {
+        log("UpdateUserProfile error ---> $error --- $stack");
+        handleLoading(false);
+      },
+      result: (result) async {
+        print("result ${result}");
+        Map<String, dynamic> jsonData = jsonDecode(result!);
+        int id = jsonData['apiresponse']['data']['vehicleId'];
+        print('Vehicle ID: $id');
+        AppPreference.setInt("VEHICLEID", id);
+        Get.to(VehicleDiagnosisScreen());
       },
     );
     imagePath = XFile("");

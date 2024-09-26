@@ -7,6 +7,7 @@ import 'package:flutter_template/modules/dashboad/home/service/home_service.dart
 import 'package:flutter_template/utils/common_api_caller.dart';
 import 'package:flutter_template/utils/loading_mixin.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 
 import '../../../../utils/app_string.dart';
 import '../../../../utils/navigation_utils/navigation.dart';
@@ -163,13 +164,22 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
       },
       result: (data) {
         getAllVehicles(currentPage: currentPage.value);
-        Navigation.removeAll(HomeScreen());
-
+        Get.offAll(HomeScreen());
         // getAllVehicleList.removeWhere((vehicle) => vehicle.id == vehicleId);
         //Navigator.pop(context);
         log("Vehicle with ID $vehicleId deleted successfully.");
       },
     );
     handleLoading(false);
+  }
+
+  @override
+  void dispose() {
+    // isResponseData.value = false;
+    print("dispose Method");
+    Get.delete<HomeController>();
+
+    // TODO: implement dispose
+    super.dispose();
   }
 }

@@ -20,6 +20,7 @@ class AppString {
   static const String next = "Next";
   static const String addVehicleDetails = "Add Vehicle Details";
   static const String addYourVehicleDetails = "Add your vehicle details.";
+  static const String editYourVehicleDetails = "Edit your vehicle details.";
   static const String addYourVehicleInformationForBetterSearch = "Add your vehicle information for better search.";
   static const String tapToAddACoverImageForVehicle = "Tap to add \na cover image for Vehicle";
   static const String vehicleNumber = "Vehicle number";

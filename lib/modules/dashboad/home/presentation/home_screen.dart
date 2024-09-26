@@ -26,8 +26,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final VehicleDetailController vehicleDetailController = Get.put(VehicleDetailController());
-
   @override
   void initState() {
     setState(() {});
@@ -170,7 +168,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           CustomButton(
                             onTap: () {
-                              vehicleDetailController.clearController();
                               Navigation.pushNamed(Routes.addVehicleDetail);
                             },
                             height: 38.h,

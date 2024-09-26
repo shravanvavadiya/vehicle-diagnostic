@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_template/modules/vehicle_details_view/model/add_vehicle_model.dart';
 import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/app_text.dart';
@@ -9,6 +12,7 @@ import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:flutter_template/widget/annotated_region.dart';
 import 'package:get/get.dart';
 import '../../../../widget/custom_listtile.dart';
+import '../../../vehicle_details_view/presentation/add_vehicle_details_screen.dart';
 import '../controller/home_controller.dart';
 import '../models/get_vehicle_data_model.dart';
 
@@ -53,6 +57,10 @@ class VehicleDetailScreen extends StatelessWidget {
                 ),
                 itemBuilder: (context) => [
                   PopupMenuItem(
+                    onTap: () {
+                      log("Edit");
+                      Get.to(AddVehicleDetailsScreen());
+                    },
                     height: 40.h,
                     padding: EdgeInsets.symmetric(horizontal: 10.w),
                     value: 1,
@@ -265,7 +273,7 @@ class VehicleDetailScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppText(
-                      text: "Vehicle information",
+                      text: AppString.vehicleInformation,
                       color: AppColors.secondaryColor.withOpacity(0.7),
                       fontWeight: FontWeight.w600,
                       fontSize: 16.sp,

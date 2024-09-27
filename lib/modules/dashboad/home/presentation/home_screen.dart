@@ -31,13 +31,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final HomeController homeController = Get.put(HomeController());
+
   @override
   Widget build(BuildContext context) {
-    return GetX<HomeController>(
-      key: UniqueKey(),
-      tag: "selected.name",
-      init: HomeController(),
-      builder: (homeController) => SafeArea(
+    return Obx(
+      () => SafeArea(
         child: AnnotatedRegion(
           value: SystemUiOverlayStyle(
             statusBarColor: AppColors.highlightedColor.withOpacity(0.1),
@@ -62,22 +61,22 @@ class _HomeScreenState extends State<HomeScreen> {
                     end: Alignment.bottomCenter,
                   ),
                   /*boxShadow: [
-                       BoxShadow(
-                        color: AppColors.highlightedColor,
-                        blurRadius: 20.0,
-                        spreadRadius: 1.0,
-                      ),
-                      BoxShadow(
-                        color: AppColors.grey50,
-                        blurRadius: 20.0,
-                        spreadRadius: 0.5,
-                      ),
-                      BoxShadow(
-                        color: AppColors.whiteColor,
-                        blurRadius: 20.0,
-                        spreadRadius: 0.5,
-                      )
-                    ]*/
+                         BoxShadow(
+                          color: AppColors.highlightedColor,
+                          blurRadius: 20.0,
+                          spreadRadius: 1.0,
+                        ),
+                        BoxShadow(
+                          color: AppColors.grey50,
+                          blurRadius: 20.0,
+                          spreadRadius: 0.5,
+                        ),
+                        BoxShadow(
+                          color: AppColors.whiteColor,
+                          blurRadius: 20.0,
+                          spreadRadius: 0.5,
+                        )
+                      ]*/
                 ),
                 child: AppBar(
                   toolbarHeight: 72,
@@ -164,19 +163,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             )
                             /*  SharedPreferencesHelper.instance
-                                      .getString(Constants.userImage)
-                                      .isNotEmpty
-                                  ? Image.network(
-                                      SharedPreferencesHelper.instance
-                                          .getString(Constants.userImage),
-                                    )
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(65.r),
-                                      child: Image.asset(
-                                        ImagesAsset.user,
-                                        height: 20,
-                                      ),
-                                    ),*/
+                                        .getString(Constants.userImage)
+                                        .isNotEmpty
+                                    ? Image.network(
+                                        SharedPreferencesHelper.instance
+                                            .getString(Constants.userImage),
+                                      )
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(65.r),
+                                        child: Image.asset(
+                                          ImagesAsset.user,
+                                          height: 20,
+                                        ),
+                                      ),*/
                             ),
                       )
                     ],

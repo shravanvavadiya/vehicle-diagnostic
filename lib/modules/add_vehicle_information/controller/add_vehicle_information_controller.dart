@@ -15,12 +15,10 @@ import '../services/vehicle_information_service.dart';
 class AddVehicleInformationController extends GetxController with LoadingMixin, LoadingApiMixin {
   Rx<VehicleInformationModel> vehicleModel = VehicleInformationModel().obs;
 
-  //RxBool isAnyOptionSelected = false.obs;
   RxList<QueData> getAllVehicleQueList = <QueData>[].obs;
   RxBool isLoading = false.obs;
   RxString selectedAnswer = "".obs;
 
-  //RxList<Map<String, dynamic>> questionAnswerPairs = <Map<String, dynamic>>[].obs;
   RxList<Map<String, dynamic>> questionAnswerPair = <Map<String, dynamic>>[].obs;
   RxList<bool> isAnyOptionSelected = <bool>[].obs;
   RxInt currentIndex = 0.obs;
@@ -40,7 +38,6 @@ class AddVehicleInformationController extends GetxController with LoadingMixin, 
         'answers': answer,
       });
     }
-    //   isAnyOptionSelected.value = answer.isNotEmpty;
   }
 
   bool checkFormFilledUp({required String answer}) {
@@ -53,25 +50,6 @@ class AddVehicleInformationController extends GetxController with LoadingMixin, 
 
     return isAnswerSelected;
   }
-
-  /* bool checkFormFilledUp() {
-    int index = questionAnswerPair.indexWhere((e) {
-      return e['answer'] == null && e['answer'] == "";
-    });
-
-    return index == -1.obs;
-  }
-*/
-
-  /* @override
-  void onInit() {
-    WidgetsBinding.instance.addPostFrameCallback(
-          (timeStamp) {
-            getAllVehiclesQue();
-      },
-    );
-    super.onInit();
-  }*/
 
   //Get all question with options
   Future<void> getAllVehiclesQue() async {
@@ -137,5 +115,12 @@ class AddVehicleInformationController extends GetxController with LoadingMixin, 
       },
     );
     return null;
+  }
+
+  @override
+  void onInit() {
+    questionAnswerPair.clear();
+    // TODO: implement onInit
+    super.onInit();
   }
 }

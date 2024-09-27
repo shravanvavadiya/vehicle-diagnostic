@@ -290,14 +290,6 @@ class _BuildFormViewState extends State<BuildFormView> {
           style: TextStyle(fontSize: 24.sp, height: 1.35.h, fontWeight: FontWeight.w600, color: AppColors.primaryColor),
         ),
         SizedBox(height: 10.h),
-        /* Text(
-          widget.formStepData.subtitle,
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w400,
-            color: AppColors.grey60,
-          ),
-        ),*/
         Expanded(
           child: ListView.separated(
             padding: EdgeInsets.only(top: 24.h),
@@ -326,7 +318,6 @@ class _BuildFormViewState extends State<BuildFormView> {
                     color: AppColors.primaryColor,
                   ),
                 ),
-                // value: _selectedOptions.contains(option),
                 value: isSelected,
                 onChanged: (bool? selected) {
                   log("isSelected ::${isSelected}");

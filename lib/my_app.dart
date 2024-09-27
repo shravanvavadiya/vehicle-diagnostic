@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
               title: AppString.appName,
               initialBinding: AppBidding(),
               initialRoute: Routes.splash,
+              // initialRoute: Routes.questionAndAnsScreenDemo,
               getPages: Routes.pages,
               builder: (context, child) {
                 return Scaffold(

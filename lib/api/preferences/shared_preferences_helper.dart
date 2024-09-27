@@ -66,6 +66,14 @@ class SharedPreferencesHelper {
     return value ?? false;
   }
 
+  Future setUserInfo(PersonalInformationModel? user) async {
+    await prefs?.setString(Constants.keyUser, jsonEncode(user));
+  }
+
+  PersonalInformationModel? getUserInfo() {
+    return PersonalInformationModel.fromJson(jsonDecode(prefs?.get(Constants.keyUser) as String? ?? ""));
+  }
+
   Future setUser(AuthApiRes? user) async {
     await prefs?.setString(Constants.keyUser, jsonEncode(user));
   }

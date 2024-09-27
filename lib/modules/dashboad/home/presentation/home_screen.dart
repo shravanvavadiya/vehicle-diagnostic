@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,19 +31,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final VehicleDetailController vehicleDetailController =
-      Get.put(VehicleDetailController());
-
-  @override
-  void initState() {
-    setState(() {});
-    // TODO: implement initState
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return GetX<HomeController>(
+
       init: HomeController(),
       builder: (homeController) => SafeArea(
         child: AnnotatedRegion(
@@ -64,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       AppColors.highlightedColor.withOpacity(0.5),
                       AppColors.whiteColor
                     ],
-                    stops: const [0.3, 0.5, 0.8, 1],
+                    stops: const [0.3, 0.5, 0.8, 4],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                   ),
@@ -114,9 +106,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontSize: 14.sp,
                           ),
                           AppText(
-                            // text: "${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.firstName ?? "demo"}"
-                            //     " ${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.lastName ?? "demo"}",
-                            text: "demo",
+                            text: "${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.firstName ?? "demo"}"
+                                " ${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.lastName ?? "demo"}",
+                            // text: "demo",
                             color: AppColors.blackColor,
                             fontWeight: FontWeight.w600,
                             fontSize: 17.sp,
@@ -129,47 +121,47 @@ class _HomeScreenState extends State<HomeScreen> {
                           setState(() {});
                         },
                         child: Container(
-                          height: 45.h,
-                          width: 45.w,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(60.r),
-                            border: Border.all(
-                              color: AppColors.whiteColor,
-                              width: 2.5.w,
+                            height: 45.h,
+                            width: 45.h,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(60.r),
+                              border: Border.all(
+                                color: AppColors.whiteColor,
+                                width: 2.5.w,
+                              ),
                             ),
-                          ),
-                          child:ClipRRect(
-                            borderRadius: BorderRadius.circular(65.r),
-                            child: CachedNetworkImage(
-                              color: Colors.transparent,
-                              imageUrl: "${SharedPreferencesHelper.instance.getUserInfo()?.apiresponse?.data?.photo}",
-                              fit: BoxFit.cover,
-                              imageBuilder: (context, imageProvider) => Container(
-                                height: 20.h,
-                                width: 20.w,
-                                decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(9.r),
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(65.r),
+                              child: CachedNetworkImage(
+                                color: Colors.transparent,
+                                imageUrl: "${SharedPreferencesHelper.instance.getUserInfo()?.apiresponse?.data?.photo}",
+                                fit: BoxFit.cover,
+                                imageBuilder: (context, imageProvider) => Container(
+                                  height: 20.h,
+                                  width: 20.w,
+                                  decoration: BoxDecoration(
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(9.r),
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                placeholder: (context, url) => Center(
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.highlightedColor,
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => ClipRRect(
+                                  borderRadius: BorderRadius.circular(65.r),
+                                  child: Image.asset(
+                                    ImagesAsset.user,
+                                    height: 20,
                                   ),
                                 ),
                               ),
-                              placeholder: (context, url) => Center(
-                                child: CircularProgressIndicator(
-                                  color: AppColors.highlightedColor,
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => ClipRRect(
-                                borderRadius: BorderRadius.circular(65.r),
-                                child: Image.asset(
-                                  ImagesAsset.user,
-                                  height: 20,
-                                ),
-                              ),
-                            ),
-                          )
+                            )
                             /*  SharedPreferencesHelper.instance
                                       .getString(Constants.userImage)
                                       .isNotEmpty
@@ -184,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         height: 20,
                                       ),
                                     ),*/
-                        ),
+                            ),
                       )
                     ],
                   ).paddingSymmetric(horizontal: 16.h),
@@ -203,8 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           AppText(
-                            text:
-                                "${AppString.myVehicle} (${homeController.getAllVehicleList?.apiresponse?.data?.vehicle?.length ?? 0})",
+                            text: "${AppString.myVehicle} (${homeController.getAllVehicleList?.apiresponse?.data?.vehicle?.length ?? 0})",
                             fontSize: 20.sp,
                             fontWeight: FontWeight.w600,
                             color: AppColors.primaryColor,
@@ -232,20 +223,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.only(bottom: 8.h),
-                              itemCount: homeController.getAllVehicleList!
-                                  .apiresponse!.data!.vehicle!.length,
+                              itemCount: homeController.getAllVehicleList!.apiresponse!.data!.vehicle!.length,
                               itemBuilder: (context, index) {
-                                return HomeScreenComponent(
-                                    getVehicleData: homeController
-                                        .getAllVehicleList!
-                                        .apiresponse!
-                                        .data!
-                                        .vehicle![index]);
+                                return HomeScreenComponent(getVehicleData: homeController.getAllVehicleList!.apiresponse!.data!.vehicle![index]);
                               },
                             )
-                          : const Align(
-                              alignment: Alignment.center,
-                              child: Text("No data found")),
+                          : const Align(alignment: Alignment.center, child: Text("No data found")),
                     ],
                   ).paddingSymmetric(horizontal: 16.w),
                 ),

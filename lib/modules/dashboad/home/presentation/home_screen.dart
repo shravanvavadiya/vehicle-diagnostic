@@ -34,7 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return GetX<HomeController>(
-
+      key: UniqueKey(),
+      tag: "selected.name",
       init: HomeController(),
       builder: (homeController) => SafeArea(
         child: AnnotatedRegion(

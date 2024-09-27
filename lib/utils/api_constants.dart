@@ -9,12 +9,14 @@ class ApiConstants {
   static const String addVehicle = "vehicle/";
   static const String getVehicleQue = "questionanswer/all";
   static const String submitVehicleRequest = "moreaboutvehicle/";
+  static const String editVehicleRequest = "moreaboutvehicle/updateAboutVehicle";
   static const String deleteVehicle = "vehicle/delete/";
 }
+
 class ApiKeyConstants {
   static const String deviceType = "deviceType";
   static const String token = "token";
   static const String appleId = "appleid";
-  static const String appleToken  = "appletoken";
-  static const String email  = "email";
+  static const String appleToken = "appletoken";
+  static const String email = "email";
 }

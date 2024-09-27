@@ -1,5 +1,5 @@
 class AppString {
-  static const String appName = 'Vehicle Diagnostic';
+  static const String appName = 'CarFixer';
   static const String fontName = 'NeueHaasDisplay';
 
   static const String continueWithGoogle = 'Continue with Google';

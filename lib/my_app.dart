@@ -33,10 +33,8 @@ class MyApp extends StatelessWidget {
                   scaffoldBackgroundColor: Colors.white,
                   checkboxTheme: CheckboxThemeData(
                       side: BorderSide(width: 0, color: AppColors.whiteColor),
-                      checkColor:
-                          WidgetStatePropertyAll(AppColors.primaryColor),
-                      fillColor:
-                          WidgetStatePropertyAll(AppColors.backgroundColor))),
+                      checkColor: WidgetStatePropertyAll(AppColors.primaryColor),
+                      fillColor: WidgetStatePropertyAll(AppColors.backgroundColor))),
               debugShowCheckedModeBanner: false,
               locale: Provider.of<LanguageChangeProvider>(context).currentLocal,
               localizationsDelegates: const [

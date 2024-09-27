@@ -40,20 +40,19 @@ class VehicleInformationService {
       rethrow;
     }
   }
-/* static Future<VehicleInformationModel> getVehicleInformation() async {
+
+  static Future<VehicleQuestionAndAns> editVehicleRequest(Map<String, dynamic> requestBody) async {
     try {
-      var result = await Api().get(
-        ApiConstants.getVehicleQue,
-      );
+      var result = await Api().put(ApiConstants.editVehicleRequest, bodyData: requestBody);
       await ResponseHandler.checkResponseError(result);
-      return VehicleInformationModel.fromJson(
+      return VehicleQuestionAndAns.fromJson(
         jsonDecode(
           utf8.decode(result.bodyBytes),
         ),
       );
-    } catch (e,st) {
-      log("error : E $e,$st");
+    } catch (e, st) {
+      log("error : $e, $st");
       rethrow;
     }
-  }*/
+  }
 }

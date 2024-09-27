@@ -28,60 +28,11 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
 
   RxBool idDisplayErrorBox = false.obs;
 
-  List<Map<String, dynamic>> vehicleMoreInfo = [
-    {
-      "title": AppString.issue,
-      "subTitle": "The engine won't start",
-    },
-    {
-      "title": AppString.noticeTheIssue,
-      "subTitle": "Today",
-    },
-    {
-      "title": AppString.issueOccur,
-      "subTitle": "Every Time I Use the car",
-    },
-    {
-      "title": AppString.typicallyHappen,
-      "subTitle": "While driving",
-    },
-    {
-      "title": AppString.mostProblem,
-      "subTitle": "From the wheels or brakes",
-    },
-    {
-      "title": AppString.unusualSmells,
-      "subTitle": "Not sure",
-    },
-    {
-      "title": AppString.specificSound,
-      "subTitle": "Knocking or rating",
-    },
-    {
-      "title": AppString.warningLights,
-      "subTitle": "Yes,a brake or ABS light",
-    },
-    {
-      "title": AppString.mostlyDriving,
-      "subTitle": "Highway",
-    },
-    {
-      "title": AppString.weatherOrTemperatureProblem,
-      "subTitle": "Not sure",
-    },
-    {
-      "title": AppString.repairedRecently,
-      "subTitle": "Yes,in the last month",
-    },
-    {
-      "title": AppString.currentMileage,
-      "subTitle": "50,000-100,000 miles",
-    }
-  ];
-
   @override
   void onInit() {
+    print("refresh data");
     SchedulerBinding.instance.addPostFrameCallback((_) {
+      print("refresh data 1 ");
       getAllVehicles(currentPage: currentPage.value);
       scrollController.addListener(() {
         if (((scrollController.position.maxScrollExtent) == scrollController.position.pixels) &&
@@ -131,7 +82,6 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
         result: (data) {
           if (data.apiresponse!.data!.vehicle!.isNotEmpty) {
             print("is not empty data ");
-
             if (getAllVehicleList != null && data.apiresponse?.data?.vehicle != null) {
               getAllVehicleList!.apiresponse!.data!.vehicle!.addAll(data.apiresponse?.data?.vehicle ?? []);
               paginationLoading.value = true;

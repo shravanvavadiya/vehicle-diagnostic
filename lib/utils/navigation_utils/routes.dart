@@ -9,6 +9,7 @@ import 'package:flutter_template/modules/vehicle_details_view/presentation/add_v
 import 'package:flutter_template/modules/vehicle_details_view/presentation/add_vehicle_details_screen.dart';
 import 'package:flutter_template/modules/splash/presentation/splash_screen.dart';
 import 'package:get/get.dart';
+import '../../demo/question_answer.dart';
 import '../../modules/add_vehicle_information/presentation/vehicle_diagnosis_screen.dart';
 import '../../modules/add_vehicle_information/presentation/vehicle_information_steps_screen.dart';
 import '../../modules/profile/presentation/account_information_screen.dart';
@@ -18,6 +19,7 @@ mixin Routes {
   static const defaultTransition = Transition.rightToLeft;
 
   // get started
+  static const String questionAndAnsScreenDemo = '/QuestionAndAnsScreenDemo';
   static const String splash = '/splash';
   static const String homeScreen = '/home';
   static const String signIn = '/signIn';
@@ -25,6 +27,7 @@ mixin Routes {
   static const String personalInformation = '/personalInformation';
   static const String addVehicle = '/addVehicle';
   static const String addVehicleDetail = '/addVehicleDetail';
+
   // static const String vehicleDiagnosisScreen = '/vehicleDiagnosisScreen';
   static const String vehicleInformationStepsScreen = '/vehicleInformationStepsScreen';
   static const String accountInformation = '/accountInformation';
@@ -34,6 +37,11 @@ mixin Routes {
   static const String subscriptionsPlanScreen = '/subscriptionsPlanScreen';
 
   static List<GetPage<dynamic>> pages = [
+    GetPage<dynamic>(
+      name: questionAndAnsScreenDemo,
+      page: () => QuestionAndAnsScreenDemo(),
+      transition: defaultTransition,
+    ),
     GetPage<dynamic>(
       name: splash,
       page: () => const SplashScreen(),
@@ -67,7 +75,7 @@ mixin Routes {
     // ),
     GetPage<dynamic>(
       name: homeScreen,
-      page: () =>  HomeScreen(),
+      page: () => HomeScreen(),
       transition: defaultTransition,
     ),
     // GetPage<dynamic>(
@@ -77,7 +85,9 @@ mixin Routes {
     // ),
     GetPage<dynamic>(
       name: vehicleInformationStepsScreen,
-      page: () =>  VehicleInformationStepsScreen(),
+      page: () => VehicleInformationStepsScreen(
+        screenName: "",
+      ),
       transition: defaultTransition,
     ),
     GetPage<dynamic>(
@@ -92,17 +102,17 @@ mixin Routes {
     ),
     GetPage<dynamic>(
       name: vehicleDetailScreen,
-      page: () =>  VehicleDetailScreen(),
+      page: () => VehicleDetailScreen(),
       transition: defaultTransition,
     ),
     GetPage<dynamic>(
       name: subscriptionsSummeryScreen,
-      page: () =>  const SubscriptionsSummeryScreen(),
+      page: () => const SubscriptionsSummeryScreen(),
       transition: defaultTransition,
     ),
     GetPage<dynamic>(
       name: subscriptionsPlanScreen,
-      page: () =>  const SubscriptionsPlanScreen(),
+      page: () => const SubscriptionsPlanScreen(),
       transition: defaultTransition,
     ),
   ];

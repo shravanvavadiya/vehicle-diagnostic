@@ -12,6 +12,8 @@ import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:flutter_template/widget/annotated_region.dart';
 import 'package:get/get.dart';
 import '../../../../widget/custom_listtile.dart';
+import '../../../add_vehicle_information/presentation/vehicle_diagnosis_screen.dart';
+import '../../../add_vehicle_information/presentation/vehicle_information_steps_screen.dart';
 import '../../../vehicle_details_view/presentation/add_vehicle_details_screen.dart';
 import '../controller/home_controller.dart';
 import '../models/get_vehicle_data_model.dart';
@@ -335,16 +337,93 @@ class VehicleDetailScreen extends StatelessWidget {
                         ),
                       ],
                     ).paddingSymmetric(horizontal: 16.w),
-                    Container(
-                      height: 7.h,
-                      color: AppColors.backgroundColor,
-                    ).paddingOnly(top: 4.h, bottom: 20.h),
-                    AppText(
-                      text: "More about your vehicle",
-                      color: AppColors.secondaryColor.withOpacity(0.7),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16.sp,
-                    ).paddingOnly(left: 16.w),
+                    _args.moreAboutVehicle?.isEmpty == true
+                        ? Container(
+                                height: 58.h,
+                                width: Get.width,
+                                decoration: BoxDecoration(
+                                    color: AppColors.logoutColor,
+                                    borderRadius: BorderRadius.circular(5.r),
+                                    border: Border.all(color: AppColors.borderColor),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        offset: Offset(0.w, 0.5.h),
+                                        color: AppColors.blackColor.withOpacity(0.4),
+                                        blurRadius: 80,
+                                      )
+                                    ]),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    AppText(
+                                      text: "Is there a problem with your \nvehicle?",
+                                      color: AppColors.whiteColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14.sp,
+                                      height: 1.3.h,
+                                      letterSpacing: 0.4,
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {},
+                                          child: Container(
+                                            height: 30.h,
+                                            width: 55.w,
+                                            decoration: BoxDecoration(
+                                                color: AppColors.whiteColor.withOpacity(0.2),
+                                                borderRadius: BorderRadius.circular(20.r),
+                                                border: Border.all(color: AppColors.whiteColor, width: 1)),
+                                            child: Center(
+                                                child: AppText(
+                                              text: "No",
+                                              color: AppColors.whiteColor,
+                                              fontWeight: FontWeight.w600,
+                                              letterSpacing: 0.3,
+                                            )),
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.to(VehicleDiagnosisScreen(
+                                              screenName: 'Vehicle Information Add',
+                                              vehicleId: _args.id!,
+                                            ));
+                                          },
+                                          child: Container(
+                                            height: 30.h,
+                                            width: 55.w,
+                                            decoration: BoxDecoration(
+                                                color: AppColors.whiteColor,
+                                                borderRadius: BorderRadius.circular(20.r),
+                                                border: Border.all(color: AppColors.whiteColor, width: 1)),
+                                            child: Center(
+                                              child: AppText(
+                                                text: "Yes",
+                                                color: AppColors.blackColor,
+                                                fontWeight: FontWeight.w600,
+                                                letterSpacing: 0.3,
+                                              ),
+                                            ),
+                                          ).paddingOnly(left: 10.w),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ).paddingSymmetric(horizontal: 10.w))
+                            .paddingSymmetric(horizontal: 16.w, vertical: 16)
+                        : Container(
+                            height: 7.h,
+                            color: AppColors.backgroundColor,
+                          ).paddingOnly(top: 4.h, bottom: 20.h),
+                    _args.moreAboutVehicle?.isEmpty == true
+                        ? Container()
+                        : AppText(
+                            text: "More about your vehicle",
+                            color: AppColors.secondaryColor.withOpacity(0.7),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16.sp,
+                          ).paddingOnly(left: 16.w),
                     ListView.separated(
                       itemCount: _args.moreAboutVehicle?.length ?? 0,
                       shrinkWrap: true,
@@ -373,83 +452,7 @@ class VehicleDetailScreen extends StatelessWidget {
             ),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: Obx(
-            () => homeController.idDisplayErrorBox.value == true
-                ? Container(
-                        height: 58.h,
-                        width: Get.width,
-                        decoration: BoxDecoration(
-                            color: AppColors.logoutColor,
-                            borderRadius: BorderRadius.circular(5.r),
-                            border: Border.all(color: AppColors.borderColor),
-                            boxShadow: [
-                              BoxShadow(
-                                offset: Offset(0.w, 0.5.h),
-                                color: AppColors.blackColor.withOpacity(0.4),
-                                blurRadius: 80,
-                              )
-                            ]),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            AppText(
-                              text: "Is there a problem with your \nvehicle?",
-                              color: AppColors.whiteColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14.sp,
-                              height: 1.3.h,
-                              letterSpacing: 0.4,
-                            ),
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    homeController.idDisplayErrorBox.value = false;
-                                  },
-                                  child: Container(
-                                    height: 30.h,
-                                    width: 55.w,
-                                    decoration: BoxDecoration(
-                                        color: AppColors.whiteColor.withOpacity(0.2),
-                                        borderRadius: BorderRadius.circular(20.r),
-                                        border: Border.all(color: AppColors.whiteColor, width: 1)),
-                                    child: Center(
-                                        child: AppText(
-                                      text: "No",
-                                      color: AppColors.whiteColor,
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 0.3,
-                                    )),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    homeController.idDisplayErrorBox.value = false;
-                                  },
-                                  child: Container(
-                                    height: 30.h,
-                                    width: 55.w,
-                                    decoration: BoxDecoration(
-                                        color: AppColors.whiteColor,
-                                        borderRadius: BorderRadius.circular(20.r),
-                                        border: Border.all(color: AppColors.whiteColor, width: 1)),
-                                    child: Center(
-                                      child: AppText(
-                                        text: "Yes",
-                                        color: AppColors.blackColor,
-                                        fontWeight: FontWeight.w600,
-                                        letterSpacing: 0.3,
-                                      ),
-                                    ),
-                                  ).paddingOnly(left: 10.w),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ).paddingSymmetric(horizontal: 10.w))
-                    .paddingSymmetric(horizontal: 16.w)
-                : const SizedBox(),
-          ),
+
           /* floatingActionButton: FloatingActionButton.extended(
 
             backgroundColor: AppColors.logoutColor,

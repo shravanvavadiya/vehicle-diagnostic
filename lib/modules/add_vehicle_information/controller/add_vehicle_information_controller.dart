@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../../../utils/navigation_utils/navigation.dart';
 import '../../../utils/navigation_utils/routes.dart';
+import '../../dashboad/home/presentation/home_screen.dart';
 import '../models/submit_vehicle_request.dart';
 import '../models/vehicle_information_step_model.dart';
 import '../services/vehicle_information_service.dart';
@@ -99,10 +100,10 @@ class AddVehicleInformationController extends GetxController with LoadingMixin, 
   }
 
   //Submit ans for all question
-  Future<VehicleQuestionAndAns?> submitForm() async {
+  Future<VehicleQuestionAndAns?> submitForm({required int vehicleId}) async {
     final body = {
       "qaVehicleRequests": questionAnswerPair,
-      "vehicleId": AppPreference.getInt("VEHICLEID"),
+      "vehicleId": vehicleId,
     };
     log("body :: ${body.entries}");
     handleLoading(true);
@@ -112,6 +113,26 @@ class AddVehicleInformationController extends GetxController with LoadingMixin, 
       result: (data) {
         log("data::: ${data.toJson()}");
         Navigation.pushNamed(Routes.homeScreen);
+        handleLoading(false);
+      },
+    );
+    return null;
+  }
+
+  Future<VehicleQuestionAndAns?> EditForm({required int vehicleId}) async {
+    final body = {
+      "qaVehicleRequests": questionAnswerPair,
+      "vehicleId": vehicleId,
+    };
+    log("body :: ${body.entries}");
+    handleLoading(true);
+    processApi(
+      () => VehicleInformationService.editVehicleRequest(body),
+      error: (error, stack) => handleLoading(false),
+      result: (data) {
+        log("data::: ${data.toJson()}");
+        // Navigation.pushNamed(Routes.homeScreen);
+        Get.offAll(HomeScreen());
         handleLoading(false);
       },
     );

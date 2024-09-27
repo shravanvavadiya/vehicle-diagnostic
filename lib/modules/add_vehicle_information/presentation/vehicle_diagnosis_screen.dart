@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_template/modules/add_vehicle_information/presentation/vehicle_information_steps_screen.dart';
 import 'package:flutter_template/modules/dashboad/home/presentation/home_screen.dart';
 import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/assets.dart';
@@ -15,7 +16,10 @@ import '../../../widget/annotated_region.dart';
 import '../controller/add_vehicle_information_controller.dart';
 
 class VehicleDiagnosisScreen extends StatelessWidget {
-  VehicleDiagnosisScreen({super.key});
+  final String screenName;
+  final int vehicleId;
+
+  VehicleDiagnosisScreen({super.key, required this.screenName, required this.vehicleId});
 
   final AddVehicleInformationController addVehicleQueController = Get.put(AddVehicleInformationController());
 
@@ -38,10 +42,15 @@ class VehicleDiagnosisScreen extends StatelessWidget {
                 yesOnTap: () {
                   addVehicleQueController.getAllVehiclesQue();
                   // Navigation.pushNamed(Routes.accountInformation);
-                  Navigation.pushNamed(Routes.vehicleInformationStepsScreen);
+                  // Navigation.pushNamed(Routes.vehicleInformationStepsScreen,arg: vehicleId);
+                  Get.to(
+                      const VehicleInformationStepsScreen(
+                        screenName: "Edit Screen",
+                      ),
+                      arguments: vehicleId);
                 },
                 noOnTap: () {
-                  Get.offAll(HomeScreen());
+                  screenName == "Vehicle Information Add" ? Get.back() : Get.offAll(HomeScreen());
                 }),
           ),
         ),

@@ -41,6 +41,7 @@ class VehicleDiagnosisScreen extends StatelessWidget {
                 isStart: true,
                 yesOnTap: () {
                   addVehicleQueController.getAllVehiclesQue();
+                  addVehicleQueController.removeSelectedAnswers();
                   // Navigation.pushNamed(Routes.accountInformation);
                   // Navigation.pushNamed(Routes.vehicleInformationStepsScreen,arg: vehicleId);
                   Get.to(

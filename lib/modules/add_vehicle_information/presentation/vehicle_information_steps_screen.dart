@@ -29,6 +29,11 @@ class _VehicleInformationStepsScreenState extends State<VehicleInformationStepsS
 
   final AddVehicleInformationController addVehicleQueController = Get.find();
 
+  bool getCheckboxValue(String questionKey, String answer) {
+    int existingIndex = addVehicleQueController.questionAnswerPair.indexWhere((element) => element['question'] == questionKey);
+    return addVehicleQueController.questionAnswerPair[existingIndex]['answer'] == answer;
+  }
+
   @override
   void initState() {
     addVehicleQueController.initializeFormStates(addVehicleQueController.getAllVehicleQueList.length);
@@ -56,34 +61,20 @@ class _VehicleInformationStepsScreenState extends State<VehicleInformationStepsS
 
   void _updateProgress(int direction) {
     setState(() {
-      // Update form index within the current segment
       _currentFormIndex += direction;
 
-      // Handle boundaries for form navigation
       if (_currentFormIndex >= _totalFormsPerSegment) {
         _currentFormIndex = 0;
         if (_currentSegment < _totalSegments - 1) {
           _currentSegment++;
         }
-
-        /*  if (_currentSegment < _totalSegments - 1) {
-          _currentSegment++;
-        }*/
       } else if (_currentFormIndex < 0) {
         _currentFormIndex = _totalFormsPerSegment - 1;
         if (_currentSegment > 0) {
           _currentSegment--;
         }
-
-        /*_currentFormIndex = _totalFormsPerSegment - 1;
-        if (_currentSegment > 0) {
-          _currentSegment--;
-        }*/
       }
 
-      //  _currentSegment=_currentFormIndex ~/ _totalFormsPerSegment;
-
-      // Navigate between segments when required
       _pageController.animateToPage(
         _currentSegment,
         duration: const Duration(milliseconds: 300),
@@ -279,9 +270,11 @@ class _BuildFormViewState extends State<BuildFormView> {
     int existingIndex = addVehicleQueController.questionAnswerPair.indexWhere((element) => element['question'] == questionKey);
     return addVehicleQueController.questionAnswerPair[existingIndex]['answer'] == answer;
   }
-
+ bool isSelected =false;
   @override
   Widget build(BuildContext context) {
+     isSelected = getCheckboxValue("${widget.formStepData.key}", "");
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -296,7 +289,7 @@ class _BuildFormViewState extends State<BuildFormView> {
             itemCount: widget.formStepData.answers?.length ?? 0,
             itemBuilder: (context, index) {
               String answer = widget.formStepData.answers?[index] ?? '';
-              final isSelected = getCheckboxValue("${widget.formStepData.key}", answer);
+               isSelected = getCheckboxValue("${widget.formStepData.key}", answer);
               return CheckboxListTile(
                 checkColor: AppColors.primaryColor,
                 side: BorderSide(color: AppColors.transparent),

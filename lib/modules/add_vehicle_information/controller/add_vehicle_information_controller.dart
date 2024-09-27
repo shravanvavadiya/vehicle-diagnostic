@@ -40,6 +40,18 @@ class AddVehicleInformationController extends GetxController with LoadingMixin, 
     }
   }
 
+  void removeSelectedAnswers() {
+    questionAnswerPair.clear();
+    log("remove working ::$getAllVehicleQueList");
+    for (QueData question in getAllVehicleQueList) {
+      questionAnswerPair.add({
+        "answer": "",
+        "question": question.key,
+      });
+    }
+    log("remove working 22 ::$getAllVehicleQueList");
+  }
+
   bool checkFormFilledUp({required String answer}) {
     bool isAnswerSelected = false;
     if (currentIndex.value >= 0) {
@@ -119,7 +131,7 @@ class AddVehicleInformationController extends GetxController with LoadingMixin, 
 
   @override
   void onInit() {
-    questionAnswerPair.clear();
+    removeSelectedAnswers();
     // TODO: implement onInit
     super.onInit();
   }

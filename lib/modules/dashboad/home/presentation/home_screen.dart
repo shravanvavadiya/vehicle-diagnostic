@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
       () => SafeArea(
         child: AnnotatedRegion(
           value: SystemUiOverlayStyle(
-            statusBarColor: AppColors.highlightedColor.withOpacity(0.1),
+            statusBarColor: AppColors.highlightedColor.withOpacity(0.07),
             statusBarIconBrightness: Brightness.dark,
           ),
           child: Scaffold(
@@ -47,8 +47,15 @@ class _HomeScreenState extends State<HomeScreen> {
             appBar: PreferredSize(
               preferredSize: Size(0, 72.h),
               child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.highlightedColor.withOpacity(0.1),
+                width: Get.width,
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                  image: AssetImage(
+                    ImagesAsset.homeBg
+                  ),
+                      fit: BoxFit.cover
+                )
+                    /* color: AppColors.highlightedColor.withOpacity(0.1),
                   gradient: LinearGradient(
                     colors: [
                       AppColors.highlightedColor,
@@ -106,7 +113,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontSize: 14.sp,
                           ),
                           AppText(
-                            text: "${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.firstName ?? "demo"}"
+                            text:
+                                "${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.firstName ?? "demo"}"
                                 " ${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.lastName ?? "demo"}",
                             // text: "demo",
                             color: AppColors.blackColor,
@@ -134,9 +142,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius: BorderRadius.circular(65.r),
                               child: CachedNetworkImage(
                                 color: Colors.transparent,
-                                imageUrl: "${SharedPreferencesHelper.instance.getUserInfo()?.apiresponse?.data?.photo}",
+                                imageUrl:
+                                    "${SharedPreferencesHelper.instance.getUserInfo()?.apiresponse?.data?.photo}",
                                 fit: BoxFit.cover,
-                                imageBuilder: (context, imageProvider) => Container(
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
                                   height: 20.h,
                                   width: 20.w,
                                   decoration: BoxDecoration(
@@ -185,6 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             body: CustomScrollView(
               controller: homeController.scrollController,
+              scrollBehavior: MyBehavior(),
               slivers: [
                 SliverToBoxAdapter(
                   child: Column(
@@ -195,7 +206,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           AppText(
-                            text: "${AppString.myVehicle} (${homeController.getAllVehicleList?.apiresponse?.data?.vehicle?.length ?? 0})",
+                            text:
+                                "${AppString.myVehicle} (${homeController.getAllVehicleList?.apiresponse?.data?.vehicle?.length ?? 0})",
                             fontSize: 20.sp,
                             fontWeight: FontWeight.w600,
                             color: AppColors.primaryColor,
@@ -223,12 +235,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.only(bottom: 8.h),
-                              itemCount: homeController.getAllVehicleList!.apiresponse!.data!.vehicle!.length,
+                              itemCount: homeController.getAllVehicleList!
+                                  .apiresponse!.data!.vehicle!.length,
                               itemBuilder: (context, index) {
-                                return HomeScreenComponent(getVehicleData: homeController.getAllVehicleList!.apiresponse!.data!.vehicle![index]);
+                                return HomeScreenComponent(
+                                    getVehicleData: homeController
+                                        .getAllVehicleList!
+                                        .apiresponse!
+                                        .data!
+                                        .vehicle![index]);
                               },
                             )
-                          : const Align(alignment: Alignment.center, child: Text("No data found")),
+                          : const Align(
+                              alignment: Alignment.center,
+                              child: Text("No data found")),
                     ],
                   ).paddingSymmetric(horizontal: 16.w),
                 ),
@@ -244,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ).paddingOnly(bottom: 24, top: 12),
                         )
-                      : SizedBox(
+                      : const SizedBox(
                           height: 50,
                         ),
                 ),
@@ -254,5 +274,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+}
+
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildOverscrollIndicator(
+      BuildContext context, Widget child, ScrollableDetails details) {
+    return child;
   }
 }

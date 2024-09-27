@@ -80,99 +80,112 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                           child: Stack(
                             alignment: Alignment.bottomRight,
                             children: [
-                              // final File image;
-                              // = editProfileController.image.value;
                               Obx(
-                              () =>  ClipOval(
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      await Utils().imagePickerModel(
-                                          selectImage:
+                                () {
+                                  return
+                                    profileController.image.value.isEmpty
+                                        ? Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: AppColors.borderColor,
+                                          width: 0.5.w,
+                                        ),
+                                      ),
+                                      child: CircularProgressIndicator(
+                                          color:
+                                          AppColors.highlightedColor)
+                                          .paddingAll(50.w),
+                                    )
+                                        : ClipOval(
+                                      child: GestureDetector(
+                                        onTap: () async {
+                                          await Utils().imagePickerModel(
+                                              selectImage:
                                               profileController.imagePath,
-                                          image: profileController.image);
-
-                                      profileController.isValidateImage.value =
-                                          true;
-                                    },
-                                    child:Container(
+                                              image: profileController.image);
+                                          profileController
+                                              .isValidateImage.value = true;
+                                        },
+                                        child: Container(
                                           decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: AppColors.borderColor,
-                                                width: 0.5.w,
-                                              )),
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                              color: AppColors.borderColor,
+                                              width: 0.5.w,
+                                            ),
+                                          ),
                                           height: 150.h,
                                           width: 150.h,
                                           child:
-                                        /*  CachedNetworkImage(
-                                            color: Colors.transparent,
-                                            imageUrl: profileController.image.value,
-                                            fit: BoxFit.cover,
-
-                                            imageBuilder: (context, imageProvider) => Container(
-                                              height: 152.h,
-                                              width: 152.w,
-                                              decoration: BoxDecoration(
-                                                color: Colors.transparent,
-                                                borderRadius: BorderRadius.circular(9.r),
-                                                image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ),
-                                            placeholder: (context, url) => Center(
-                                              child: CircularProgressIndicator(
-                                                color: AppColors.highlightedColor,
-                                              ),
-                                            ),
-                                            errorWidget: (context, url, error) => ClipRRect(
-                                              borderRadius: BorderRadius.circular(65.r),
-                                              child: Image.asset(
-                                                ImagesAsset.user,
-                                              ),
-                                            ),
-                                          ),*/
                                           Image.network(
-                                              profileController.image.value,
-                                              loadingBuilder:
-                                                  (BuildContext context,
-                                                      Widget child,
-                                                      ImageChunkEvent?
-                                                          loadingProgress) {
-                                                if (loadingProgress == null) {
-                                                  return child;
-                                                }
-                                                return Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                          color: AppColors
-                                                              .highlightedColor),
-                                                );
-                                              },
-                                              height: 150.h,
-                                              width: 150.h,
-                                              fit: BoxFit.cover,
-                                              errorBuilder:
-                                                  (context, error, stackTrace) =>
-                                                      Image.file(
-                                                        File(profileController
-                                                            .image.value),
-                                                        fit: BoxFit.cover,
-                                                        frameBuilder: (context,
-                                                            child,
-                                                            frame,
-                                                            wasSynchronouslyLoaded) {
-                                                          if (frame == null) {
-                                                            return Center(
-                                                              child: CircularProgressIndicator(
-                                                                  color: AppColors
-                                                                      .highlightedColor),
-                                                            );
-                                                          }
-                                                          return child;
-                                                        },
-                                                      ))
+                                            profileController.image.value,
+                                            loadingBuilder:
+                                                (BuildContext context,
+                                                Widget child,
+                                                ImageChunkEvent?
+                                                loadingProgress) {
+                                              if (loadingProgress == null) {
+                                                return child;
+                                              }
+                                              return Center(
+                                                child:
+                                                CircularProgressIndicator(
+                                                    color: AppColors
+                                                        .highlightedColor),
+                                              );
+                                            },
+                                            height: 150.h,
+                                            width: 150.h,
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (context, error,
+                                                stackTrace) =>
+                                                Image.file(
+                                                  File(profileController
+                                                      .image.value),
+                                                  fit: BoxFit.cover,
+                                                  frameBuilder: (context,
+                                                      child,
+                                                      frame,
+                                                      wasSynchronouslyLoaded) {
+                                                    if (frame == null) {
+                                                      return Center(
+                                                        child: CircularProgressIndicator(
+                                                            color: AppColors
+                                                                .highlightedColor),
+                                                      );
+                                                    }
+                                                    return child;
+                                                  },
+                                                ),
+                                          ),
+
+                                          /*  CachedNetworkImage(
+                                                color: Colors.transparent,
+                                                imageUrl: profileController.image.value,
+                                                fit: BoxFit.cover,
+
+                                                imageBuilder: (context, imageProvider) => Container(
+                                                  height: 152.h,
+                                                  width: 152.w,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.transparent,
+                                                    borderRadius: BorderRadius.circular(9.r),
+                                                    image: DecorationImage(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                                placeholder: (context, url) => Center(
+                                                  child: CircularProgressIndicator(
+                                                    color: AppColors.highlightedColor,
+                                                  ),
+                                                ),
+                                                errorWidget: (context, url, error) =>  CircularProgressIndicator(
+                                                  color: AppColors.highlightedColor,
+                                                ),
+                                              ),*/
 
                                           // Image.file(
                                           //   File(editProfileController.pickedImage.value),
@@ -185,48 +198,54 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                                           //     ImagesAsset.profileImage,
                                           //     fit: BoxFit.cover,
                                           //   ),
-                                          ),
-                                    ),
-                                  ),
-                              ),
-
-                              Positioned(
-                                right: 6.w,
-                                bottom: 6.h,
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    await Utils().imagePickerModel(
-                                        selectImage:
-                                            profileController.imagePath,
-                                        image: profileController.image);
-
-                                    profileController.isValidateImage.value =
-                                        true;
-                                  },
-                                  child: ClipOval(
-                                    child: Container(
-                                      padding: EdgeInsets.all(5.r),
-                                      height: 31.h,
-                                      width: 31.h,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: AppColors.blackColor
-                                                .withOpacity(0.5),
-                                            spreadRadius: 14,
-                                            blurRadius: 12,
-                                          ),
-                                        ],
-                                        color: AppColors.whiteColor,
+                                        ),
                                       ),
-                                      child: SvgPicture.asset(
-                                              IconAsset.editIcon,
-                                              color: AppColors.primaryColor)
-                                          .paddingAll(3.w),
-                                    ),
-                                  ),
-                                ),
+                                    );
+
+                                  }
+                              ),
+                              Obx(
+                                () => profileController.image.value.isEmpty
+                                    ? const SizedBox()
+                                    : Positioned(
+                                        right: 6.w,
+                                        bottom: 6.h,
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            await Utils().imagePickerModel(
+                                                selectImage:
+                                                    profileController.imagePath,
+                                                image: profileController.image);
+
+                                            profileController
+                                                .isValidateImage.value = true;
+                                          },
+                                          child: ClipOval(
+                                            child: Container(
+                                              padding: EdgeInsets.all(5.r),
+                                              height: 31.h,
+                                              width: 31.h,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: AppColors.blackColor
+                                                        .withOpacity(0.5),
+                                                    spreadRadius: 14,
+                                                    blurRadius: 12,
+                                                  ),
+                                                ],
+                                                color: AppColors.whiteColor,
+                                              ),
+                                              child: SvgPicture.asset(
+                                                      IconAsset.editIcon,
+                                                      color: AppColors
+                                                          .primaryColor)
+                                                  .paddingAll(3.w),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                               ),
                             ],
                           ),
@@ -301,34 +320,35 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                   ),
                 ),
               ),
-               CustomButton(
-                  onTap: () async {
-                    if (profileController.updateFormKey.currentState?.validate() ??
-                        false) {
-                      profileController.updateUserProfileAPI(
-                        firstname: profileController.firstname.text,
-                        lastname: profileController.lastname.text,
-                        postCode: profileController.postCode.text,
-                        imagePath: profileController.image.value,
-                      );
-                    }
-                  },
-                 /*   isDisabled: (profileController.isValidateName.value &&
+              CustomButton(
+                onTap: () async {
+                  if (profileController.updateFormKey.currentState
+                          ?.validate() ??
+                      false) {
+                    profileController.updateUserProfileAPI(
+                      firstname: profileController.firstname.text,
+                      lastname: profileController.lastname.text,
+                      postCode: profileController.postCode.text,
+                      imagePath: profileController.image.value,
+                    );
+                  }
+                },
+                /*   isDisabled: (profileController.isValidateName.value &&
                           profileController.isValidateLastName.value &&
                           profileController.isValidatePostCode.value&&
                         profileController.image.value.isNotEmpty)
                       ? false
                       : true,*/
-                  height: 52.h,
-                  buttonColor: AppColors.highlightedColor,
-                  fontSize: 15.h,
-                  //   disableTextColor: AppColors.whiteColor,
-                  text: AppString.updateProfile,
-                  borderRadius: BorderRadius.circular(8.r),
-                ).paddingSymmetric(
-                  horizontal: 16.w,
-                  vertical: 25.h,
-                ),
+                height: 52.h,
+                buttonColor: AppColors.highlightedColor,
+                fontSize: 15.h,
+                //   disableTextColor: AppColors.whiteColor,
+                text: AppString.updateProfile,
+                borderRadius: BorderRadius.circular(8.r),
+              ).paddingSymmetric(
+                horizontal: 16.w,
+                vertical: 25.h,
+              ),
             ],
           ),
         ));

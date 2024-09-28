@@ -12,6 +12,8 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
 import '../../../api/preferences/shared_preferences_helper.dart';
+import '../../../demo/question_ans_controller.dart';
+import '../../../demo/question_answer.dart';
 import '../../../widget/annotated_region.dart';
 import '../controller/add_vehicle_information_controller.dart';
 
@@ -22,6 +24,7 @@ class VehicleDiagnosisScreen extends StatelessWidget {
   VehicleDiagnosisScreen({super.key, required this.screenName, required this.vehicleId});
 
   final AddVehicleInformationController addVehicleQueController = Get.put(AddVehicleInformationController());
+  final QuestionAndAnsController questionAndAnsController = Get.put(QuestionAndAnsController());
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +44,21 @@ class VehicleDiagnosisScreen extends StatelessWidget {
                 isStart: true,
                 yesOnTap: () {
                   addVehicleQueController.getAllVehiclesQue();
+                  questionAndAnsController.getAllVehiclesQue();
                   addVehicleQueController.removeSelectedAnswers();
                   // Navigation.pushNamed(Routes.accountInformation);
                   // Navigation.pushNamed(Routes.vehicleInformationStepsScreen,arg: vehicleId);
                   Get.to(
+                      QuestionAndAnsScreen(
+                        screenName: "Edit Screen",
+                          vehicleId :vehicleId
+                      ),
+                      );
+                  /*Get.to(
                       const VehicleInformationStepsScreen(
                         screenName: "Edit Screen",
                       ),
-                      arguments: vehicleId);
+                      arguments: vehicleId);*/
                 },
                 noOnTap: () {
                   screenName == "Vehicle Information Add" ? Get.back() : Get.offAll(HomeScreen());

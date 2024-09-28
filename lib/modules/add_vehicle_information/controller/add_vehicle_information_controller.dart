@@ -109,7 +109,7 @@ class AddVehicleInformationController extends GetxController with LoadingMixin, 
     return null;
   }
 
-  Future<VehicleQuestionAndAns?> EditForm({required int vehicleId}) async {
+  Future<VehicleQuestionAndAns?> EditForm({required int vehicleId,}) async {
     final body = {
       "qaVehicleRequests": questionAnswerPair,
       "vehicleId": vehicleId,

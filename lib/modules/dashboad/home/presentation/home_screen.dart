@@ -191,16 +191,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ).paddingSymmetric(vertical: 16.h),
                       homeController.isResponseData.value == true
-                          ? ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.only(bottom: 8.h),
-                              itemCount: homeController.getAllVehicleList!.apiresponse!.data!.vehicle!.length,
-                              itemBuilder: (context, index) {
-                                return HomeScreenComponent(getVehicleData: homeController.getAllVehicleList!.apiresponse!.data!.vehicle![index]);
-                              },
+                          ? homeController.getAllVehicleList!.apiresponse!.data!.vehicle!.isEmpty
+                              ? const Align(alignment: Alignment.center, child: Text("No data found"))
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  padding: EdgeInsets.only(bottom: 8.h),
+                                  itemCount: homeController.getAllVehicleList!.apiresponse!.data!.vehicle!.length,
+                                  itemBuilder: (context, index) {
+                                    return HomeScreenComponent(getVehicleData: homeController.getAllVehicleList!.apiresponse!.data!.vehicle![index]);
+                                  },
+                                )
+                          : const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.black,
+                              ),
                             )
-                          : const Align(alignment: Alignment.center, child: Text("No data found")),
                     ],
                   ).paddingSymmetric(horizontal: 16.w),
                 ),

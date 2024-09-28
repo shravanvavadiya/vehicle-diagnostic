@@ -6,6 +6,7 @@ class ApiConstants {
   static const String user = "user/";
   static const String updateUser = "user/update";
   static const String getAllVehicle = "vehicle/all";
+  static const String getAllVehicleByUserId = "vehicle/user";
   static const String addVehicle = "vehicle/";
   static const String getVehicleQue = "questionanswer/all";
   static const String submitVehicleRequest = "moreaboutvehicle/";

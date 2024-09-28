@@ -8,6 +8,7 @@ class AppColors {
   static Color backgroundColor = const Color(0xFFF5F5F5);
   static Color disableButtonColor = const Color(0xFFC4C4C4);
   static Color highlightedColor = const Color(0xFFFF7043);
+  static Color backHighlightedColor = const Color(0xFFFFE7DF);
   static Color primaryColor = const Color(0xFF1F3B4D);
   static Color secondaryColor = const Color(0xFF4B4B4B);
   static Color accentColor = const Color(0xFF00BCD4);

@@ -27,8 +27,10 @@ class VehicleInformationService {
 
   //Add ans for the question
   static Future<VehicleQuestionAndAns> submitVehicleRequest(Map<String, dynamic> requestBody) async {
+    print("requestBodyrequestBody ${requestBody}");
     try {
       var result = await Api().post(url: ApiConstants.submitVehicleRequest, bodyData: requestBody);
+      log("resultresult ${result.body}");
       await ResponseHandler.checkResponseError(result);
       return VehicleQuestionAndAns.fromJson(
         jsonDecode(

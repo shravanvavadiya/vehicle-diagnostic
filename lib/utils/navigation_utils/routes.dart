@@ -9,6 +9,7 @@ import 'package:flutter_template/modules/vehicle_details_view/presentation/add_v
 import 'package:flutter_template/modules/vehicle_details_view/presentation/add_vehicle_details_screen.dart';
 import 'package:flutter_template/modules/splash/presentation/splash_screen.dart';
 import 'package:get/get.dart';
+import '../../demo/demo_1.dart';
 import '../../demo/question_answer.dart';
 import '../../modules/add_vehicle_information/presentation/vehicle_diagnosis_screen.dart';
 import '../../modules/add_vehicle_information/presentation/vehicle_information_steps_screen.dart';
@@ -21,6 +22,7 @@ mixin Routes {
   // get started
   static const String questionAndAnsScreenDemo = '/QuestionAndAnsScreenDemo';
   static const String splash = '/splash';
+  static const String demo01 = '/demo01';
   static const String homeScreen = '/home';
   static const String signIn = '/signIn';
   static const String getStarted = '/getStarted';
@@ -38,10 +40,8 @@ mixin Routes {
 
   static List<GetPage<dynamic>> pages = [
     GetPage<dynamic>(
-      name: questionAndAnsScreenDemo,
-      page: () => QuestionAndAnsScreenDemo(
-
-      ),
+      name: demo01,
+      page: () => Demo0111(),
       transition: defaultTransition,
     ),
     GetPage<dynamic>(
@@ -85,13 +85,13 @@ mixin Routes {
     //   page: () => VehicleDiagnosisScreen(),
     //   transition: defaultTransition,
     // ),
-    GetPage<dynamic>(
+    /*GetPage<dynamic>(
       name: vehicleInformationStepsScreen,
       page: () => VehicleInformationStepsScreen(
         screenName: "",
       ),
       transition: defaultTransition,
-    ),
+    ),*/
     GetPage<dynamic>(
       name: accountInformation,
       page: () => AccountInformationScreen(),

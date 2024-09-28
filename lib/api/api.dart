@@ -22,8 +22,7 @@ Map<String, String> headers() {
     String token =
         "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzI2ODM1MTk3LCJleHAiOjE3Mjc0Mzk5OTd9.QC8sQqIWJF9G_B1b1nTQXCjgF4ZpaZTajWH9tNxmD0XDmV9jiyUbBbfSRDCRCdXUHsrO3pcxYJDUP9hY9ERDEA";
     /* headers["Authorization"] = token;*/
-    headers["Authorization"] =
-        '${SharedPreferencesHelper.instance.getUserToken()}';
+    headers["Authorization"] = '${SharedPreferencesHelper.instance.getUserToken()}';
     log("headers ::: $headers");
   }
   return headers;
@@ -35,8 +34,7 @@ Map<String, String> contentHeader() {
   headers["Content-Type"] = "application/json";
   log("user token :: ${SharedPreferencesHelper.instance.getUserToken()}");
   if (SharedPreferencesHelper.instance.getUserToken()?.isNotEmpty ?? false) {
-    headers["Authorization"] =
-        '${SharedPreferencesHelper.instance.getUserToken()}';
+    headers["Authorization"] = '${SharedPreferencesHelper.instance.getUserToken()}';
     log("headers ::: $headers");
   }
   return headers;
@@ -74,7 +72,7 @@ class Api {
       body: jsonEncode(bodyData),
       headers: queryData == null ? contentHeader() : headers(),
     );
-    print("response $response");
+    print("response ${response.body}");
     return response;
   }
 
@@ -84,9 +82,8 @@ class Api {
     Map<String, dynamic>? bodyData,
   }) async {
     log("put ${await headers()}}");
-    final response = await dio.put(getUrl(url, queryParameters: queryData),
-        body: jsonEncode(bodyData),
-        headers: queryData == null ? contentHeader() : headers());
+    final response =
+        await dio.put(getUrl(url, queryParameters: queryData), body: jsonEncode(bodyData), headers: queryData == null ? contentHeader() : headers());
     return response;
   }
 
@@ -96,8 +93,7 @@ class Api {
     Map<String, dynamic>? bodyData,
   }) async {
     final response = await dio.patch(getUrl(url, queryParameters: queryData),
-        body: jsonEncode(bodyData),
-        headers: queryData == null ? contentHeader() : headers());
+        body: jsonEncode(bodyData), headers: queryData == null ? contentHeader() : headers());
     return response;
   }
 
@@ -106,8 +102,7 @@ class Api {
     Map<String, dynamic>? queryData,
     Map<String, dynamic>? bodyData,
   }) async {
-    final response = await dio.delete(getUrl(url, queryParameters: queryData),
-        body: jsonEncode(bodyData), headers: headers());
+    final response = await dio.delete(getUrl(url, queryParameters: queryData), body: jsonEncode(bodyData), headers: headers());
     return response;
   }
 
@@ -134,15 +129,10 @@ class Api {
     return response;
   }
 
-  Future<String?> multiPartRequestAddVehicle(String endpoint,
-      {required MyVehicleData addProfileFormData, String? imagePath}) async {
+  Future<String?> multiPartRequestAddVehicle(String endpoint, {required MyVehicleData addProfileFormData, String? imagePath}) async {
     try {
-      var headers = {
-        'accept': '*/*',
-        'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'
-      };
-      var request = http.MultipartRequest(
-          'POST', Uri.parse('http://103.206.139.86:8070/vehicle/'));
+      var headers = {'accept': '*/*', 'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'};
+      var request = http.MultipartRequest('POST', Uri.parse('http://103.206.139.86:8070/vehicle/'));
       final body = {
         'fuelType': "${addProfileFormData.fuelType}",
         'transmissionType': "${addProfileFormData.transmissionType}",
@@ -153,13 +143,11 @@ class Api {
       };
       request.fields.addAll(body);
       if (imagePath?.isNotEmpty ?? false) {
-        request.files
-            .add(await http.MultipartFile.fromPath('photo', imagePath ?? ""));
+        request.files.add(await http.MultipartFile.fromPath('photo', imagePath ?? ""));
       }
 
       request.headers.addAll(headers);
-      http.Response response =
-          await http.Response.fromStream(await request.send());
+      http.Response response = await http.Response.fromStream(await request.send());
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response.body;
       }
@@ -212,12 +200,8 @@ class Api {
     required String imagePath,
   }) async {
     try {
-      var headers = {
-        'accept': '*/*',
-        'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'
-      };
-      var request = http.MultipartRequest(
-          'POST', Uri.parse('${ApiConstants.baseUrl}$endPoint'));
+      var headers = {'accept': '*/*', 'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'};
+      var request = http.MultipartRequest('POST', Uri.parse('${ApiConstants.baseUrl}$endPoint'));
       final body = {
         'email': email,
         'firstName': firstName,
@@ -230,8 +214,7 @@ class Api {
       request.fields.addAll(body);
       request.headers.addAll(headers);
 
-      http.Response response =
-          await http.Response.fromStream(await request.send());
+      http.Response response = await http.Response.fromStream(await request.send());
       if (response.statusCode == 200) {
         print(response);
         return response.body;
@@ -251,12 +234,8 @@ class Api {
     required String imagePath,
   }) async {
     try {
-      var headers = {
-        'accept': '*/*',
-        'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'
-      };
-      var request = http.MultipartRequest('POST',
-          Uri.parse('${ApiConstants.baseUrl}${ApiConstants.updateUser}'));
+      var headers = {'accept': '*/*', 'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'};
+      var request = http.MultipartRequest('POST', Uri.parse('${ApiConstants.baseUrl}${ApiConstants.updateUser}'));
       log("get data ::email: $email, firstName: $firstName, lastName: $lastName, postCode: $postCode, imagePath: $imagePath, id: $id");
       log("request ::${request}");
       final body = {
@@ -272,10 +251,8 @@ class Api {
       request.fields.addAll(body);
       request.headers.addAll(headers);
 
-      http.Response response =
-          await http.Response.fromStream(await request.send());
+      http.Response response = await http.Response.fromStream(await request.send());
       if (response.statusCode == 200) {
-
         print(response);
         return response.body;
       }

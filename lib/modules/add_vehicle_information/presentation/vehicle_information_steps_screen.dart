@@ -102,13 +102,6 @@ class _VehicleInformationStepsScreenState extends State<VehicleInformationStepsS
     return segment < _currentSegment ? 1.0 : 0.0;
   }
 
-/*  double _getSegmentProgress(int segment) {
-    if (segment == _currentSegment) {
-      return (_currentFormIndex + 1) / _totalFormsPerSegment;
-    }
-    return segment < _currentSegment ? 1.0 : 0.0;
-  }*/
-
   @override
   Widget build(BuildContext context) {
     log("_currentFormIndex ::${_currentFormIndex + 1}");
@@ -228,9 +221,9 @@ class _VehicleInformationStepsScreenState extends State<VehicleInformationStepsS
                 if (_currentFormIndex < _totalFormsPerSegment - 1 || _currentSegment < _totalSegments - 1) {
                   _updateProgress(1);
                 } else {
-                  widget.screenName == "Edit Screen"
-                      ? await addVehicleQueController.EditForm(vehicleId: Get.arguments)
-                      : await addVehicleQueController.submitForm(vehicleId: Get.arguments);
+                  // widget.screenName == "Edit Screen"
+                  //     ? await addVehicleQueController.EditForm(vehicleId: Get.arguments)
+                  //     : await addVehicleQueController.submitForm(vehicleId: Get.arguments);
 
                   log("response :${addVehicleQueController.questionAnswerPair.toJson()}");
                 }
@@ -270,10 +263,12 @@ class _BuildFormViewState extends State<BuildFormView> {
     int existingIndex = addVehicleQueController.questionAnswerPair.indexWhere((element) => element['question'] == questionKey);
     return addVehicleQueController.questionAnswerPair[existingIndex]['answer'] == answer;
   }
- bool isSelected =false;
+
+  bool isSelected = false;
+
   @override
   Widget build(BuildContext context) {
-     isSelected = getCheckboxValue("${widget.formStepData.key}", "");
+    isSelected = getCheckboxValue("${widget.formStepData.key}", "");
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -289,7 +284,7 @@ class _BuildFormViewState extends State<BuildFormView> {
             itemCount: widget.formStepData.answers?.length ?? 0,
             itemBuilder: (context, index) {
               String answer = widget.formStepData.answers?[index] ?? '';
-               isSelected = getCheckboxValue("${widget.formStepData.key}", answer);
+              isSelected = getCheckboxValue("${widget.formStepData.key}", answer);
               return CheckboxListTile(
                 checkColor: AppColors.primaryColor,
                 side: BorderSide(color: AppColors.transparent),

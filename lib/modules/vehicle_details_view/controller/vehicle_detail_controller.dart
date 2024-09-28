@@ -131,20 +131,25 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
         handleLoading(false);
       },
       result: (result) async {
-        print("result ${result}");
+        print("result $result");
         Map<String, dynamic> jsonData = jsonDecode(result!);
         int vehicleId = jsonData['apiresponse']['data']['id'];
         print('Vehicle ID: $vehicleId');
         AppPreference.setInt("VEHICLEID", vehicleId);
+        screenName.value == "Edit Screen"
+            ? {}
+            : {
+                imagePath = XFile(""),
+                image.value = "",
+                clearController(),
+              };
         Get.offAll(VehicleDiagnosisScreen(
           screenName: "",
           vehicleId: vehicleId,
         ));
       },
     );
-    imagePath = XFile("");
-    image.value = "";
-    clearController();
+
     handleLoading(false);
   }
 

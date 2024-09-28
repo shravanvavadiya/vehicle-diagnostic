@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_template/api/preferences/shared_preferences_helper.dart';
 import 'package:flutter_template/modules/personal_information_view/model/personal_information_model.dart';
 import 'package:flutter_template/modules/personal_information_view/service/personal_information_service.dart';
+import 'package:flutter_template/utils/app_preferences.dart';
 import 'package:flutter_template/utils/constants.dart';
 import 'package:flutter_template/widget/app_snackbar.dart';
 import 'package:get/get.dart';
@@ -68,17 +69,17 @@ class UserInformationController extends GetxController with LoadingMixin, Loadin
         },
         result: (data) async {
           personalInformationModel.value = data;
-          log("user Data ${data}");
-          bool userAccountAccess = personalInformationModel.value.apiresponse?.data?.profileCompleted ?? false;
-          log("userAccountAccess $userAccountAccess");
-          await SharedPreferencesHelper.instance.setInt(Constants.keyUserId, personalInformationModel.value.apiresponse?.data?.id ?? 0);
-          // await SharedPreferencesHelper.instance.setUser(data);
-          SharedPreferencesHelper.instance.setLogInUser(value: userAccountAccess);
+          print("user id ${data.apiresponse!.data!.id!}");
+          AppPreference.setInt("UserId", data.apiresponse!.data!.id!);
+          print("user id ${AppPreference.getInt("UserId")}");
 
-          log("result ${personalInformationModel.value.apiresponse?.data?.email ?? ""}");
+          bool userAccountAccess = personalInformationModel.value.apiresponse?.data?.profileCompleted ?? false;
+          await SharedPreferencesHelper.instance.setInt(Constants.keyUserId, personalInformationModel.value.apiresponse?.data?.id ?? 0);
+          SharedPreferencesHelper.instance.setLogInUser(value: userAccountAccess);
           await SharedPreferencesHelper.instance.setInt(Constants.keyUserId, personalInformationModel.value.apiresponse?.data?.id ?? 0);
           await SharedPreferencesHelper.instance.setString(Constants.userImage, personalInformationModel.value.apiresponse?.data?.photo ?? "");
           await SharedPreferencesHelper.instance.setUserInfo(data);
+
           Get.offAll(const AddVehicleScreen());
         },
       );

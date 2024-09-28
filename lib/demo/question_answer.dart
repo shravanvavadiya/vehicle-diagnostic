@@ -1,35 +1,96 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_template/demo/question_ans_controller.dart';
 import 'package:get/get.dart';
 
-class QuestionAndAnsScreenDemo extends StatefulWidget {
-  QuestionAndAnsScreenDemo();
+import '../utils/app_colors.dart';
+import '../utils/app_string.dart';
+import '../utils/assets.dart';
+import '../widget/custom_backarrow_widget.dart';
+import '../widget/custom_button.dart';
+import '../widget/info_text_widget.dart';
+
+class QuestionAndAnsScreen extends StatefulWidget {
+  final String screenName;
+  final int vehicleId;
+
+  const QuestionAndAnsScreen({super.key, required this.screenName, required this.vehicleId});
 
   @override
-  _QuestionAndAnsScreenDemoState createState() => _QuestionAndAnsScreenDemoState();
+  _QuestionAndAnsScreenState createState() => _QuestionAndAnsScreenState();
 }
 
-class _QuestionAndAnsScreenDemoState extends State<QuestionAndAnsScreenDemo> {
+class _QuestionAndAnsScreenState extends State<QuestionAndAnsScreen> {
   @override
   Widget build(BuildContext context) {
     return GetX<QuestionAndAnsController>(
       init: QuestionAndAnsController(),
       builder: (controller) => Scaffold(
-        appBar: AppBar(title: Text('Question and Answer Demo')),
+        appBar: AppBar(
+          leading: CustomBackArrowWidget(
+                  onTap: controller.currentStep > 0
+                      ? () {
+                          controller.pageController.previousPage(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.ease,
+                          );
+                        }
+                      : () {
+                          Get.back();
+                          controller.clearAll();
+                        })
+              .paddingAll(11.r),
+          backgroundColor: AppColors.whiteColor,
+          elevation: 0,
+          actions: [
+            Obx(
+              () => Center(
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '${controller.currentStep.value + 1}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18.sp,
+                          color: AppColors.blackColor,
+                        ),
+                      ),
+                      TextSpan(
+                        text: "/${controller.vehicleModel.value.apiresponse?.data?.length ?? 0} Steps",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14.sp,
+                          color: AppColors.grey60.withOpacity(0.6),
+                        ),
+                      ),
+                    ],
+                  ),
+                ).paddingSymmetric(horizontal: 16.h),
+              ),
+            )
+          ],
+        ),
         body: Column(
           children: [
-            // Progress bar
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
               child: LinearProgressIndicator(
                 value: controller.progress.value,
-                backgroundColor: Colors.grey[300],
-                color: Colors.blue,
+                backgroundColor: AppColors.backHighlightedColor,
+                color: AppColors.highlightedColor,
+                borderRadius: BorderRadius.circular(10),
+                minHeight: 2.h,
               ),
             ),
             controller.isResponseData.value == true
                 ? Expanded(
                     child: PageView.builder(
+                      physics: NeverScrollableScrollPhysics(),
                       controller: controller.pageController,
                       onPageChanged: (int page) {
                         controller.currentStep.value = page;
@@ -38,10 +99,10 @@ class _QuestionAndAnsScreenDemoState extends State<QuestionAndAnsScreenDemo> {
                       itemCount: controller.vehicleModel.value.apiresponse!.data!.length,
                       itemBuilder: (context, index) {
                         return _buildStepPage(
-                            controller.vehicleModel.value.apiresponse!.data![index].question!,
+                            controller.vehicleModel.value.apiresponse!.data![index].question!.obs,
                             controller.vehicleModel.value.apiresponse!.data![index].answers!,
-                            controller.vehicleModel.value.apiresponse!.data![index].key!,
-                            index,
+                            controller.vehicleModel.value.apiresponse!.data![index].key!.obs,
+                            index.obs,
                             controller);
                       },
                     ),
@@ -49,51 +110,62 @@ class _QuestionAndAnsScreenDemoState extends State<QuestionAndAnsScreenDemo> {
                 : Center(
                     child: CircularProgressIndicator(),
                   ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: controller.currentStep > 0
-                        ? () {
-                            controller.pageController.previousPage(
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.ease,
-                            );
-                          }
-                        : null,
-                    child: Text('Previous'),
-                  ),
-                  ElevatedButton(
-                    onPressed: controller.currentStep.value < controller.vehicleModel.value.apiresponse!.data!.length - 1 &&
-                            controller.selectedAnswers.containsKey(controller.currentStep.value)
-                        ? () {
-                            controller.pageController.nextPage(
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.ease,
-                            );
-                          }
-                        : controller.currentStep.value == controller.vehicleModel.value.apiresponse!.data!.length - 1 &&
-                                controller.selectedAnswers.containsKey(controller.currentStep)
-                            ? () {
-                                _showSelectedAnswers(controller); // Show the selected answers on the last page
-                              }
-                            : null,
-                    child:
-                        controller.currentStep.value == controller.vehicleModel.value.apiresponse!.data!.length - 1 ? Text('Finish') : Text('Next'),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
+        floatingActionButton: controller.isResponseData.value == true
+            ? GestureDetector(
+                onTap: controller.currentStep.value < controller.vehicleModel.value.apiresponse!.data!.length - 1 &&
+                        controller.selectedAnswers.containsKey(controller.currentStep.value)
+                    ? () {
+                        controller.pageController.nextPage(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.ease,
+                        );
+                      }
+                    : controller.currentStep.value == controller.vehicleModel.value.apiresponse!.data!.length - 1 &&
+                            controller.selectedAnswers.containsKey(controller.currentStep)
+                        ? () {
+                            log("controller.selectedResponse ${controller.selectedResponse}");
+                            widget.screenName == "Edit Screen"
+                                ? controller.EditForm(vehicleId: widget.vehicleId, selectedResponse: controller.selectedResponse)
+                                : controller.submitForm(vehicleId: widget.vehicleId, selectedResponse: controller.selectedResponse);
+                          }
+                        : null,
+                child: Container(
+                  height: 52.h,
+                  width: 113.w,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(46.r),
+                    color: controller.selectedAnswers.containsKey(controller.currentStep.value)
+                        ? AppColors.highlightedColor
+                        : AppColors.highlightedColor.withOpacity(0.5),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        controller.currentStep.value == controller.vehicleModel.value.apiresponse!.data!.length - 1
+                            ? AppString.finish
+                            : AppString.next,
+                        style: TextStyle(fontSize: 16.h, color: Colors.white, fontWeight: FontWeight.w600),
+                      ),
+                      SvgPicture.asset(
+                        IconAsset.forwardArrow,
+                        height: 20.h,
+                      ).paddingOnly(left: 14.w)
+                    ],
+                  ),
+                ),
+              ).paddingOnly(bottom: 25.h)
+            : SizedBox(),
       ),
     );
   }
 
-  Widget _buildStepPage(String question, List<dynamic> answers, String questionKey, int index, QuestionAndAnsController controller) {
-    String? selectedAnswer = controller.selectedAnswers[index]; // Get the selected answer for this page
+  Widget _buildStepPage(RxString question, List<dynamic> answers, RxString questionKey, RxInt index, QuestionAndAnsController controller) {
+    String? selectedAnswer = controller.selectedAnswers[index.value]; // Get the selected answer for this page
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -101,33 +173,107 @@ class _QuestionAndAnsScreenDemoState extends State<QuestionAndAnsScreenDemo> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            question,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            question.value,
+            style: TextStyle(fontSize: 24.sp, height: 1.35.h, fontWeight: FontWeight.w600, color: AppColors.primaryColor),
           ),
           SizedBox(height: 20),
-          Column(
-            children: List.generate(answers.length, (i) {
-              return CheckboxListTile(
-                title: Text(answers[i]),
-                value: selectedAnswer == answers[i],
-                onChanged: (bool? value) {
-                  if (value == true) {
-                    controller.selectedAnswers[index] = answers[i]; // Store answer by index
-                    controller.selectedResponse[questionKey] = answers[i]; // Store answer by key
-                  } else {
-                    controller.selectedAnswers.remove(index);
-                    controller.selectedResponse.remove(questionKey); // Remove the answer if unchecked
-                  }
-                },
-              );
-            }),
+          Text(
+            AppString.addYourVehicleInformationForBetterSearch,
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14.h, color: AppColors.grey60),
           ),
+          Column(children: [
+            ListView.separated(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context, listIndex) {
+                  return CheckboxListTile(
+                    checkColor: AppColors.primaryColor,
+                    side: BorderSide(color: AppColors.transparent),
+                    checkboxShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(3.r),
+                      side: BorderSide(
+                        color: AppColors.whiteColor,
+                        width: 0,
+                      ),
+                    ),
+                    visualDensity: VisualDensity.standard,
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
+                      answers[listIndex],
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        letterSpacing: 0.2,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    value: selectedAnswer == answers[listIndex],
+                    onChanged: (bool? value) {
+                      if (value == true) {
+                        controller.selectedAnswers[index.value] = answers[listIndex]; // Store answer by index
+                        controller.selectedResponse.add({
+                          "answer": "${answers[listIndex]}",
+                          "question": "${questionKey.value}",
+                        });
+                      } else {
+                        controller.selectedAnswers.remove(index.value);
+                        controller.selectedResponse.remove(questionKey.value); // Remove the answer if unchecked
+                      }
+                      setState(() {});
+                    },
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return Divider(
+                    height: 15.h,
+                    thickness: 0.5.h,
+                    color: AppColors.borderColor,
+                  );
+                },
+                itemCount: answers.length),
+          ])
+          // Column(children: [
+          //   CheckboxListTile(
+          //     checkColor: AppColors.primaryColor,
+          //     side: BorderSide(color: AppColors.transparent),
+          //     checkboxShape: RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.circular(3.r),
+          //       side: BorderSide(
+          //         color: AppColors.whiteColor,
+          //         width: 0,
+          //       ),
+          //     ),
+          //     visualDensity: VisualDensity.standard,
+          //     contentPadding: EdgeInsets.zero,
+          //     title: Text(
+          //       answers[index.value],
+          //       style: TextStyle(
+          //         fontSize: 16.sp,
+          //         letterSpacing: 0.2,
+          //         fontWeight: FontWeight.w600,
+          //         color: AppColors.primaryColor,
+          //       ),
+          //     ),
+          //     value: selectedAnswer == answers[index.value],
+          //     onChanged: (bool? value) {
+          //       if (value == true) {
+          //         controller.selectedAnswers[index.value] = answers[index.value]; // Store answer by index
+          //         controller.selectedResponse[questionKey.value] = answers[index.value]; // Store answer by key
+          //       } else {
+          //         controller.selectedAnswers.remove(index.value);
+          //         controller.selectedResponse.remove(questionKey.value); // Remove the answer if unchecked
+          //       }
+          //       setState(() {});
+          //     },
+          //   ),
+          // ]
         ],
       ),
     );
   }
 
   void _showSelectedAnswers(QuestionAndAnsController controller) {
+    print(controller.selectedResponse);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -136,16 +282,16 @@ class _QuestionAndAnsScreenDemoState extends State<QuestionAndAnsScreenDemo> {
           title: Text('Selected Answers'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: controller.selectedResponse.entries.map((entry) {
+            children: controller.selectedResponse.map((entry) {
               return ListTile(
-                title: Text("${entry.key}: ${entry.value}"),
+                title: Text("$entry: $entry"),
               );
             }).toList(),
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                controller.clearAll();
               },
               child: Text('Close'),
             ),

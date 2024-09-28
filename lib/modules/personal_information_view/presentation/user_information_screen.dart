@@ -72,9 +72,11 @@ class UserInformationScreen extends StatelessWidget {
                               ),
                               child: GestureDetector(
                                 onTap: () async {
-                                  await Utils().imagePickerModel(
-                                      selectImage: personalInformationController.imagePath, image: personalInformationController.image);
 
+                                  await Utils().imagePickerModel(
+                                      selectImage: personalInformationController.imagePath,
+                                      image: personalInformationController.image
+                                  );
                                   personalInformationController.isValidateImage.value = true;
                                 },
                                 child: Container(
@@ -98,7 +100,6 @@ class UserInformationScreen extends StatelessWidget {
                               onTap: () async {
                                 await Utils().imagePickerModel(
                                     selectImage: personalInformationController.imagePath, image: personalInformationController.image);
-
                                 if (personalInformationController.image.value.isNotEmpty) {
                                   personalInformationController.isValidateImage.value = true;
                                 } else {
@@ -134,6 +135,7 @@ class UserInformationScreen extends StatelessWidget {
                       text: AppString.firstName,
                       hintText: AppString.firstName,
                       validator: AppValidation.nameValidator,
+                      textCapitalization: TextCapitalization.words,
                       controller: personalInformationController.firstname,
                     ).paddingOnly(top: 24.h, bottom: 16.h),
                     customTextFormField(
@@ -142,6 +144,7 @@ class UserInformationScreen extends StatelessWidget {
                       },
                       text: AppString.lastName,
                       hintText: AppString.lastName,
+                      textCapitalization: TextCapitalization.words,
                       validator: AppValidation.lastNameValidator,
                       controller: personalInformationController.lastname,
                     ),
@@ -211,6 +214,8 @@ Widget customTextFormField({
   String? Function(String?)? validator,
   required String text,
   required String hintText,
+   int? maxLength,
+  TextCapitalization? textCapitalization,
   bool? readOnly,
   Function(String)? onChanged,
   required TextEditingController controller,
@@ -227,6 +232,8 @@ Widget customTextFormField({
       CustomTextField(
         readOnly: readOnly ?? false,
         onChanged: onChanged,
+        maxLength: maxLength,
+        textCapitalization: textCapitalization,
         controller: controller,
         hintText: hintText,
         validator: validator,

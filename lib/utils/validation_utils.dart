@@ -54,6 +54,8 @@ class AppValidation {
   static String? vehicleYearValidator(String? value) {
     if (value!.isEmpty) {
       return AppString.pleaseEnterVehicleYear;
+    }else if (value.length != 4) {
+      return AppString.vehicleYearMustBeDigits;
     }
     return null;
   }

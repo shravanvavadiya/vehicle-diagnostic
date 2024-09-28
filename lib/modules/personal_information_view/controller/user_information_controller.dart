@@ -72,7 +72,6 @@ class UserInformationController extends GetxController with LoadingMixin, Loadin
           bool userAccountAccess = personalInformationModel.value.apiresponse?.data?.profileCompleted ?? false;
           log("userAccountAccess $userAccountAccess");
           await SharedPreferencesHelper.instance.setInt(Constants.keyUserId, personalInformationModel.value.apiresponse?.data?.id ?? 0);
-          // await SharedPreferencesHelper.instance.setUser(data);
           SharedPreferencesHelper.instance.setLogInUser(value: userAccountAccess);
 
           log("result ${personalInformationModel.value.apiresponse?.data?.email ?? ""}");

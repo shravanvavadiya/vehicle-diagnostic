@@ -31,16 +31,6 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
   final ProfileController profileController = Get.put(ProfileController());
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) {
-        profileController.getUserProfileAPI();
-      },
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     return CustomAnnotatedRegions(
         statusBarColor: AppColors.transparent,
@@ -80,87 +70,84 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                           child: Stack(
                             alignment: Alignment.bottomRight,
                             children: [
-                              Obx(
-                                () {
-                                  return
-                                    profileController.image.value.isEmpty
-                                        ? Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: AppColors.borderColor,
-                                          width: 0.5.w,
-                                        ),
-                                      ),
-                                      child: CircularProgressIndicator(
-                                          color:
-                                          AppColors.highlightedColor)
-                                          .paddingAll(50.w),
-                                    )
-                                        : ClipOval(
-                                      child: GestureDetector(
-                                        onTap: () async {
-                                          await Utils().imagePickerModel(
-                                              selectImage:
-                                              profileController.imagePath,
-                                              image: profileController.image);
-                                          profileController
-                                              .isValidateImage.value = true;
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                              color: AppColors.borderColor,
-                                              width: 0.5.w,
-                                            ),
+                              Obx(() {
+                                return profileController.image!.value.isEmpty
+                                    ? Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: AppColors.borderColor,
+                                            width: 0.5.w,
                                           ),
-                                          height: 150.h,
-                                          width: 150.h,
-                                          child:
-                                          Image.network(
-                                            profileController.image.value,
-                                            loadingBuilder:
-                                                (BuildContext context,
-                                                Widget child,
-                                                ImageChunkEvent?
-                                                loadingProgress) {
-                                              if (loadingProgress == null) {
-                                                return child;
-                                              }
-                                              return Center(
-                                                child:
-                                                CircularProgressIndicator(
-                                                    color: AppColors
-                                                        .highlightedColor),
-                                              );
-                                            },
+                                        ),
+                                        child: CircularProgressIndicator(
+                                                color:
+                                                    AppColors.highlightedColor)
+                                            .paddingAll(50.w),
+                                      )
+                                    : ClipOval(
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            await Utils().imagePickerModel(
+                                                selectImage:
+                                                    profileController.imagePath,
+                                                image: profileController.image);
+                                            profileController
+                                                .isValidateImage.value = true;
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: AppColors.borderColor,
+                                                width: 0.5.w,
+                                              ),
+                                            ),
                                             height: 150.h,
                                             width: 150.h,
-                                            fit: BoxFit.cover,
-                                            errorBuilder: (context, error,
-                                                stackTrace) =>
-                                                Image.file(
-                                                  File(profileController
-                                                      .image.value),
-                                                  fit: BoxFit.cover,
-                                                  frameBuilder: (context,
-                                                      child,
-                                                      frame,
-                                                      wasSynchronouslyLoaded) {
-                                                    if (frame == null) {
-                                                      return Center(
-                                                        child: CircularProgressIndicator(
-                                                            color: AppColors
-                                                                .highlightedColor),
-                                                      );
-                                                    }
-                                                    return child;
-                                                  },
-                                                ),
-                                          ),
+                                            child: Image.network(
+                                              profileController.image!.value,
+                                              loadingBuilder:
+                                                  (BuildContext context,
+                                                      Widget child,
+                                                      ImageChunkEvent?
+                                                          loadingProgress) {
+                                                if (loadingProgress == null) {
+                                                  return child;
+                                                }
+                                                return Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                          color: AppColors
+                                                              .highlightedColor),
+                                                );
+                                              },
+                                              height: 150.h,
+                                              width: 150.h,
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (context, error,
+                                                      stackTrace) =>
+                                                  Image.file(
+                                                File(profileController
+                                                    .image!.value),
+                                                fit: BoxFit.cover,
+                                                frameBuilder: (context,
+                                                    child,
+                                                    frame,
+                                                    wasSynchronouslyLoaded) {
+                                                  if (frame == null) {
+                                                    return Center(
+                                                      child: CircularProgressIndicator(
+                                                          color: AppColors
+                                                              .highlightedColor),
+                                                    );
+                                                  }
+                                                  return child;
+                                                },
+                                              ),
+                                            ),
 
-                                          /*  CachedNetworkImage(
+                                            /*  CachedNetworkImage(
                                                 color: Colors.transparent,
                                                 imageUrl: profileController.image.value,
                                                 fit: BoxFit.cover,
@@ -187,25 +174,24 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                                                 ),
                                               ),*/
 
-                                          // Image.file(
-                                          //   File(editProfileController.pickedImage.value),
-                                          //   fit: BoxFit.cover,
-                                          // ):
-                                          // editProfileController.profileImage.value != null && editProfileController.profileImage.value != ""
-                                          //     ? CommonNetworkImageLoader(imageUrl: editProfileController.profileImage.value,)
-                                          //     : SvgPicture.asset(IconsAsset.placeHolderIconImage)
-                                          // : Image.asset(
-                                          //     ImagesAsset.profileImage,
-                                          //     fit: BoxFit.cover,
-                                          //   ),
+                                            // Image.file(
+                                            //   File(editProfileController.pickedImage.value),
+                                            //   fit: BoxFit.cover,
+                                            // ):
+                                            // editProfileController.profileImage.value != null && editProfileController.profileImage.value != ""
+                                            //     ? CommonNetworkImageLoader(imageUrl: editProfileController.profileImage.value,)
+                                            //     : SvgPicture.asset(IconsAsset.placeHolderIconImage)
+                                            // : Image.asset(
+                                            //     ImagesAsset.profileImage,
+                                            //     fit: BoxFit.cover,
+                                            //   ),
+                                          ),
                                         ),
-                                      ),
-                                    );
-
-                                  }
-                              ),
+                                      );
+                              }),
                               Obx(
-                                () => profileController.image.value.isEmpty
+                                () => profileController.image?.value != null &&
+                                        profileController.image!.value.isEmpty
                                     ? const SizedBox()
                                     : Positioned(
                                         right: 6.w,
@@ -278,6 +264,7 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                           text: AppString.firstName,
                           hintText: AppString.firstName,
                           validator: AppValidation.nameValidator,
+                          textCapitalization: TextCapitalization.words,
                           controller: profileController.firstname,
                           onChanged: (String) {
                             profileController.isValidateName.value =
@@ -288,12 +275,15 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                           text: AppString.lastName,
                           hintText: AppString.lastName,
                           validator: AppValidation.lastNameValidator,
+                          textCapitalization: TextCapitalization.words,
+
                           controller: profileController.lastname,
                           onChanged: (String) {
                             profileController.isValidateLastName.value =
                                 profileController.lastname.text.isNotEmpty;
                           },
                         ),
+
                         customTextFormField(
                           text: AppString.email,
                           hintText: AppString.emailEx,
@@ -309,6 +299,7 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                           text: AppString.postCode,
                           hintText: AppString.postCode,
                           validator: AppValidation.postCode,
+                          keyboardType: TextInputType.number,
                           controller: profileController.postCode,
                           onChanged: (String) {
                             profileController.isValidatePostCode.value =
@@ -326,10 +317,11 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                           ?.validate() ??
                       false) {
                     profileController.updateUserProfileAPI(
+                      email: profileController.email.text,
                       firstname: profileController.firstname.text,
                       lastname: profileController.lastname.text,
                       postCode: profileController.postCode.text,
-                      imagePath: profileController.image.value,
+                      imagePath: profileController.image?.value ?? "",
                     );
                   }
                 },

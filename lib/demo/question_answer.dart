@@ -107,8 +107,12 @@ class _QuestionAndAnsScreenState extends State<QuestionAndAnsScreen> {
                       },
                     ),
                   )
-                : Center(
-                    child: CircularProgressIndicator(),
+                : Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.highlightedColor,
+                      ),
+                    ),
                   ),
           ],
         ),
@@ -217,7 +221,7 @@ class _QuestionAndAnsScreenState extends State<QuestionAndAnsScreen> {
                         });
                       } else {
                         controller.selectedAnswers.remove(index.value);
-                        controller.selectedResponse.remove(questionKey.value); // Remove the answer if unchecked
+                        controller.selectedResponse.remove(questionKey.value);
                       }
                       setState(() {});
                     },

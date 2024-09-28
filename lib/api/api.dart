@@ -290,10 +290,7 @@ class Api {
       if (response.statusCode == 200) {
         print(response);
         log("imagePath ::${imagePath}");
-
         print("response ::${response.body}");
-
-
         return response.body;
       }
     } catch (e, st) {

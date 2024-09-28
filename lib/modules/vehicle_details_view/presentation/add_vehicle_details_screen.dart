@@ -128,7 +128,8 @@ class AddVehicleDetailsScreen extends StatelessWidget {
                               ).paddingOnly(top: 24.h, bottom: 8.h)
                             : GestureDetector(
                                 onTap: () async {
-                                  await Utils().imagePickerModel(selectImage: vehicleDetailController.imagePath, image: vehicleDetailController.image);
+                                  await Utils()
+                                      .imagePickerModel(selectImage: vehicleDetailController.imagePath, image: vehicleDetailController.image);
 
                                   if (vehicleDetailController.image.value.isNotEmpty) {
                                     vehicleDetailController.isValidateImage.value = true;
@@ -226,12 +227,9 @@ class AddVehicleDetailsScreen extends StatelessWidget {
                       alignment: Alignment.bottomRight,
                       child: CustomButton(
                         onTap: () async {
-                          if (vehicleDetailController.formKey.currentState
-                              ?.validate() ?? false) {
-                            screenName == "Edit Screen"
-                                ? await vehicleDetailController.editVehicleApi()
-                                : await vehicleDetailController.addVehicleApi();
-                          }
+                          screenName == "Edit Screen"
+                              ? await vehicleDetailController.editVehicleApi()
+                              : await vehicleDetailController.addVehicleApi();
                         },
                         isDisabled: (vehicleDetailController.isValidateVName.value &&
                                 vehicleDetailController.isValidateVYear.value &&

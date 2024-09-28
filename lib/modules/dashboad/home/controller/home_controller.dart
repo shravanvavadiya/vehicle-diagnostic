@@ -6,6 +6,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_template/modules/dashboad/home/service/home_service.dart';
 import 'package:flutter_template/utils/common_api_caller.dart';
 import 'package:flutter_template/utils/loading_mixin.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
@@ -25,8 +26,20 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
   RxBool paginationLoading = true.obs;
   RxBool hasMoreData = true.obs;
   RxInt currentPage = 1.obs;
-
   RxBool idDisplayErrorBox = false.obs;
+
+  DateTime? currentBackPressTime;
+
+  Future<bool> onWillPop() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Fluttertoast.showToast(msg: "Tap back again to leave");
+      // AppSnackBar();
+      return Future.value(false);
+    }
+    return Future.value(true);
+  }
 
   @override
   void onInit() {

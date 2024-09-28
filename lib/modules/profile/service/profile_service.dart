@@ -26,15 +26,17 @@ class ProfileService {
   }
 
   /// User profile Update::
-  static Future<PersonalInformationModel> updateUserAPI({
+  static Future<PersonalInformationModel?> updateUserAPI({
     required String imagePath,
     required String email,
-    required String id,
+    required int id,
     required String firstName,
     required String lastName,
     required String postCode,
   }) async {
     try {
+      log("imagePath :: 111 :${imagePath}");
+
       var result = await Api().multiPartRequestUpdateUserData(
           email: email,
           firstName: firstName,
@@ -42,14 +44,17 @@ class ProfileService {
           postCode: postCode,
           imagePath: imagePath,
           id: id);
-      log(
-        "updateUserAPI ::email: $email, firstName: $firstName, lastName: $lastName, postCode: $postCode, imagePath: $imagePath, id: $id",
-      );
-      log("result ::${result.toString()}");
-      return PersonalInformationModel.fromJson(jsonDecode(result));
+      log("result data  ::${result}");
+
+     if( result!=null) {
+
+       return PersonalInformationModel.fromJson(jsonDecode(result));
+     }
     } catch (exception, st) {
-      log("exception in personalInformation : E $exception , $st");
+      log("exception in profile service : E $exception , $st");
+
       throw AppException.exceptionHandler(exception);
+
     }
   }
 

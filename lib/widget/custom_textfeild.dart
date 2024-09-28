@@ -21,6 +21,7 @@ class CustomTextField extends StatelessWidget {
   final Color fillColor;
   final VoidCallback? onTap;
   final Color? enableColor;
+  final TextCapitalization? textCapitalization;
   final Color? focusedColor;
   final Color? cursorColor;
   final EdgeInsetsGeometry? contentPadding;
@@ -44,6 +45,7 @@ class CustomTextField extends StatelessWidget {
     this.prefix,
     this.suffix,
     this.onTap,
+    this.textCapitalization,
     this.enableColor,
     this.focusedColor,
     this.cursorColor,
@@ -81,6 +83,7 @@ class CustomTextField extends StatelessWidget {
             maxLength: maxLength,
             keyboardType: keyboardType,
             validator: validator,
+            textCapitalization: textCapitalization??TextCapitalization.none,
             focusNode: focusNode,
             cursorColor: cursorColor,
             textAlign: textAlign ?? TextAlign.start,

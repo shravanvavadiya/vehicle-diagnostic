@@ -46,10 +46,11 @@ class Utils {
             ),
             onPressed: () async {
               Get.back();
+              log("--> ${selectImage}");
               selectImage =
                   await Utils.imagePicker(source: ImageSource.gallery);
-              log("selectImage ::${selectImage?.path}");
 
+              log("selectImage ::${selectImage?.path}");
               if (selectImage?.path.isNotEmpty ?? false) {
                 image?.value = selectImage?.path ?? "";
               }

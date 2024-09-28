@@ -1,11 +1,10 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_template/modules/dashboad/home/controller/home_controller.dart';
 import 'package:flutter_template/modules/dashboad/home/presentation/home_screen_component.dart';
+import 'package:flutter_template/modules/personal_information_view/controller/user_information_controller.dart';
 import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/app_text.dart';
@@ -13,14 +12,9 @@ import 'package:get/get.dart';
 
 import '../../../../api/preferences/shared_preferences_helper.dart';
 import '../../../../utils/assets.dart';
-import '../../../../utils/constants.dart';
-import '../../../../utils/custom_catch_image.dart';
 import '../../../../utils/navigation_utils/navigation.dart';
 import '../../../../utils/navigation_utils/routes.dart';
 import '../../../../widget/custom_button.dart';
-import '../../../vehicle_details_view/controller/vehicle_detail_controller.dart';
-import 'package:sliver_tools/sliver_tools.dart';
-
 import '../../../vehicle_details_view/presentation/add_vehicle_details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -32,6 +26,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final HomeController homeController = Get.put(HomeController());
+  final UserInformationController userInformationController =
+      Get.put(UserInformationController());
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Pre-cache the image as soon as the widget is initialized
+    precacheImage(
+      NetworkImage(
+          "${SharedPreferencesHelper.instance.getUserInfo()?.apiresponse?.data?.photo}"),
+      context,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +55,10 @@ class _HomeScreenState extends State<HomeScreen> {
               preferredSize: Size(0, 72.h),
               child: Container(
                 width: Get.width,
-                decoration: const BoxDecoration(image: DecorationImage(image: AssetImage(ImagesAsset.homeBg), fit: BoxFit.cover)),
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(ImagesAsset.homeBg),
+                        fit: BoxFit.cover)),
                 child: AppBar(
                   toolbarHeight: 72,
                   titleSpacing: 0,
@@ -76,20 +86,25 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontWeight: FontWeight.w500,
                             fontSize: 14.sp,
                           ),
-                          AppText(
-                            text: "${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.firstName ?? "demo"}"
-                                " ${SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.lastName ?? "demo"}",
-                            // text: "demo",
-                            color: AppColors.blackColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 17.sp,
-                          ).paddingOnly(top: 2.sp),
+                          SizedBox(
+                            width: Get.width / 1.8.w,
+                            child: AppText(
+                              text:
+                                  "${SharedPreferencesHelper.instance.getUserInfo()?.apiresponse?.data?.firstName ?? "demo"}"
+                                  " ${SharedPreferencesHelper.instance.getUserInfo()?.apiresponse?.data?.lastName ?? "demo"}",
+                              color: AppColors.blackColor,
+                              fontWeight: FontWeight.w600,
+                              maxLines: 2,
+                              fontSize: 17.sp,
+                            ).paddingOnly(
+                              top: 2.sp,
+                            ),
+                          ),
                         ],
                       ),
                       GestureDetector(
                         onTap: () {
                           Navigation.pushNamed(Routes.profileScreen);
-                          setState(() {});
                         },
                         child: Container(
                             height: 45.h,
@@ -105,9 +120,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius: BorderRadius.circular(65.r),
                               child: CachedNetworkImage(
                                 color: Colors.transparent,
-                                imageUrl: "${SharedPreferencesHelper.instance.getUserInfo()?.apiresponse?.data?.photo}",
+                                imageUrl:
+                                    "${SharedPreferencesHelper.instance.getUserInfo()?.apiresponse?.data?.photo}",
                                 fit: BoxFit.cover,
-                                imageBuilder: (context, imageProvider) => Container(
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
                                   height: 20.h,
                                   width: 20.w,
                                   decoration: BoxDecoration(
@@ -132,22 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               ),
-                            )
-                            /*  SharedPreferencesHelper.instance
-                                        .getString(Constants.userImage)
-                                        .isNotEmpty
-                                    ? Image.network(
-                                        SharedPreferencesHelper.instance
-                                            .getString(Constants.userImage),
-                                      )
-                                    : ClipRRect(
-                                        borderRadius: BorderRadius.circular(65.r),
-                                        child: Image.asset(
-                                          ImagesAsset.user,
-                                          height: 20,
-                                        ),
-                                      ),*/
-                            ),
+                            )),
                       )
                     ],
                   ).paddingSymmetric(horizontal: 16.h),
@@ -167,7 +169,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           AppText(
-                            text: "${AppString.myVehicle} (${homeController.getAllVehicleList?.apiresponse?.data?.vehicle?.length ?? 0})",
+                            text:
+                                "${AppString.myVehicle} (${homeController.getAllVehicleList?.apiresponse?.data?.totalCount ?? 0})",
                             fontSize: 20.sp,
                             fontWeight: FontWeight.w600,
                             color: AppColors.primaryColor,
@@ -207,6 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Colors.black,
                               ),
                             )
+                          : const Align(alignment: Alignment.center, child: Text("No data found")),
                     ],
                   ).paddingSymmetric(horizontal: 16.w),
                 ),
@@ -237,7 +241,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class MyBehavior extends ScrollBehavior {
   @override
-  Widget buildOverscrollIndicator(BuildContext context, Widget child, ScrollableDetails details) {
+  Widget buildOverscrollIndicator(
+      BuildContext context, Widget child, ScrollableDetails details) {
     return child;
   }
 }

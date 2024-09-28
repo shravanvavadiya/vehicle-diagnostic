@@ -15,6 +15,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../utils/assets.dart';
 import '../../../utils/navigation_utils/navigation.dart';
+import '../../../widget/app_snackbar.dart';
 import '../../authentication/models/authapi_res.dart';
 import '../../personal_information_view/model/personal_information_model.dart';
 
@@ -36,7 +37,20 @@ class ProfileController extends GetxController
   RxBool isValidatePostCode = false.obs;
   RxBool isValidateImage = false.obs;
   XFile? imagePath;
-  RxString image = "".obs;
+  RxString? image = "".obs;
+
+
+  @override
+  void onInit() {
+
+
+    WidgetsBinding.instance.addPostFrameCallback(
+          (timeStamp) {
+      getUserProfileAPI();
+      },
+    );
+    super.onInit();
+  }
 
   clearData() {
     firstname.clear();
@@ -80,7 +94,8 @@ class ProfileController extends GetxController
         lastname.text = profileData?.lastName.toString() ?? "";
         email.text = profileData?.email.toString() ?? "";
         postCode.text = profileData?.postCode.toString() ?? "";
-        image.value = profileData?.photo ?? "";
+        image?.value = profileData?.photo ?? "";
+        log("image.value ::${image?.value}");
       },
     );
   }
@@ -88,26 +103,31 @@ class ProfileController extends GetxController
   /// Update User API::
 
   Future<void> updateUserProfileAPI({
+    required String email,
     required String firstname,
     required String lastname,
     required String postCode,
     required String imagePath,
   }) async {
     int userId = SharedPreferencesHelper.instance.getInt(Constants.keyUserId);
+    print(userId);
+    print("imagePath :: ===${imagePath}");
     processApi(
       () => ProfileService.updateUserAPI(
-          id: "$userId",
-          email: email.text,
+          id: userId,
+          email: email,
           firstName: firstname,
           lastName: lastname,
           postCode: postCode,
           imagePath: imagePath),
       loading: handleLoading,
-      result: (data) {
-        updateUserProfileModel.value = data;
+      result: (data) async{
+        log("Controller Data :: ${data?.apiresponse?.data?.photo}");
+        updateUserProfileModel.value = data!;
         SharedPreferencesHelper.instance.setUserInfo(data);
         Navigation.pushNamed(Routes.homeScreen);
       },
     );
   }
+
 }

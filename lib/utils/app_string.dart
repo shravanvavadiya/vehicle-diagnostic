@@ -29,7 +29,7 @@ class AppString {
   static const String lastName = "Last Name";
   static const String createAccount = "Create Account";
   static const String forgotPassword = "Forgot password?";
-  static const String codeHasBeenSen = "A code has been sen";
+  static const String codeHasBeenSend = "A code has been send";
   static const String email = "Email";
   static const String password = "Password";
   static const String newPassword = "New Password";
@@ -101,9 +101,12 @@ class AppString {
   static const String pleaseEnterName = "Please enter name";
   static const String pleaseEnterLastName = "Please enter last name";
   static const String pleaseEnterEmail = "Please enter email";
+  static const String pleaseEnterPassword = "Please enter password";
+  static const String bothPasswordNotMatch = "Both Password Not Match";
   static const String emailAddressIsInvalid = "Email address is invalid";
   static const String pleaseEnterPostCode = "Please enter post code";
   static const String postCodeMustBeDigits = "Post code must be 6 digits";
+  static const String passwordCodeMustBeDigits = "Password must be 6 digits";
   static const String vehicleYearMustBeDigits = "Vehicle year must be 4 digits";
   static const String pleaseEnterValidVehicleNumber = "Please enter valid vehicle number";
   static const String postCodeMustContainOnlyDigits = "Post code must contain only digits";
@@ -117,6 +120,8 @@ class AppString {
   static const String authToken = "authToken";
 
   ///STRING CONST FOR CONST
-  static const String editScreen = "Edit Screen";
-  static const String newVehicleAdd = "New Vehicle Add";
+  static const String editScreenFlag = "Edit Screen";
+  static const String newVehicleAddFlag = "New Vehicle Add";
+  static const String createNewAccountFlag = "Create New Account";
+  static const String forgotPasswordFlag = "Forgot Password Flag";
 }

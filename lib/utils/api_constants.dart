@@ -3,6 +3,10 @@ class ApiConstants {
   static const String signUp = "auth/googleTokenVerify";
   static const String googleTokenVerify = "auth/googleTokenVerify";
   static const String appleTokenVerify = "auth/appletokenVerify";
+  static const String accountCreate = "auth/register";
+  static const String accountLogin = "auth/login";
+  static const String accountOtpVerify = "auth/user-verify";
+  static const String resendOtp = "auth/forgotpassword";
   static const String user = "user/";
   static const String updateUser = "user/update";
   static const String getAllVehicle = "vehicle/all";

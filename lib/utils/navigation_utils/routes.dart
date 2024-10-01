@@ -66,16 +66,16 @@ mixin Routes {
       page: () => const GetStartedScreen(),
       transition: defaultTransition,
     ),
-    GetPage<dynamic>(
-      name: personalInformation,
-      page: () => UserInformationScreen(),
-      transition: defaultTransition,
-    ),
-    GetPage<dynamic>(
-      name: addVehicle,
-      page: () => const AddVehicleScreen(),
-      transition: defaultTransition,
-    ),
+    // GetPage<dynamic>(
+    //   name: personalInformation,
+    //   page: () => UserInformationScreen(),
+    //   transition: defaultTransition,
+    // ),
+    // GetPage<dynamic>(
+    //   name: addVehicle,
+    //   page: () => const AddVehicleScreen(),
+    //   transition: defaultTransition,
+    // ),
     // GetPage<dynamic>(
     //   name: addVehicleDetail,
     //   page: () => const AddVehicleDetailsScreen(),

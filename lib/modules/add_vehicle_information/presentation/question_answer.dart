@@ -133,7 +133,7 @@ class _QuestionAndAnsScreenState extends State<QuestionAndAnsScreen> {
                             controller.selectedAnswers.containsKey(controller.currentStep)
                         ? () {
                             log("controller.selectedResponse ${controller.selectedResponseList}");
-                            widget.screenName == AppString.editScreen
+                            widget.screenName == AppString.editScreenFlag
                                 ? controller.EditForm(vehicleId: widget.vehicleId, selectedResponse: controller.selectedResponseList)
                                 : controller.submitForm(vehicleId: widget.vehicleId, selectedResponse: controller.selectedResponseList);
                           }

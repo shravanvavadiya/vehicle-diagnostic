@@ -11,7 +11,9 @@ import 'package:flutter_template/widget/lets_start_widget.dart';
 import 'package:get/get.dart';
 
 class AddVehicleScreen extends StatelessWidget {
-  const AddVehicleScreen({super.key});
+  final String userName;
+
+  const AddVehicleScreen({super.key, required this.userName});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class AddVehicleScreen extends StatelessWidget {
         body: SafeArea(
           child: LetsStartWidget(
             image: ImagesAsset.addVehicle,
-            title: "Yey! ”Jerry” now that we know you, lets get your vehicle details.",
+            title: "Yey! ”$userName” now that we know you, lets get your vehicle details.",
             description: "Hello [firstname]! Now we know more about you, tell me about your vehicle(s)",
             buttonText: AppString.addVehicleDetails,
             bottom: 40.h,

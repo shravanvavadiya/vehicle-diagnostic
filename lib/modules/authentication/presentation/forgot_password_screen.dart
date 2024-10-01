@@ -44,39 +44,41 @@ class ForgotPasswordScreen extends StatelessWidget {
             body: ScrollConfiguration(
               behavior: MyBehavior(),
               child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    InfoTextWidget(
-                      title: controller.screenName.value,
-                      titleFontSize: 24.sp,
-                      titleFontWeight: FontWeight.w600,
-                      description: controller.subText.value,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
-                    ).paddingOnly(bottom: 32.h),
-                    customTextFormField(
-                            onChanged: (p0) {},
-                            text: AppString.email,
-                            hintText: AppString.emailEx,
-                            validator: AppValidation.nameValidator,
-                            textCapitalization: TextCapitalization.words,
-                            controller: controller.emailController,
-                            keyboardType: TextInputType.emailAddress)
-                        .paddingOnly(top: 24.h, bottom: 16.h),
-
-                    Container(
-                      height: 68.h,
-                      child: Center(
-                        child: CustomButton(
-                          height: 50.h,
-                          onTap: () {
-                            Get.to(const OtpScreen(screenName: "",), transition: Transition.rightToLeft);
-                          },
-                          text: controller.buttonName.value,
+                child: Form(
+                  key: controller.formKey,
+                  child: Column(
+                    children: [
+                      InfoTextWidget(
+                        title: controller.screenName.value,
+                        titleFontSize: 24.sp,
+                        titleFontWeight: FontWeight.w600,
+                        description: controller.subText.value,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                      ).paddingOnly(bottom: 32.h),
+                      customTextFormField(
+                              onChanged: (p0) {},
+                              text: AppString.email,
+                              hintText: AppString.emailEx,
+                              validator: AppValidation.emailValidator,
+                              textCapitalization: TextCapitalization.words,
+                              controller: controller.emailController,
+                              keyboardType: TextInputType.emailAddress)
+                          .paddingOnly(top: 24.h, bottom: 16.h),
+                      Container(
+                        height: 68.h,
+                        child: Center(
+                          child: CustomButton(
+                            height: 50.h,
+                            onTap: () {
+                              controller.formKey.currentState!.validate() ? {controller.resendOtp(email: controller.emailController.text)} : {};
+                            },
+                            text: controller.buttonName.value,
+                          ),
                         ),
-                      ),
-                    ).paddingOnly(top: 8.h),
-                  ],
+                      ).paddingOnly(top: 8.h),
+                    ],
+                  ),
                 ),
               ).paddingSymmetric(horizontal: 16.w),
             ),

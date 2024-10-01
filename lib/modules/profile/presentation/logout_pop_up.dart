@@ -34,8 +34,8 @@ void showCustomDialog(
                 color: AppColors.blackColor,
                 fontSize: 18.sp,
                 textAlign: TextAlign.center,
-              ).paddingOnly(left: 14.w, right: 14.w, top: 5.h),
-              AppText(
+              ).paddingOnly(left: 14.w, right: 14.w, top: 5.h,bottom: 20.h),
+              /*AppText(
                 // text: subTitle,
                 text: "Ready to say goodbye? Deleting your account will remove all your data from our Car Fixer app.",
                 fontWeight: FontWeight.w400,
@@ -49,7 +49,7 @@ void showCustomDialog(
                 bottom: 20.h,
                 left: 16.w,
                 right: 16.w,
-              ),
+              ),*/
               GestureDetector(
                 onTap: () {
                   SharedPreferencesHelper.instance.clearSharedPreferences();

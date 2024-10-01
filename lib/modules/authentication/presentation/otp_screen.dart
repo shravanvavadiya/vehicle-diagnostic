@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/widget/annotated_region.dart';
+import 'package:flutter_template/widget/app_snackbar.dart';
 import 'package:get/get.dart';
 
 import '../../../custome_package/lib/otp_field.dart';
@@ -27,9 +29,18 @@ import '../controller/otp_controller.dart';
 import 'create_new_password_screen.dart';
 
 class OtpScreen extends StatelessWidget {
-  final String screenName;
+  final String screenNameFlag;
+  final String userEmailId;
+  final String password;
+  final String confirmPassword;
 
-  const OtpScreen({super.key, required this.screenName});
+  const OtpScreen({
+    super.key,
+    required this.screenNameFlag,
+    required this.userEmailId,
+    required this.password,
+    required this.confirmPassword,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +48,7 @@ class OtpScreen extends StatelessWidget {
       child: CustomAnnotatedRegions(
         statusBarColor: Colors.white,
         child: GetX<OtpController>(
-          init: OtpController(),
+          init: OtpController(flag: screenNameFlag),
           builder: (controller) => Scaffold(
             appBar: PreferredSize(
               preferredSize: Size(0, 45.h),
@@ -79,19 +90,28 @@ class OtpScreen extends StatelessWidget {
                             fieldStyle: FieldStyle.box,
                             outlineBorderRadius: 4.r,
                             otpFieldStyle: OtpFieldStyle(
-                                backgroundColor: AppColors.backgroundColor,
-                                borderColor: Colors.transparent,
-                                disabledBorderColor: Colors.transparent,
-                                enabledBorderColor: Colors.transparent,
-                                errorBorderColor: Colors.transparent,
-                                focusBorderColor: Colors.transparent),
+                              backgroundColor: AppColors.backgroundColor,
+                              borderColor: Colors.transparent,
+                              disabledBorderColor: Colors.transparent,
+                              enabledBorderColor: Colors.transparent,
+                              errorBorderColor: Colors.transparent,
+                              focusBorderColor: Colors.transparent,
+                            ),
                             obscureText: false,
-                            style: TextStyle(fontSize: 24.sp, color: AppColors.blackColor, fontWeight: FontWeight.w600),
+                            style:
+                                TextStyle(fontSize: 24.sp, color: AppColors.blackColor, fontWeight: FontWeight.w600, fontFamily: AppString.fontName),
                             onChanged: (pin) {
-                              print("Changed: " + pin);
+                              pin.length == 6
+                                  ? {
+                                      controller.textFieldValidation.value = true,
+                                    }
+                                  : {
+                                      controller.textFieldValidation.value = false,
+                                    };
                             },
                             onCompleted: (pin) {
-                              print("Completed: " + pin);
+                              controller.filledOtp.value = pin;
+                              controller.textFieldValidation.value = true;
                             }),
                       ).paddingOnly(top: 24.h, bottom: 16.h),
                     ),
@@ -105,17 +125,37 @@ class OtpScreen extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Text(
-                              AppString.resendIn,
-                              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400, color: AppColors.primaryColor),
+                            AppText(
+                              text: AppString.resendIn,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.primaryColor,
                             ).paddingOnly(right: 7.w),
-                            Icon(
-                              Icons.watch_later,
-                              color: Colors.black,
-                            ).paddingOnly(right: 7.w),
-                            Text(
-                              controller.formatTime(controller.secondsRemaining.value).value,
-                              style: TextStyle(fontWeight: FontWeight.w600, color: AppColors.blackColor, fontSize: 13.sp),
+                            GestureDetector(
+                              onTap: controller.formatTime(controller.secondsRemaining.value).value != "00:00"
+                                  ? () {}
+                                  : () {
+                                      controller.resendOtp(
+                                        email: userEmailId,
+                                      );
+                                    },
+                              child: Container(
+                                color: Colors.transparent,
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.watch_later,
+                                      color: Colors.black,
+                                    ).paddingOnly(right: 7.w),
+                                    AppText(
+                                      text: controller.formatTime(controller.secondsRemaining.value).value,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.blackColor,
+                                      fontSize: 13.sp,
+                                    )
+                                  ],
+                                ),
+                              ),
                             )
                           ],
                         )
@@ -126,11 +166,15 @@ class OtpScreen extends StatelessWidget {
                       child: Center(
                         child: CustomButton(
                           height: 50.h,
-                          onTap: () {
-                            screenName == "createNewAccount"
-                                ? Get.back()
-                                : Get.to(const CreateNewPasswordScreen(), transition: Transition.rightToLeft);
-                          },
+                          buttonColor:
+                              controller.textFieldValidation.value == true ? AppColors.highlightedColor : AppColors.highlightedColor.withOpacity(0.5),
+                          onTap: controller.textFieldValidation.value == false
+                              ? () {}
+                              : () {
+                                  screenNameFlag == AppString.forgotPasswordFlag
+                                      ? {}
+                                      : {controller.accountOtpVerifyFunction(email: userEmailId, otp: controller.filledOtp.value)};
+                                },
                           text: controller.buttonName.value,
                         ),
                       ),

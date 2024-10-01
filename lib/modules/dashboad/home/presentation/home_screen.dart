@@ -15,6 +15,7 @@ import '../../../../utils/assets.dart';
 import '../../../../utils/navigation_utils/navigation.dart';
 import '../../../../utils/navigation_utils/routes.dart';
 import '../../../../widget/custom_button.dart';
+import '../../../profile/presentation/profile_screen.dart';
 import '../../../vehicle_details_view/presentation/add_vehicle_details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -26,17 +27,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final HomeController homeController = Get.put(HomeController());
-  final UserInformationController userInformationController = Get.put(UserInformationController());
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Pre-cache the image as soon as the widget is initialized
-    precacheImage(
-      NetworkImage("${SharedPreferencesHelper.instance.getUserInfo()?.apiresponse?.data?.photo}"),
-      context,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,8 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               width: Get.width / 1.8.w,
                               child: AppText(
-                                text: "${SharedPreferencesHelper.instance.getUserInfo()?.apiresponse?.data?.firstName ?? "demo"}"
-                                    " ${SharedPreferencesHelper.instance.getUserInfo()?.apiresponse?.data?.lastName ?? "demo"}",
+                                text: "${homeController.getUserProfileModel.value.profileResponse?.profileData?.firstName ?? ""} "
+                                    "${homeController.getUserProfileModel.value.profileResponse?.profileData?.lastName ?? ""}",
                                 color: AppColors.blackColor,
                                 fontWeight: FontWeight.w600,
                                 maxLines: 2,
@@ -95,12 +85,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               ).paddingOnly(
                                 top: 2.sp,
                               ),
-                            ),
+                            )
                           ],
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigation.pushNamed(Routes.profileScreen);
+                            Get.to(ProfileScreen());
                           },
                           child: Container(
                               height: 45.h,
@@ -118,7 +108,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   maxHeightDiskCache: 150,
                                   maxWidthDiskCache: 150,
                                   color: Colors.transparent,
-                                  imageUrl: "${SharedPreferencesHelper.instance.getUserInfo()?.apiresponse?.data?.photo}",
+
+                                  /// TODO : image Change
+                                  imageUrl: homeController.getUserProfileModel.value.profileResponse?.profileData!.photo ?? "",
                                   fit: BoxFit.cover,
                                   imageBuilder: (context, imageProvider) => Container(
                                     height: 20.h,
@@ -173,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             CustomButton(
                               onTap: () {
                                 Get.to(const AddVehicleDetailsScreen(
-                                  screenName: AppString.newVehicleAdd,
+                                  screenName: AppString.newVehicleAddFlag,
                                 ));
                               },
                               height: 38.h,

@@ -15,16 +15,21 @@ import '../controller/question_ans_controller.dart';
 import 'question_answer.dart';
 import '../../../widget/annotated_region.dart';
 
-class VehicleDiagnosisScreen extends StatelessWidget {
+class VehicleDiagnosisScreen extends StatefulWidget {
   final String screenName;
   final int vehicleId;
 
   VehicleDiagnosisScreen({super.key, required this.screenName, required this.vehicleId});
 
   @override
+  State<VehicleDiagnosisScreen> createState() => _VehicleDiagnosisScreenState();
+}
+
+class _VehicleDiagnosisScreenState extends State<VehicleDiagnosisScreen> {
+  @override
   Widget build(BuildContext context) {
     log('token  :: ${SharedPreferencesHelper.instance.getLogInUser()}');
-    log(screenName);
+    log(widget.screenName);
     final QuestionAndAnsController questionAndAnsController = Get.put(QuestionAndAnsController());
 
     return Scaffold(
@@ -42,17 +47,18 @@ class VehicleDiagnosisScreen extends StatelessWidget {
                 isStart: true,
                 yesOnTap: () async {
                   questionAndAnsController.getAllVehiclesQue();
-                  log("preLoadDataFunction===>onTAP yes screenName::$screenName");
-                  if (screenName == AppString.editScreen) {
-                    log("preLoadDataFunction===>onTAP yes IN IF screenName::$screenName");
-                    await questionAndAnsController.preLoadDataFunction(vehicleId: vehicleId);
+                  log("preLoadDataFunction===>onTAP yes screenName::${widget.screenName}");
+                  if (widget.screenName == AppString.editScreenFlag) {
+                    log("preLoadDataFunction===>onTAP yes IN IF screenName::${widget.screenName}");
+                    await questionAndAnsController.preLoadDataFunction(vehicleId: widget.vehicleId);
+                    setState(() {});
                   }
                   Get.to(
-                    QuestionAndAnsScreen(screenName: screenName, vehicleId: vehicleId),
+                    QuestionAndAnsScreen(screenName: widget.screenName, vehicleId: widget.vehicleId),
                   );
                 },
                 noOnTap: () {
-                  screenName == AppString.editScreen ? Get.back() : Get.offAll(HomeScreen());
+                  widget.screenName == AppString.editScreenFlag ? Get.offAll(HomeScreen()) : Get.offAll(HomeScreen());
                 }),
           ),
         ),

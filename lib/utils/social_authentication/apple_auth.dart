@@ -1,20 +1,18 @@
-
 import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../../modules/personal_information_view/get_started_screen.dart';
 import '../navigation_utils/navigation.dart';
 
-
-class LoginController extends GetxController{
+class LoginController extends GetxController {
   RxString appleEmail = ''.obs;
   RxString appleId = ''.obs;
-  RxBool appleLoading= false.obs;
+  RxBool appleLoading = false.obs;
 
   Future<String?> appleLogin() async {
     AuthorizationCredentialAppleID? credential;
     try {
-     appleLoading.value = true;
+      appleLoading.value = true;
       credential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
@@ -30,7 +28,9 @@ class LoginController extends GetxController{
       print("credential.identityToken :: ${credential.identityToken}");
       appleEmail.value = credential.email ?? '';
       appleId.value = credential.userIdentifier ?? '';
-     Navigation.push(const GetStartedScreen());
+      Navigation.push(GetStartedScreen(
+
+      ));
     } catch (e) {
       log('apple auth error :: $e');
     } finally {
@@ -39,6 +39,4 @@ class LoginController extends GetxController{
     appleLoading.value = false;
     return credential?.identityToken;
   }
-
 }
-

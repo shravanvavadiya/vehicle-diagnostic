@@ -16,7 +16,6 @@ import '../utils/constants.dart';
 Map<String, String> headers() {
   final Map<String, String> headers = <String, String>{};
   headers["accept"] = "*/*";
-  log("user token :: ${SharedPreferencesHelper.instance.getUserToken()}");
   if (SharedPreferencesHelper.instance.getUserToken()?.isNotEmpty ?? false) {
     ///remove after test
     String token =
@@ -32,7 +31,6 @@ Map<String, String> contentHeader() {
   final Map<String, String> headers = <String, String>{};
   headers["accept"] = "*/*";
   headers["Content-Type"] = "application/json";
-  log("user token :: ${SharedPreferencesHelper.instance.getUserToken()}");
   if (SharedPreferencesHelper.instance.getUserToken()?.isNotEmpty ?? false) {
     headers["Authorization"] = '${SharedPreferencesHelper.instance.getUserToken()}';
     log("headers ::: $headers");

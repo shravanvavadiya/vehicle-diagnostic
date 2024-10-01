@@ -10,9 +10,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
+import '../../../../utils/app_preferences.dart';
 import '../../../../utils/app_string.dart';
 import '../../../../utils/navigation_utils/navigation.dart';
 import '../../../../utils/navigation_utils/routes.dart';
+import '../../../profile/models/get_user_model.dart';
+import '../../../profile/service/profile_service.dart';
 import '../models/get_vehicle_data_model.dart';
 import '../presentation/home_screen.dart';
 
@@ -45,6 +48,7 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
   void onInit() {
     print("refresh data");
     SchedulerBinding.instance.addPostFrameCallback((_) {
+      getUserProfileAPI();
       print("refresh data 1 ");
       getAllVehicles(currentPage: currentPage.value);
       scrollController.addListener(() {
@@ -135,6 +139,22 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
       },
     );
     handleLoading(false);
+  }
+
+  Rx<GetUserProfileModel> getUserProfileModel = GetUserProfileModel().obs;
+
+  Future<void> getUserProfileAPI() async {
+    processApi(
+      () => ProfileService.getUserAPI(
+        userId: AppPreference.getInt("UserId"),
+      ),
+      loading: handleLoading,
+      result: (data) {
+        getUserProfileModel.value = data;
+        log("profile image ::${data.profileResponse?.profileData?.photo}");
+        log("${getUserProfileModel.value.profileResponse!.profileData!.firstName} ${getUserProfileModel.value.profileResponse!.profileData!.lastName}");
+      },
+    );
   }
 
   @override

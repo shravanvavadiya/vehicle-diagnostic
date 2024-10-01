@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_template/modules/personal_information_view/controller/user_information_controller.dart';
 import 'package:flutter_template/modules/profile/controller/profile_controller.dart';
+import 'package:flutter_template/modules/profile/presentation/account_information_screen.dart';
 import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/app_text.dart';
@@ -14,12 +15,38 @@ import 'package:flutter_template/widget/annotated_region.dart';
 import 'package:flutter_template/widget/custom_button.dart';
 import 'package:get/get.dart';
 
+import '../models/get_user_model.dart';
+import '../models/profile_model.dart';
 import 'logout_pop_up.dart';
 
-class ProfileScreen extends StatelessWidget {
-  ProfileScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  ProfileScreen({
+    super.key,
+  });
 
-  final ProfileController profileController = Get.put(ProfileController());
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final List<ProfileModel> profileDataList = [
+    ProfileModel(
+      title: AppString.accountInfo,
+      icon: IconAsset.profile,
+    ),
+    ProfileModel(
+      title: AppString.subscription,
+      icon: IconAsset.crown,
+    ),
+    ProfileModel(
+      title: AppString.privacyPolicy,
+      icon: IconAsset.security,
+    ),
+    ProfileModel(
+      title: AppString.termsCondition,
+      icon: IconAsset.document,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -53,14 +80,47 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: AlignedGridView.count(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 15.w, vertical: 16.h),
-                    itemCount: profileController.profileDataList.length,
+                    padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 16.h),
+                    itemCount: profileDataList.length,
                     crossAxisCount: 2,
                     mainAxisSpacing: 15,
                     crossAxisSpacing: 15,
                     itemBuilder: (context, index) {
-                      return ProfileComponent(index: index);
+                      return GestureDetector(
+                        onTap: () {
+                          if (index == 0) {
+                            Get.to(AccountInformationScreen());
+                          } else if (index == 1) {
+                            Navigation.pushNamed(Routes.subscriptionsPlanScreen);
+                          } else if (index == 2) {
+                          } else {}
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.r),
+                            border: Border.all(color: AppColors.secondaryColor.withOpacity(0.4), width: 0.3),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SvgPicture.asset(
+                                profileDataList[index].icon,
+                                height: 24.h,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 8.h),
+                                child: Text(
+                                  profileDataList[index].title,
+                                  style: TextStyle(color: AppColors.grey60, fontWeight: FontWeight.w500, fontSize: 15.sp),
+                                ),
+                              )
+                            ],
+                          ).paddingSymmetric(
+                            horizontal: 8.w,
+                            vertical: 12.h,
+                          ),
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -81,64 +141,6 @@ class ProfileScreen extends StatelessWidget {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class ProfileComponent extends StatelessWidget {
-  final int index;
-
-  ProfileComponent({super.key, required this.index});
-
-  final ProfileController profileController = Get.find();
-  final UserInformationController personalInformationController =
-      Get.put(UserInformationController());
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (index == 0) {
-          //personalInformationController.clearData();
-          Navigation.pushNamed(Routes.accountInformation);
-        } else if (index == 1) {
-          Navigation.pushNamed(Routes.subscriptionsPlanScreen);
-          // Navigation.pushNamed(Routes.subscriptionsSummeryScreen);
-        } else if (index == 2) {
-         // Navigation.pushNamed(Routes.homeScreen);
-        } else {
-          //Navigation.pushNamed(Routes.accountInformation);
-        }
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5.r),
-          border: Border.all(
-              color: AppColors.secondaryColor.withOpacity(0.4), width: 0.3),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SvgPicture.asset(
-              profileController.profileDataList[index].icon,
-              height: 24.h,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 8.h),
-              child: Text(
-                profileController.profileDataList[index].title,
-                style: TextStyle(
-                    color: AppColors.grey60,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 15.sp),
-              ),
-            )
-          ],
-        ).paddingSymmetric(
-          horizontal: 8.w,
-          vertical: 12.h,
         ),
       ),
     );

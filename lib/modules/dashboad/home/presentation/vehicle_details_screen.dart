@@ -18,9 +18,14 @@ import '../../../vehicle_details_view/presentation/add_vehicle_details_screen.da
 import '../controller/home_controller.dart';
 import '../models/get_vehicle_data_model.dart';
 
-class VehicleDetailScreen extends StatelessWidget {
+class VehicleDetailScreen extends StatefulWidget {
   VehicleDetailScreen({super.key});
 
+  @override
+  State<VehicleDetailScreen> createState() => _VehicleDetailScreenState();
+}
+
+class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
   final HomeController homeController = Get.put(HomeController());
 
   final _args = Get.arguments as Vehicle;
@@ -36,13 +41,14 @@ class VehicleDetailScreen extends StatelessWidget {
             leadingWidth: 30,
             elevation: 0,
             title: AppText(
-              text: "${_args.id}",
+              text: "${_args.userId}",
               color: AppColors.blackColor,
               fontWeight: FontWeight.w600,
               fontSize: 17.sp,
             ),
             leading: GestureDetector(
               onTap: () {
+                homeController.idDisplayErrorBox.value = false;
                 Navigation.pop();
               },
               child: SvgPicture.asset(
@@ -61,7 +67,7 @@ class VehicleDetailScreen extends StatelessWidget {
                   PopupMenuItem(
                     onTap: () {
                       log("Edit");
-                      Get.to(AddVehicleDetailsScreen(screenName: AppString.editScreen, vehicleData: _args));
+                      Get.to(AddVehicleDetailsScreen(screenName: AppString.editScreenFlag, vehicleData: _args));
                     },
                     height: 40.h,
                     padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -191,7 +197,6 @@ class VehicleDetailScreen extends StatelessWidget {
                               ).paddingOnly(top: 20.h),
                             );
                           });
-                      // homeController.idDisplayErrorBox.value = true;
                     },
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -340,80 +345,88 @@ class VehicleDetailScreen extends StatelessWidget {
                         ],
                       ).paddingSymmetric(horizontal: 16.w),
                       _args.moreAboutVehicle?.isEmpty == true
-                          ? Container(
-                                  height: 58.h,
-                                  width: Get.width,
-                                  decoration: BoxDecoration(
-                                      color: AppColors.logoutColor,
-                                      borderRadius: BorderRadius.circular(5.r),
-                                      border: Border.all(color: AppColors.borderColor),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          offset: Offset(0.w, 0.5.h),
-                                          color: AppColors.blackColor.withOpacity(0.4),
-                                          blurRadius: 80,
-                                        )
-                                      ]),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      AppText(
-                                        text: "Is there a problem with your \nvehicle?",
-                                        color: AppColors.whiteColor,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14.sp,
-                                        height: 1.3.h,
-                                        letterSpacing: 0.4,
-                                      ),
-                                      Row(
+                          // homeController.idDisplayErrorBox.value == false
+                          ? homeController.idDisplayErrorBox.value == true
+                              ? SizedBox()
+                              : Container(
+                                      height: 58.h,
+                                      width: Get.width,
+                                      decoration: BoxDecoration(
+                                          color: AppColors.logoutColor,
+                                          borderRadius: BorderRadius.circular(5.r),
+                                          border: Border.all(color: AppColors.borderColor),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              offset: Offset(0.w, 0.5.h),
+                                              color: AppColors.blackColor.withOpacity(0.4),
+                                              blurRadius: 80,
+                                            )
+                                          ]),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          GestureDetector(
-                                            onTap: () {},
-                                            child: Container(
-                                              height: 30.h,
-                                              width: 55.w,
-                                              decoration: BoxDecoration(
-                                                  color: AppColors.whiteColor.withOpacity(0.2),
-                                                  borderRadius: BorderRadius.circular(20.r),
-                                                  border: Border.all(color: AppColors.whiteColor, width: 1)),
-                                              child: Center(
-                                                  child: AppText(
-                                                text: "No",
-                                                color: AppColors.whiteColor,
-                                                fontWeight: FontWeight.w600,
-                                                letterSpacing: 0.3,
-                                              )),
-                                            ),
+                                          AppText(
+                                            text: "Is there a problem with your \nvehicle?",
+                                            color: AppColors.whiteColor,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14.sp,
+                                            height: 1.3.h,
+                                            letterSpacing: 0.4,
                                           ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Get.to(VehicleDiagnosisScreen(
-                                                screenName: AppString.editScreen,
-                                                vehicleId: _args.id!,
-                                              ));
-                                            },
-                                            child: Container(
-                                              height: 30.h,
-                                              width: 55.w,
-                                              decoration: BoxDecoration(
-                                                  color: AppColors.whiteColor,
-                                                  borderRadius: BorderRadius.circular(20.r),
-                                                  border: Border.all(color: AppColors.whiteColor, width: 1)),
-                                              child: Center(
-                                                child: AppText(
-                                                  text: "Yes",
-                                                  color: AppColors.blackColor,
-                                                  fontWeight: FontWeight.w600,
-                                                  letterSpacing: 0.3,
+                                          Row(
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    homeController.idDisplayErrorBox.value = true;
+                                                  });
+                                                },
+                                                child: Container(
+                                                  height: 30.h,
+                                                  width: 55.w,
+                                                  decoration: BoxDecoration(
+                                                      color: AppColors.whiteColor.withOpacity(0.2),
+                                                      borderRadius: BorderRadius.circular(20.r),
+                                                      border: Border.all(color: AppColors.whiteColor, width: 1)),
+                                                  child: Center(
+                                                    child: AppText(
+                                                      text: "No",
+                                                      color: AppColors.whiteColor,
+                                                      fontWeight: FontWeight.w600,
+                                                      letterSpacing: 0.3,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                            ).paddingOnly(left: 10.w),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Get.to(VehicleDiagnosisScreen(
+                                                    screenName: AppString.editScreenFlag,
+                                                    vehicleId: _args.id!,
+                                                  ));
+                                                },
+                                                child: Container(
+                                                  height: 30.h,
+                                                  width: 55.w,
+                                                  decoration: BoxDecoration(
+                                                      color: AppColors.whiteColor,
+                                                      borderRadius: BorderRadius.circular(20.r),
+                                                      border: Border.all(color: AppColors.whiteColor, width: 1)),
+                                                  child: Center(
+                                                    child: AppText(
+                                                      text: "Yes",
+                                                      color: AppColors.blackColor,
+                                                      fontWeight: FontWeight.w600,
+                                                      letterSpacing: 0.3,
+                                                    ),
+                                                  ),
+                                                ).paddingOnly(left: 10.w),
+                                              ),
+                                            ],
                                           ),
                                         ],
-                                      ),
-                                    ],
-                                  ).paddingSymmetric(horizontal: 10.w))
-                              .paddingSymmetric(horizontal: 16.w, vertical: 16)
+                                      ).paddingSymmetric(horizontal: 10.w))
+                                  .paddingSymmetric(horizontal: 16.w, vertical: 16)
                           : Container(
                               height: 7.h,
                               color: AppColors.backgroundColor,

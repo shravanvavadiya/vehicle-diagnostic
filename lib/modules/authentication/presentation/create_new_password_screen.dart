@@ -95,7 +95,7 @@ class CreateNewPasswordScreen extends StatelessWidget {
                           height: 50.h,
                           onTap: () {
 
-                            Get.offAll(LogInWithEmailIdScreen());
+                            Get.offAll(const LogInWithEmailIdScreen());
                           },
                           text: AppString.save,
                         ),

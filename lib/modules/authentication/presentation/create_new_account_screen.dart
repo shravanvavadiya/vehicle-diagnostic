@@ -56,46 +56,61 @@ class CreateNewAccountScreen extends StatelessWidget {
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
                     ).paddingOnly(bottom: 32.h),
-                    customTextFormField(
-                        onChanged: (p0) {},
-                        text: AppString.email,
-                        hintText: AppString.emailEx,
-                        validator: AppValidation.nameValidator,
-                        textCapitalization: TextCapitalization.words,
-                        controller: controller.emailController,
-                        keyboardType: TextInputType.emailAddress),
-                    customTextFormField(
-                      onChanged: (p0) {},
-                      text: AppString.createPassword,
-                      hintText: AppString.createPassword,
-                      validator: AppValidation.nameValidator,
-                      textCapitalization: TextCapitalization.words,
-                      controller: controller.createPasswordController,
-                      showPassword: controller.createPassword.value,
-                      keyboardType: TextInputType.text,
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          controller.createPassword.value = !controller.createPassword.value;
-                          Utils.hideKeyboardInApp(context);
-                        },
-                        icon: SvgPicture.asset(!controller.createPassword.value ? IconAsset.openEyes : IconAsset.closeEyes),
-                      ),
-                    ).paddingOnly(top: 24.h, bottom: 16.h),
-                    customTextFormField(
-                      onChanged: (p0) {},
-                      text: AppString.confirmPassword,
-                      hintText: AppString.confirmPassword,
-                      textCapitalization: TextCapitalization.words,
-                      validator: AppValidation.lastNameValidator,
-                      controller: controller.confirmPasswordController,
-                      keyboardType: TextInputType.text,
-                      showPassword: controller.confirmPassword.value,
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          controller.confirmPassword.value = !controller.confirmPassword.value;
-                          Utils.hideKeyboardInApp(context);
-                        },
-                        icon: SvgPicture.asset(!controller.confirmPassword.value ? IconAsset.openEyes : IconAsset.closeEyes),
+                    Form(
+                      key: controller.formKey,
+                      child: Column(
+                        children: [
+                          customTextFormField(
+                              onChanged: (p0) {},
+                              text: AppString.email,
+                              hintText: AppString.emailEx,
+                              validator: AppValidation.emailValidator,
+                              textCapitalization: TextCapitalization.words,
+                              controller: controller.emailController,
+                              keyboardType: TextInputType.emailAddress),
+                          customTextFormField(
+                            onChanged: (p0) {},
+                            text: AppString.createPassword,
+                            hintText: AppString.createPassword,
+                            validator: AppValidation.password,
+                            textCapitalization: TextCapitalization.words,
+                            controller: controller.createPasswordController,
+                            showPassword: controller.createPassword.value,
+                            keyboardType: TextInputType.text,
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                controller.createPassword.value = !controller.createPassword.value;
+                                Utils.hideKeyboardInApp(context);
+                              },
+                              icon: SvgPicture.asset(!controller.createPassword.value ? IconAsset.openEyes : IconAsset.closeEyes),
+                            ),
+                          ).paddingOnly(top: 24.h, bottom: 16.h),
+                          customTextFormField(
+                            onChanged: (p0) {},
+                            text: AppString.confirmPassword,
+                            hintText: AppString.confirmPassword,
+                            textCapitalization: TextCapitalization.words,
+                            controller: controller.confirmPasswordController,
+                            validator: (p0) {
+                              if (controller.confirmPasswordController.text.isEmpty) {
+                                return AppString.pleaseEnterPassword;
+                              } else if (controller.confirmPasswordController.text.length <= 6) {
+                                return AppString.passwordCodeMustBeDigits;
+                              } else if (controller.confirmPasswordController.text != controller.createPasswordController.text) {
+                                return AppString.bothPasswordNotMatch;
+                              }
+                            },
+                            keyboardType: TextInputType.text,
+                            showPassword: controller.confirmPassword.value,
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                controller.confirmPassword.value = !controller.confirmPassword.value;
+                                Utils.hideKeyboardInApp(context);
+                              },
+                              icon: SvgPicture.asset(!controller.confirmPassword.value ? IconAsset.openEyes : IconAsset.closeEyes),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     Container(
@@ -104,11 +119,16 @@ class CreateNewAccountScreen extends StatelessWidget {
                         child: CustomButton(
                           height: 50.h,
                           onTap: () {
-                            Get.to(
-                                const OtpScreen(
-                                  screenName: "createNewAccount",
-                                ),
-                                transition: Transition.rightToLeft);
+                            controller.formKey.currentState!.validate()
+                                ? {
+                                    controller.createNewAccountFunction(
+                                      email: controller.emailController.text,
+                                      confirmPassword: controller.confirmPasswordController.text,
+                                      createPassword: controller.createPasswordController.text,
+                                    ),
+                                  }
+                                : {};
+                            Utils.hideKeyboardInApp(context);
                           },
                           text: AppString.createAccount,
                         ),

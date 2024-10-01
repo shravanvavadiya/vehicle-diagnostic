@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
           builder: (_, child) {
             return GetMaterialApp(
               theme: ThemeData(
+                  fontFamily: "NeueHaasDisplayBold",
                   useMaterial3: false,
                   splashColor: Colors.transparent,
                   splashFactory: NoSplash.splashFactory,

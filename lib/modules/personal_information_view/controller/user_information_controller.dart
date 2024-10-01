@@ -72,15 +72,11 @@ class UserInformationController extends GetxController with LoadingMixin, Loadin
           print("user id ${data.apiresponse!.data!.id!}");
           AppPreference.setInt("UserId", data.apiresponse!.data!.id!);
           print("user id ${AppPreference.getInt("UserId")}");
-
-          bool userAccountAccess = personalInformationModel.value.apiresponse?.data?.profileCompleted ?? false;
-          await SharedPreferencesHelper.instance.setInt(Constants.keyUserId, personalInformationModel.value.apiresponse?.data?.id ?? 0);
-          SharedPreferencesHelper.instance.setLogInUser(value: userAccountAccess);
-          await SharedPreferencesHelper.instance.setInt(Constants.keyUserId, personalInformationModel.value.apiresponse?.data?.id ?? 0);
           await SharedPreferencesHelper.instance.setString(Constants.userImage, personalInformationModel.value.apiresponse?.data?.photo ?? "");
-          await SharedPreferencesHelper.instance.setUserInfo(data);
-
-          Get.offAll(const AddVehicleScreen());
+          await SharedPreferencesHelper.instance.setLogInUser(value: data.apiresponse!.data!.profileCompleted!);
+          Get.offAll(AddVehicleScreen(
+            userName: data.apiresponse!.data!.firstName!,
+          ));
         },
       );
     }

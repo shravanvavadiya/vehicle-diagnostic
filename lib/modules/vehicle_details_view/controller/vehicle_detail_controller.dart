@@ -28,7 +28,7 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
 
   VehicleDetailController({required String name, required Vehicle fetchData}) {
     print(name);
-    name == AppString.editScreen
+    name == AppString.editScreenFlag
         ? {
             screenName.value = AppString.editYourVehicleDetails,
             // fetchData.photo = image.value,
@@ -117,9 +117,9 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
       vehicleNumber: vehicleNumber.text.trim(),
       vehicleModel: selectedValueModel.trim(),
       vehicleMake: selectedValueMake.value,
-      userId: SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.id,
+      userId: AppPreference.getInt("UserId"),
       transmissionType: selectedValueTType.value,
-      id: SharedPreferencesHelper.instance.getUser()?.apiresponse?.data?.id,
+      id: vehicleId.value,
     );
     await processApi(
       () => VehicleService.createVehicle(
@@ -139,7 +139,7 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
           AppPreference.setInt("VEHICLEID", vehicleId);
 
           await Get.offAll(VehicleDiagnosisScreen(
-            screenName: AppString.newVehicleAdd,
+            screenName: AppString.newVehicleAddFlag,
             vehicleId: vehicleId,
           ));
         } else {}
@@ -178,7 +178,7 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
         print('Vehicle ID: $vehicleId');
         AppPreference.setInt("VEHICLEID", vehicleId);
         Get.to(VehicleDiagnosisScreen(
-          screenName: AppString.editScreen,
+          screenName: AppString.editScreenFlag,
           vehicleId: vehicleId,
         ));
       },

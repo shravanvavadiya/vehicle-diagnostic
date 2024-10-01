@@ -23,7 +23,8 @@ import '../../../utils/utils.dart';
 import '../../../utils/validation_utils.dart';
 
 class UserInformationScreen extends StatelessWidget {
-  UserInformationScreen({super.key});
+
+  const UserInformationScreen({super.key, });
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,6 @@
 import '../api/exception/app_exception.dart';
 import 'app_string.dart';
 
-
 class AppValidation {
   static String? nameValidator(String? value) {
     if (value!.isEmpty) {
@@ -18,8 +17,7 @@ class AppValidation {
   }
 
   static String? emailValidator(String? value) {
-    const Pattern pattern =
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+    const Pattern pattern = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
     final RegExp regex = RegExp(pattern.toString());
     if (value!.isEmpty) {
       return AppString.pleaseEnterEmail;
@@ -30,12 +28,32 @@ class AppValidation {
     }
   }
 
+  static String? password(String? value) {
+    if (value!.isEmpty) {
+      return AppString.pleaseEnterPassword;
+    } else if (value.length <= 6) {
+      return AppString.passwordCodeMustBeDigits;
+    }
+    return null;
+  }
+
+  static String? confirmPassword(String? confirmPassword) {
+    if (confirmPassword!.isEmpty) {
+      return AppString.pleaseEnterPassword;
+    } else if (confirmPassword.length <= 6) {
+      return AppString.passwordCodeMustBeDigits;
+    } else if (confirmPassword != password.toString()) {
+      return AppString.bothPasswordNotMatch;
+    }
+    return null;
+  }
+
   static String? postCode(String? value) {
     if (value!.isEmpty) {
       return AppString.pleaseEnterPostCode;
     } else if (value.length != 6) {
       return AppString.postCodeMustBeDigits;
-    }else if(!RegExp(r'^[0-9]{6}$').hasMatch(value)){
+    } else if (!RegExp(r'^[0-9]{6}$').hasMatch(value)) {
       return AppString.postCodeMustContainOnlyDigits;
     } else {
       return null;
@@ -54,7 +72,7 @@ class AppValidation {
   static String? vehicleYearValidator(String? value) {
     if (value!.isEmpty) {
       return AppString.pleaseEnterVehicleYear;
-    }else if (value.length != 4) {
+    } else if (value.length != 4) {
       return AppString.vehicleYearMustBeDigits;
     }
     return null;
@@ -88,7 +106,7 @@ class AppValidation {
     return null;
   }
 
- /* static String? passwordValidator(String? value) {
+/* static String? passwordValidator(String? value) {
     log("-->$value");
     if (value!.isEmpty) {
       return AppString.pleaseEnterPassword;
@@ -107,9 +125,6 @@ class AppValidation {
     }
   }*/
 
-
-
-
 /*  String? _validateConfirmPassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please confirm your password';
@@ -119,11 +134,7 @@ class AppValidation {
     return null;
   }
   */
-
-
-
 }
-
 
 /*extension Validator on String {
   bool isValidEmail() {

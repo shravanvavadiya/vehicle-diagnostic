@@ -9,6 +9,7 @@ import 'package:flutter_template/modules/authentication/models/user_data_respons
 import 'package:flutter_template/utils/api_constants.dart';
 
 import '../models/authapi_res.dart';
+import '../models/create_new_account_model.dart';
 
 class AuthService {
   static Future signUp(SignUpFormData request) async {
@@ -26,8 +27,7 @@ class AuthService {
     }
   }
 
-  static Future<AuthApiRes> googleTokenVerify(
-      Map<String, dynamic> request) async {
+  static Future<AuthApiRes> googleTokenVerify(Map<String, dynamic> request) async {
     try {
       print("request $request");
       var result = await Api().post(
@@ -46,8 +46,7 @@ class AuthService {
     }
   }
 
-  static Future<AuthApiRes> appleTokenVerify(
-      Map<String, dynamic> request) async {
+  static Future<AuthApiRes> appleTokenVerify(Map<String, dynamic> request) async {
     try {
       var result = await Api().post(
         bodyData: request,
@@ -58,6 +57,50 @@ class AuthService {
       return AuthApiRes.fromJson(jsonDecode(utf8.decode(result.bodyBytes)));
     } catch (e) {
       log("error : E $e");
+      rethrow;
+    }
+  }
+
+  static Future<CreateNewAccountModel> createNewAccountByEmail(Map<String, dynamic> queryData) async {
+    try {
+      var result = await Api().post(url: ApiConstants.accountCreate, queryData: queryData);
+      log('status: ${result.statusCode} body:${result.body}');
+      await ResponseHandler.checkResponseError(result);
+      return CreateNewAccountModel.fromJson(jsonDecode(utf8.decode(result.bodyBytes)));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<CreateNewAccountModel> logInByEmail(Map<String, dynamic> queryData) async {
+    try {
+      var result = await Api().post(url: ApiConstants.accountLogin, queryData: queryData);
+      log('status: ${result.statusCode} body:${result.body}');
+      await ResponseHandler.checkResponseError(result);
+      return CreateNewAccountModel.fromJson(jsonDecode(utf8.decode(result.bodyBytes)));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<CreateNewAccountModel> accountOtpVerify(Map<String, dynamic> queryData) async {
+    try {
+      var result = await Api().post(url: ApiConstants.accountOtpVerify, queryData: queryData);
+      log('status: ${result.statusCode} body:${result.body}');
+      await ResponseHandler.checkResponseError(result);
+      return CreateNewAccountModel.fromJson(jsonDecode(utf8.decode(result.bodyBytes)));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<CreateNewAccountModel?> resendOtp(Map<String, dynamic> queryData) async {
+    try {
+      var result = await Api().post(url: ApiConstants.resendOtp, queryData: queryData);
+      log('status: ${result.statusCode} body:${result.body}');
+      await ResponseHandler.checkResponseError(result);
+      return CreateNewAccountModel.fromJson(jsonDecode(utf8.decode(result.bodyBytes)));
+    } catch (e) {
       rethrow;
     }
   }

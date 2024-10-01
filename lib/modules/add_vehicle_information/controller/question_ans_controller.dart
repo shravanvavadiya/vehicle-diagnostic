@@ -63,21 +63,22 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
     processApi(
       () => VehicleInformationService.getAnsByVehicleId(vehicleId: vehicleId),
       error: (error, stack) {
-        log("preLoadDataFunction===>onTAP yes error");
+        log("preLoadDataFunction===>onTAP yes error $error");
         handleLoading(false);
       },
       result: (data) {
         selectedResponseList = [];
         log("preLoadDataFunction===>onTAP yes success Res::${data.toJson()}");
-        for (var key in data.apiresponse!.data!.qaVehicleResponses!) {
-          for (int i = 0; i < vehicleModel.value.apiresponse!.data!.length; i++) {
-            if (key.question == vehicleModel.value.apiresponse!.data![i].key) {
+        for (var key in data.apiresponse?.data?.qaVehicleResponses ?? []) {
+          int totleLength = vehicleModel.value.apiresponse?.data?.length ?? 0;
+          for (int i = 0; i < totleLength; i++) {
+            if (key.question == vehicleModel.value.apiresponse?.data?[i].key) {
               print("compere both data for pre load data ${key.question}----$i");
               // int datas = vehicleModel.value.apiresponse!.data![i].answers!.indexOf(key.answer!);
               // preLoadDataResponse[key.question] = datas;
               selectedResponseList.add(SelectedQnsAnsModel(question: key.question, answer: key.answer));
-              selectedAnswers[i] = key.answer!; // Store answer by index
-
+              selectedAnswers[i] = key.answer ?? ""; // Store answer by index
+              isResponseData.value = true;
               break;
             }
           }
@@ -145,139 +146,4 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
     // TODO: implement dispose
     super.dispose();
   }
-
-  final Map<String, dynamic> preSelectedAnswers = {
-    "apiresponse": {
-      "dataArray": null,
-      "data": [
-        {
-          "creationDate": 1726744065932,
-          "lastModifiedDate": 1726744065932,
-          "id": 1,
-          "question": "What is the main symptom or issue you're experiencing?",
-          "answers": [
-            "The engine won’t start",
-            "The car makes strange noises (e.g., knocking, squealing)",
-            "The car vibrates or shakes while driving",
-            "A warning light is on (e.g., check engine, ABS)",
-            "The car struggles to accelerate or loses power",
-            "Other (allow free text)"
-          ],
-          "key": "Issue"
-        },
-        {
-          "creationDate": 1726744171683,
-          "lastModifiedDate": 1726744171683,
-          "id": 2,
-          "question": "When did you first notice the issue?",
-          "answers": ["Today", "A few days ago", "A few weeks ago", "Over a month ago"],
-          "key": "Notice The Issue"
-        },
-        {
-          "creationDate": 1726744985737,
-          "lastModifiedDate": 1726744985737,
-          "id": 3,
-          "question": "How often does the issue occur?",
-          "answers": ["Every time I use the car", "Only sometimes", "It only happened once", "Not sure"],
-          "key": "Issue occur"
-        },
-        {
-          "creationDate": 1726745046330,
-          "lastModifiedDate": 1726745046330,
-          "id": 4,
-          "question": "When does the problem typically happen?",
-          "answers": [
-            "When starting the car",
-            "While driving (e.g., accelerating or turning)",
-            "When slowing down or braking",
-            "Randomly",
-            "Not sure"
-          ],
-          "key": "Typically happen"
-        },
-        {
-          "creationDate": 1726745129685,
-          "lastModifiedDate": 1726745129685,
-          "id": 5,
-          "question": "Where do you notice the problem the most?",
-          "answers": [
-            "Around the engine or under the hood",
-            "From the wheels or brakes",
-            "Inside the car (e.g., dashboard or steering)",
-            "Underneath the car (e.g., fluid leak, exhaust)",
-            "Not sure"
-          ],
-          "key": "Most problem"
-        },
-        {
-          "creationDate": 1726745183051,
-          "lastModifiedDate": 1726745183051,
-          "id": 6,
-          "question": "Have you noticed any unusual smells or fluids leaking from the car?",
-          "answers": [
-            "Yes, there’s a strange smell (e.g., burning, gasoline)",
-            "Yes, I see fluid leaking under the car",
-            "No, nothing unusual",
-            "Not sure"
-          ],
-          "key": "Unusual smells"
-        },
-        {
-          "creationDate": 1726745254953,
-          "lastModifiedDate": 1726745254953,
-          "id": 7,
-          "question": "Is there a specific sound the car is making?",
-          "answers": ["Knocking or rattling", "Squealing or grinding", "Clicking or ticking", "No unusual sounds", "Not sure"],
-          "key": "Specific sound"
-        },
-        {
-          "creationDate": 1726745373589,
-          "lastModifiedDate": 1726745373589,
-          "id": 8,
-          "question": "Have any warning lights appeared on the dashboard?",
-          "answers": [
-            "Yes, a 'check engine' light",
-            "Yes, a brake or ABS light",
-            "Yes, a battery or charging system light",
-            "No, no warning lights",
-            "Not sure"
-          ],
-          "key": "Warning lights"
-        },
-        {
-          "creationDate": 1726745497861,
-          "lastModifiedDate": 1726745497861,
-          "id": 9,
-          "question": "What type of driving do you mostly do?",
-          "answers": ["City driving (stop-and-go traffic)", "Highway driving", "A mix of both", "Other (allow free text)"],
-          "key": "Mostly driving"
-        },
-        {
-          "creationDate": 1726745568945,
-          "lastModifiedDate": 1726745568945,
-          "id": 10,
-          "question": "Has the weather or temperature been unusual when the problem happens?",
-          "answers": ["Yes, it's been very cold", "Yes, it's been very hot", "No, weather has been normal", "Not sure"],
-          "key": "Weather or temperature problem"
-        },
-        {
-          "creationDate": 1726745630201,
-          "lastModifiedDate": 1726745630201,
-          "id": 11,
-          "question": "Has the vehicle been serviced or repaired recently?",
-          "answers": ["Yes, in the last month", "Yes, in the last 6 months", "No, not recently", "Not sure"],
-          "key": "Repaired recently"
-        },
-        {
-          "creationDate": 1726745676222,
-          "lastModifiedDate": 1726745676222,
-          "id": 12,
-          "question": "What is the current mileage of the vehicle?",
-          "answers": ["Less than 50,000 miles", "50,000 - 100,000 miles", "100,000 - 150,000 miles", "150,000+ miles"],
-          "key": "Current mileage"
-        }
-      ],
-      "timestamp": 1727506354146
-    }
-  };
 }

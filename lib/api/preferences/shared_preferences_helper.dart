@@ -66,21 +66,21 @@ class SharedPreferencesHelper {
     return value ?? false;
   }
 
-  Future setUserInfo(PersonalInformationModel? user) async {
-    await prefs?.setString(Constants.keyUser, jsonEncode(user));
-  }
+  // Future setUserInfo(PersonalInformationModel? user) async {
+  //   await prefs?.setString(Constants.keyUser, jsonEncode(user));
+  // }
+  //
+  // PersonalInformationModel? getUserInfo() {
+  //   return PersonalInformationModel.fromJson(jsonDecode(prefs?.get(Constants.keyUser) as String? ?? ""));
+  // }
 
-  PersonalInformationModel? getUserInfo() {
-    return PersonalInformationModel.fromJson(jsonDecode(prefs?.get(Constants.keyUser) as String? ?? ""));
-  }
-
-  Future setUser(AuthApiRes? user) async {
-    await prefs?.setString(Constants.keyUser, jsonEncode(user));
-  }
-
-  AuthApiRes? getUser() {
-    return AuthApiRes.fromJson(jsonDecode(prefs?.get(Constants.keyUser) as String? ?? ""));
-  }
+  // Future setUser(AuthApiRes? user) async {
+  //   await prefs?.setString(Constants.keyUser, jsonEncode(user));
+  // }
+  //
+  // AuthApiRes? getUser() {
+  //   return AuthApiRes.fromJson(jsonDecode(prefs?.get(Constants.keyUser) as String? ?? ""));
+  // }
 
   Future setLong(String key, double value) async {
     await prefs?.setDouble(key, value);

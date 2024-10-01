@@ -49,6 +49,7 @@ class GoogleLogInScreen extends StatelessWidget {
                   text: TextSpan(
                       text: AppString.alreadyWithUs,
                       style: TextStyle(
+                        fontFamily: AppString.fontName,
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
                         color: AppColors.introHintColor,
@@ -57,6 +58,7 @@ class GoogleLogInScreen extends StatelessWidget {
                         TextSpan(
                           text: " ${AppString.signIn}",
                           style: TextStyle(
+                            fontFamily: AppString.fontName,
                             color: AppColors.accentColor,
                             fontWeight: FontWeight.w600,
                             fontSize: 16.sp,

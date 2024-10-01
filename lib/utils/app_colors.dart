@@ -18,6 +18,8 @@ class AppColors {
   static Color logoutColor = const Color(0xFFCC2929);
   static Color borderColor = const Color(0xFFC8C5CB);
   static Color titleColor = const Color(0xFF4A4C62);
+  static Color dividerColor = const Color(0xFFE8E8E8);
+  static Color introHintColor = const Color(0xFF5E5E5E);
   static Color transparent =  Colors.transparent;
   static Color redColor =  Colors.red;
 }

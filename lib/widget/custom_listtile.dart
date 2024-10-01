@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_template/modules/add_vehicle_information/controller/add_vehicle_information_controller.dart';
 
 import '../utils/app_colors.dart';
 import '../utils/app_text.dart';

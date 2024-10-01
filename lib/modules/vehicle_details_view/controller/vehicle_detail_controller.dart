@@ -28,7 +28,7 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
 
   VehicleDetailController({required String name, required Vehicle fetchData}) {
     print(name);
-    name == "Edit Screen"
+    name == AppString.editScreen
         ? {
             screenName.value = AppString.editYourVehicleDetails,
             // fetchData.photo = image.value,
@@ -137,15 +137,9 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
           int vehicleId = jsonData['apiresponse']['data']['id'];
           print('Vehicle ID: $vehicleId');
           AppPreference.setInt("VEHICLEID", vehicleId);
-          screenName.value == "Edit Screen"
-              ? {}
-              : {
-                  imagePath = XFile(""),
-                  image.value = "",
-                  clearController(),
-                };
+
           await Get.offAll(VehicleDiagnosisScreen(
-            screenName: "",
+            screenName: AppString.newVehicleAdd,
             vehicleId: vehicleId,
           ));
         } else {}
@@ -184,14 +178,11 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
         print('Vehicle ID: $vehicleId');
         AppPreference.setInt("VEHICLEID", vehicleId);
         Get.to(VehicleDiagnosisScreen(
-          screenName: "Edit Screen",
+          screenName: AppString.editScreen,
           vehicleId: vehicleId,
         ));
       },
     );
-    imagePath = XFile("");
-    image.value = "";
-    clearController();
     handleLoading(false);
   }
 

@@ -17,49 +17,5 @@ import '../../../api/preferences/shared_preferences_helper.dart';
 import '../../../utils/app_string.dart';
 
 class SignInController extends GetxController with LoadingMixin, LoadingApiMixin {
-  RxString buttonName = Platform.isAndroid ? AppString.continueWithGoogle.obs : AppString.continueWithApple.obs;
-
-  continueWithGoogle() async {
-    handleLoading(true);
-    processApi(
-      () => SocialLoginService.signInWithGoogle(),
-      error: (error, stack) => handleLoading(false),
-      result: (data) {
-        processApi(
-          () {
-            print("data $data");
-            return AuthService.googleTokenVerify({ApiKeyConstants.deviceType: Constants.android, ApiKeyConstants.token: data});
-          },
-          result: (data) async {
-            log("${data.apiresponse?.data?.token}");
-            await SharedPreferencesHelper.instance.setUserToken(data.apiresponse?.data?.token ?? "");
-            await SharedPreferencesHelper.instance.setString("email", data.apiresponse?.data?.email ?? "");
-            Get.offAll(const GetStartedScreen());
-            await SharedPreferencesHelper.instance.setUser(data);
-          },
-          loading: handleLoading,
-        );
-      },
-    );
-  }
-
-  continueWithApple() async {
-    handleLoading(true);
-    processApi(
-      () => SocialLoginService.signInWithApple(),
-      error: (error, stack) => handleLoading(false),
-      result: (data) {
-        processApi(
-          () => AuthService.appleTokenVerify({ApiKeyConstants.appleToken: data}),
-          result: (data) async {
-            await SharedPreferencesHelper.instance.setUserToken(data.apiresponse?.data?.token ?? "");
-            await SharedPreferencesHelper.instance.setString("email", data.apiresponse?.data?.email ?? "");
-            await SharedPreferencesHelper.instance.setUser(data);
-            Navigation.replaceAll(Routes.getStarted);
-          },
-          loading: handleLoading,
-        );
-      },
-    );
-  }
+  RxString buttonName = AppString.createAccount.obs;
 }

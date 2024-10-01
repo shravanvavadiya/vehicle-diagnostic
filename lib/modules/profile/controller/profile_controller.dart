@@ -107,7 +107,7 @@ class ProfileController extends GetxController
     required String firstname,
     required String lastname,
     required String postCode,
-    required String imagePath,
+    required String? imagePath,
   }) async {
     int userId = SharedPreferencesHelper.instance.getInt(Constants.keyUserId);
     print(userId);
@@ -119,7 +119,7 @@ class ProfileController extends GetxController
           firstName: firstname,
           lastName: lastname,
           postCode: postCode,
-          imagePath: imagePath),
+          imagePath: imagePath?? null),
       loading: handleLoading,
       result: (data) async{
         log("Controller Data :: ${data?.apiresponse?.data?.photo}");

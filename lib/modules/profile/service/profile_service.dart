@@ -27,7 +27,7 @@ class ProfileService {
 
   /// User profile Update::
   static Future<PersonalInformationModel?> updateUserAPI({
-    required String imagePath,
+    required String? imagePath,
     required String email,
     required int id,
     required String firstName,
@@ -44,7 +44,7 @@ class ProfileService {
           postCode: postCode,
           imagePath: imagePath,
           id: id);
-      log("result data  ::${result}");
+      log("result data  ::$result");
 
      if( result!=null) {
 

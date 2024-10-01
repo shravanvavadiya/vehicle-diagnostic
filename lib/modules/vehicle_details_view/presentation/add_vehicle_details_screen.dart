@@ -40,7 +40,7 @@ class AddVehicleDetailsScreen extends StatelessWidget {
     return CustomAnnotatedRegions(
       statusBarColor: AppColors.whiteColor,
       child: GetX<VehicleDetailController>(
-        init: VehicleDetailController(name: screenName, fetchData: screenName == "Edit Screen" ? vehicleData! : Vehicle()),
+        init: VehicleDetailController(name: screenName, fetchData: screenName == AppString.editScreen ? vehicleData! : Vehicle()),
         builder: (vehicleDetailController) => Scaffold(
           appBar: AppBar(
             leading: const CustomBackArrowWidget().paddingAll(11.w),
@@ -95,7 +95,7 @@ class AddVehicleDetailsScreen extends StatelessWidget {
                               ),
                             ),
                           ).paddingOnly(top: 24.h, bottom: 8.h)
-                        : screenName == "Edit Screen"
+                        : screenName == AppString.editScreen
                             ? Container(
                                 height: 195.h,
                                 width: double.infinity,
@@ -227,7 +227,7 @@ class AddVehicleDetailsScreen extends StatelessWidget {
                       alignment: Alignment.bottomRight,
                       child: CustomButton(
                         onTap: () async {
-                          screenName == "Edit Screen"
+                          screenName == AppString.editScreen
                               ? await vehicleDetailController.editVehicleApi()
                               : await vehicleDetailController.addVehicleApi();
                         },

@@ -10,9 +10,10 @@ import 'package:flutter_template/modules/vehicle_details_view/presentation/add_v
 import 'package:flutter_template/modules/splash/presentation/splash_screen.dart';
 import 'package:get/get.dart';
 import '../../demo/demo_1.dart';
-import '../../demo/question_answer.dart';
+import '../../demo/pre_load_data.dart';
+import '../../modules/add_vehicle_information/presentation/question_answer.dart';
 import '../../modules/add_vehicle_information/presentation/vehicle_diagnosis_screen.dart';
-import '../../modules/add_vehicle_information/presentation/vehicle_information_steps_screen.dart';
+import '../../modules/authentication/presentation/log_in_with_email_id.dart';
 import '../../modules/profile/presentation/account_information_screen.dart';
 import '../../modules/subscriptions/presentation/subscriptions_plan_screen.dart';
 
@@ -23,6 +24,7 @@ mixin Routes {
   static const String questionAndAnsScreenDemo = '/QuestionAndAnsScreenDemo';
   static const String splash = '/splash';
   static const String demo01 = '/demo01';
+  static const String logInWithEmailId = '/logInWithEmailId';
   static const String homeScreen = '/home';
   static const String signIn = '/signIn';
   static const String getStarted = '/getStarted';
@@ -30,7 +32,6 @@ mixin Routes {
   static const String addVehicle = '/addVehicle';
   static const String addVehicleDetail = '/addVehicleDetail';
 
-  // static const String vehicleDiagnosisScreen = '/vehicleDiagnosisScreen';
   static const String vehicleInformationStepsScreen = '/vehicleInformationStepsScreen';
   static const String accountInformation = '/accountInformation';
   static const String profileScreen = '/profileScreen';
@@ -41,7 +42,12 @@ mixin Routes {
   static List<GetPage<dynamic>> pages = [
     GetPage<dynamic>(
       name: demo01,
-      page: () => Demo0111(),
+      page: () => QuestionAndAnsScreenDemo(),
+      transition: defaultTransition,
+    ),
+    GetPage<dynamic>(
+      name: logInWithEmailId,
+      page: () => LogInWithEmailIdScreen(),
       transition: defaultTransition,
     ),
     GetPage<dynamic>(

@@ -158,15 +158,10 @@ class Api {
     return null;
   }
 
-  Future<String?> multiPartRequestEditVehicle(String endpoint,
-      {required MyVehicleData editProfileFormData, String? imagePath}) async {
+  Future<String?> multiPartRequestEditVehicle(String endpoint, {required MyVehicleData editProfileFormData, String? imagePath}) async {
     try {
-      var headers = {
-        'accept': '*/*',
-        'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'
-      };
-      var request = http.MultipartRequest('POST',
-          Uri.parse('http://103.206.139.86:8070/moreaboutvehicle/update'));
+      var headers = {'accept': '*/*', 'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'};
+      var request = http.MultipartRequest('POST', Uri.parse('http://103.206.139.86:8070/moreaboutvehicle/update'));
       final body = {
         'fuelType': "${editProfileFormData.fuelType}",
         'transmissionType': "${editProfileFormData.transmissionType}",
@@ -181,13 +176,11 @@ class Api {
       };
       request.fields.addAll(body);
       if (imagePath?.isNotEmpty ?? false) {
-        request.files
-            .add(await http.MultipartFile.fromPath('photo', imagePath ?? ""));
+        request.files.add(await http.MultipartFile.fromPath('photo', imagePath ?? ""));
       }
 
       request.headers.addAll(headers);
-      http.Response response =
-          await http.Response.fromStream(await request.send());
+      http.Response response = await http.Response.fromStream(await request.send());
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response.body;
       }
@@ -238,39 +231,11 @@ class Api {
     required String firstName,
     required String lastName,
     required String postCode,
-    required String imagePath,
+    required String? imagePath,
   }) async {
-    // var headers = {
-    //   'accept': '*/*',
-    //   'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'
-    // };
-    // var request = http.MultipartRequest('POST', Uri.parse('http://103.206.139.86:8070/user/update'));
-    // request.fields.addAll({
-    //   'email': 'xrstudio.dev@gmail.com',
-    //   'firstName': 'dc',
-    //   'id': '2',
-    //   'lastName': 'demo',
-    //   'postCode': '123456'
-    // });
-    // request.files.add(await http.MultipartFile.fromPath('photo', '/data/user/0/com.vehicle.diagnostic/cache/7e13c3c2-e1ce-4fe3-8a38-fef73e696ac6/1000001663.jpg'));
-    // request.headers.addAll(headers);
-    //
-    // http.StreamedResponse response = await request.send();
-    //
-    // if (response.statusCode == 200) {
-    //   print(await response.stream.bytesToString());
-    // }
-    // else {
-    //   print(response.reasonPhrase);
-    // }
-
     try {
-      var headers = {
-        'accept': '*/*',
-        'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'
-      };
-      var request = http.MultipartRequest(
-          'POST', Uri.parse('http://103.206.139.86:8070/user/update'));
+      var headers = {'accept': '*/*', 'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'};
+      var request = http.MultipartRequest('POST', Uri.parse('http://103.206.139.86:8070/user/update'));
       request.fields.addAll({
         'email': email,
         'firstName': firstName,
@@ -279,9 +244,8 @@ class Api {
         'postCode': postCode,
       });
 
-      if (imagePath.isNotEmpty) {
-        request.files
-            .add(await http.MultipartFile.fromPath('photo', imagePath));
+      if (imagePath != null) {
+        request.files.add(await http.MultipartFile.fromPath('photo', imagePath));
       }
 
       request.headers.addAll(headers);

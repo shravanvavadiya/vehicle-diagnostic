@@ -1,9 +1,11 @@
 import 'dart:ffi';
 import 'dart:io';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_template/modules/authentication/controller/google_log_in_controller.dart';
+import 'package:flutter_template/modules/authentication/presentation/log_in_with_email_id.dart';
 import 'package:flutter_template/modules/authentication/widget/story_view_screen.dart';
 import 'package:flutter_template/modules/personal_information_view/get_started_screen.dart';
 import 'package:flutter_template/utils/app_colors.dart';
@@ -18,6 +20,7 @@ import 'package:flutter_template/widget/custom_button.dart';
 import 'package:get/get.dart';
 
 import '../service/social_service.dart';
+import 'create_new_account_screen.dart';
 
 class GoogleLogInScreen extends StatelessWidget {
   GoogleLogInScreen({super.key});
@@ -35,27 +38,38 @@ class GoogleLogInScreen extends StatelessWidget {
                 Expanded(
                   child: StoryViewScreen(),
                 ),
-                Platform.isAndroid
-                    ? CustomButton(
-                        height: 52.h,
-                        onTap: signInController.continueWithGoogle,
-                        buttonColor: AppColors.backgroundColor,
-                        text: signInController.buttonName.value,
-                        textColor: AppColors.primaryColor,
-                        svg: IconAsset.googleIcon,
-                      ).paddingSymmetric(horizontal: 16.w)
-                    : Platform.isIOS
-                        ? CustomButton(
-                            height: 52.h,
-                            onTap: signInController.continueWithApple,
-                            buttonColor: AppColors.backgroundColor,
-                            text: signInController.buttonName.value,
-                            textColor: AppColors.primaryColor,
-                            svg: IconAsset.appleIcon,
-                          ).paddingSymmetric(horizontal: 16.w, vertical: 12.h)
-                        : Container(),
+                CustomButton(
+                  height: 50.h,
+                  onTap: () {
+                    Get.to(const CreateNewAccountScreen(), transition: Transition.rightToLeft);
+                  },
+                  text: signInController.buttonName.value,
+                ).paddingSymmetric(horizontal: 16),
+                RichText(
+                  text: TextSpan(
+                      text: AppString.alreadyWithUs,
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.introHintColor,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: " ${AppString.signIn}",
+                          style: TextStyle(
+                            color: AppColors.accentColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16.sp,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Get.to(const LogInWithEmailIdScreen(), transition: Transition.rightToLeft);
+                            },
+                        ),
+                      ]),
+                ).paddingOnly(top: 16.sp)
               ],
-            ).paddingOnly(bottom: 50.h),
+            ).paddingOnly(bottom: 16.h),
           ),
         ),
       ),

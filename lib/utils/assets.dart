@@ -18,6 +18,8 @@ class IconAsset {
   static const String googleIcon = '${icons}google_icon.svg';
   static const String appleIcon = '${icons}apple_icon.svg';
   static const String backArrow = '${icons}back_arrow.svg';
+  static const String closeEyes = '${icons}ic_eye_close.svg';
+  static const String openEyes = '${icons}ic_open_eyes.svg';
   static const String forwardArrow = '${icons}forward_arrow.svg';
   static const String downArrow = '${icons}down_arrow.svg';
   static const String uploadIcon = '${icons}upload_icon.svg';
@@ -34,5 +36,4 @@ class IconAsset {
   static const String download = '${icons}download.svg';
   static const String light = '${icons}light.svg';
   static const String userPlaceholder = '${icons}user_icon.svg';
-
 }

@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
               ],
               title: AppString.appName,
               initialBinding: AppBidding(),
-              // initialRoute: Routes.demo01,
+              // initialRoute: Routes.logInWithEmailId,
               initialRoute: Routes.splash,
               // initialRoute: Routes.questionAndAnsScreenDemo,
               getPages: Routes.pages,

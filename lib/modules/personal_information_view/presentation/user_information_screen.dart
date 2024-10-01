@@ -40,7 +40,7 @@ class UserInformationScreen extends StatelessWidget {
                 elevation: 0,
               ),
             ),
-            body:ScrollConfiguration(
+            body: ScrollConfiguration(
               behavior: MyBehavior(),
               child: SingleChildScrollView(
                 child: Form(
@@ -75,11 +75,8 @@ class UserInformationScreen extends StatelessWidget {
                                 ),
                                 child: GestureDetector(
                                   onTap: () async {
-              
                                     await Utils().imagePickerModel(
-                                        selectImage: personalInformationController.imagePath,
-                                        image: personalInformationController.image
-                                    );
+                                        selectImage: personalInformationController.imagePath, image: personalInformationController.image);
                                     personalInformationController.isValidateImage.value = true;
                                   },
                                   child: Container(
@@ -219,12 +216,14 @@ Widget customTextFormField({
   String? Function(String?)? validator,
   required String text,
   required String hintText,
-   int? maxLength,
+  int? maxLength,
   TextCapitalization? textCapitalization,
   bool? readOnly,
   Function(String)? onChanged,
   required TextEditingController controller,
   TextInputType keyboardType = TextInputType.text,
+  Widget? suffixIcon,
+  bool? showPassword,
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,6 +242,8 @@ Widget customTextFormField({
         hintText: hintText,
         validator: validator,
         keyboardType: keyboardType,
+        suffix: suffixIcon,
+        isPassword: showPassword ?? false,
       ),
     ],
   );

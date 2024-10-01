@@ -1,16 +1,18 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_template/modules/add_vehicle_information/models/selected_qns_ans_model.dart';
 import 'package:flutter_template/modules/dashboad/home/presentation/home_screen.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 
-import '../modules/add_vehicle_information/models/submit_vehicle_request.dart';
-import '../modules/add_vehicle_information/models/vehicle_information_step_model.dart';
-import '../modules/add_vehicle_information/services/vehicle_information_service.dart';
-import '../utils/common_api_caller.dart';
-import '../utils/loading_mixin.dart';
+import '../models/submit_vehicle_request.dart';
+import '../models/vehicle_information_step_model.dart';
+import '../services/vehicle_information_service.dart';
+import '../../../utils/common_api_caller.dart';
+import '../../../utils/loading_mixin.dart';
 
 class QuestionAndAnsController extends GetxController with LoadingMixin, LoadingApiMixin {
   PageController pageController = PageController();
@@ -20,15 +22,18 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
   RxBool isLoading = false.obs;
   RxBool isResponseData = false.obs;
   Rx<VehicleInformationModel> vehicleModel = VehicleInformationModel().obs;
-  List<Map<String, dynamic>> selectedResponse = <Map<String, dynamic>>[];
+  List<SelectedQnsAnsModel> selectedResponseList = <SelectedQnsAnsModel>[];
+  RxInt userVehicleId = 0.obs;
 
   void updateProgress() {
     progress.value = (currentStep.value + 1) / vehicleModel.value.apiresponse!.data!.length; // Update progress based on the current step
   }
 
+  RxMap preLoadDataResponse = {}.obs;
+
   void clearAll() {
     selectedAnswers.clear();
-    selectedResponse.clear();
+    selectedResponseList.clear();
     currentStep.value = 0;
     pageController.jumpToPage(0);
     progress.value = 0.1;
@@ -44,14 +49,6 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
         if (data.apiresponse!.data?.isEmpty != true) {
           isResponseData.value = true;
           vehicleModel.value = data;
-          /*preSelectedAnswers["apiresponse"]["data"]["question"].forEach((key, value) {
-            print("key selected ${key}");
-            int index = vehicleModel.value.apiresponse!.data!.indexWhere((element) => element.key == key);
-            if (index != -1) {
-              selectedAnswers[index] = value;
-              selectedResponse[key] = value;
-            }
-          });*/
         } else {
           isResponseData.value = false;
         }
@@ -61,12 +58,42 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
     handleLoading(false);
   }
 
-  Future submitForm({required int vehicleId, required List<Map<String, dynamic>> selectedResponse}) async {
+  Future preLoadDataFunction({required int vehicleId}) async {
+    log("preLoadDataFunction===>onTAP yes call");
+    processApi(
+      () => VehicleInformationService.getAnsByVehicleId(vehicleId: vehicleId),
+      error: (error, stack) {
+        log("preLoadDataFunction===>onTAP yes error");
+        handleLoading(false);
+      },
+      result: (data) {
+        selectedResponseList = [];
+        log("preLoadDataFunction===>onTAP yes success Res::${data.toJson()}");
+        for (var key in data.apiresponse!.data!.qaVehicleResponses!) {
+          for (int i = 0; i < vehicleModel.value.apiresponse!.data!.length; i++) {
+            if (key.question == vehicleModel.value.apiresponse!.data![i].key) {
+              print("compere both data for pre load data ${key.question}----$i");
+              // int datas = vehicleModel.value.apiresponse!.data![i].answers!.indexOf(key.answer!);
+              // preLoadDataResponse[key.question] = datas;
+              selectedResponseList.add(SelectedQnsAnsModel(question: key.question, answer: key.answer));
+              selectedAnswers[i] = key.answer!; // Store answer by index
+
+              break;
+            }
+          }
+        }
+        log(" preLoadDataFunction final response:::${selectedResponseList}");
+      },
+    );
+  }
+
+  void finalResponse() {
+    Map response = {};
+  }
+
+  Future submitForm({required int vehicleId, required List<SelectedQnsAnsModel> selectedResponse}) async {
     print("selectedResponse $selectedResponse");
     final body = {
-      // "qaVehicleRequests": [
-      //   {"question": "string", "answer": "string"}
-      // ],
       "qaVehicleRequests": selectedResponse,
       "vehicleId": vehicleId,
     };
@@ -85,7 +112,7 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
     return null;
   }
 
-  Future<VehicleQuestionAndAns?> EditForm({required int vehicleId, required List<Map<String, dynamic>> selectedResponse}) async {
+  Future<VehicleQuestionAndAns?> EditForm({required int vehicleId, required List<SelectedQnsAnsModel> selectedResponse}) async {
     final body = {
       "qaVehicleRequests": selectedResponse,
       "vehicleId": vehicleId,

@@ -268,6 +268,7 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                             hintText: AppString.postCode,
                             validator: AppValidation.postCode,
                             keyboardType: TextInputType.number,
+                            maxLength: 6,
                             controller: profileController.postCode,
                             onChanged: (String) {
                               profileController.isValidatePostCode.value = profileController.postCode.text.isNotEmpty;
@@ -287,7 +288,7 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                       firstname: profileController.firstname.text,
                       lastname: profileController.lastname.text,
                       postCode: profileController.postCode.text,
-                      imagePath: profileController.image?.value ?? "",
+                      imagePath: profileController.image!.value.contains("http") ? null : profileController.image!.value,
                     );
                   }
                 },

@@ -14,7 +14,6 @@ import 'package:flutter_template/widget/annotated_region.dart';
 import 'package:get/get.dart';
 import '../../../../widget/custom_listtile.dart';
 import '../../../add_vehicle_information/presentation/vehicle_diagnosis_screen.dart';
-import '../../../add_vehicle_information/presentation/vehicle_information_steps_screen.dart';
 import '../../../vehicle_details_view/presentation/add_vehicle_details_screen.dart';
 import '../controller/home_controller.dart';
 import '../models/get_vehicle_data_model.dart';
@@ -37,7 +36,7 @@ class VehicleDetailScreen extends StatelessWidget {
             leadingWidth: 30,
             elevation: 0,
             title: AppText(
-              text: "${_args.vehicleNumber}",
+              text: "${_args.id}",
               color: AppColors.blackColor,
               fontWeight: FontWeight.w600,
               fontSize: 17.sp,
@@ -62,7 +61,7 @@ class VehicleDetailScreen extends StatelessWidget {
                   PopupMenuItem(
                     onTap: () {
                       log("Edit");
-                      Get.to(AddVehicleDetailsScreen(screenName: "Edit Screen", vehicleData: _args));
+                      Get.to(AddVehicleDetailsScreen(screenName: AppString.editScreen, vehicleData: _args));
                     },
                     height: 40.h,
                     padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -389,7 +388,7 @@ class VehicleDetailScreen extends StatelessWidget {
                                           GestureDetector(
                                             onTap: () {
                                               Get.to(VehicleDiagnosisScreen(
-                                                screenName: 'Vehicle Information Add',
+                                                screenName: AppString.editScreen,
                                                 vehicleId: _args.id!,
                                               ));
                                             },

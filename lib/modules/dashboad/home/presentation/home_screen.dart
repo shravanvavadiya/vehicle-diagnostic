@@ -172,9 +172,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             CustomButton(
                               onTap: () {
-                                // Navigation.pushNamed(Routes.addVehicleDetail);
                                 Get.to(const AddVehicleDetailsScreen(
-                                  screenName: "New Vehicle",
+                                  screenName: AppString.newVehicleAdd,
                                 ));
                               },
                               height: 38.h,
@@ -202,7 +201,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding: EdgeInsets.only(bottom: 8.h),
                                     itemCount: homeController.getAllVehicleList!.apiresponse!.data!.vehicle!.length,
                                     itemBuilder: (context, index) {
-                                      return HomeScreenComponent(getVehicleData: homeController.getAllVehicleList!.apiresponse!.data!.vehicle![index]);
+                                      return HomeScreenComponent(
+                                          getVehicleData: homeController.getAllVehicleList!.apiresponse!.data!.vehicle![index]);
                                     },
                                   )
                             : Center(

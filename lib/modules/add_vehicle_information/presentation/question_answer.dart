@@ -4,15 +4,16 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_template/demo/question_ans_controller.dart';
+import 'package:flutter_template/modules/add_vehicle_information/controller/question_ans_controller.dart';
+import 'package:flutter_template/modules/add_vehicle_information/models/selected_qns_ans_model.dart';
 import 'package:get/get.dart';
 
-import '../utils/app_colors.dart';
-import '../utils/app_string.dart';
-import '../utils/assets.dart';
-import '../widget/custom_backarrow_widget.dart';
-import '../widget/custom_button.dart';
-import '../widget/info_text_widget.dart';
+import '../../../utils/app_colors.dart';
+import '../../../utils/app_string.dart';
+import '../../../utils/assets.dart';
+import '../../../widget/custom_backarrow_widget.dart';
+import '../../../widget/custom_button.dart';
+import '../../../widget/info_text_widget.dart';
 
 class QuestionAndAnsScreen extends StatefulWidget {
   final String screenName;
@@ -35,7 +36,7 @@ class _QuestionAndAnsScreenState extends State<QuestionAndAnsScreen> {
                   onTap: controller.currentStep > 0
                       ? () {
                           controller.pageController.previousPage(
-                            duration: Duration(milliseconds: 300),
+                            duration: const Duration(milliseconds: 300),
                             curve: Curves.ease,
                           );
                         }
@@ -90,7 +91,7 @@ class _QuestionAndAnsScreenState extends State<QuestionAndAnsScreen> {
             controller.isResponseData.value == true
                 ? Expanded(
                     child: PageView.builder(
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       controller: controller.pageController,
                       onPageChanged: (int page) {
                         controller.currentStep.value = page;
@@ -123,17 +124,18 @@ class _QuestionAndAnsScreenState extends State<QuestionAndAnsScreen> {
                         controller.selectedAnswers.containsKey(controller.currentStep.value)
                     ? () {
                         controller.pageController.nextPage(
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           curve: Curves.ease,
                         );
+                        log("vehicle id ${widget.vehicleId}");
                       }
                     : controller.currentStep.value == controller.vehicleModel.value.apiresponse!.data!.length - 1 &&
                             controller.selectedAnswers.containsKey(controller.currentStep)
                         ? () {
-                            log("controller.selectedResponse ${controller.selectedResponse}");
-                            widget.screenName == "Edit Screen"
-                                ? controller.EditForm(vehicleId: widget.vehicleId, selectedResponse: controller.selectedResponse)
-                                : controller.submitForm(vehicleId: widget.vehicleId, selectedResponse: controller.selectedResponse);
+                            log("controller.selectedResponse ${controller.selectedResponseList}");
+                            widget.screenName == AppString.editScreen
+                                ? controller.EditForm(vehicleId: widget.vehicleId, selectedResponse: controller.selectedResponseList)
+                                : controller.submitForm(vehicleId: widget.vehicleId, selectedResponse: controller.selectedResponseList);
                           }
                         : null,
                 child: Container(
@@ -163,7 +165,7 @@ class _QuestionAndAnsScreenState extends State<QuestionAndAnsScreen> {
                   ),
                 ),
               ).paddingOnly(bottom: 25.h)
-            : SizedBox(),
+            : const SizedBox.shrink(),
       ),
     );
   }
@@ -180,128 +182,77 @@ class _QuestionAndAnsScreenState extends State<QuestionAndAnsScreen> {
             question.value,
             style: TextStyle(fontSize: 24.sp, height: 1.35.h, fontWeight: FontWeight.w600, color: AppColors.primaryColor),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
             AppString.addYourVehicleInformationForBetterSearch,
             style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14.h, color: AppColors.grey60),
           ),
-          Column(children: [
-            ListView.separated(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, listIndex) {
-                  return CheckboxListTile(
-                    checkColor: AppColors.primaryColor,
-                    side: BorderSide(color: AppColors.transparent),
-                    checkboxShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(3.r),
-                      side: BorderSide(
-                        color: AppColors.whiteColor,
-                        width: 0,
+          Column(
+            children: [
+              ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, listIndex) {
+                    return CheckboxListTile(
+                      checkColor: AppColors.primaryColor,
+                      side: BorderSide(color: AppColors.transparent),
+                      checkboxShape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(3.r),
+                        side: BorderSide(
+                          color: AppColors.whiteColor,
+                          width: 0,
+                        ),
                       ),
-                    ),
-                    visualDensity: VisualDensity.standard,
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      answers[listIndex],
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        letterSpacing: 0.2,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.primaryColor,
+                      visualDensity: VisualDensity.standard,
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        answers[listIndex],
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          letterSpacing: 0.2,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryColor,
+                        ),
                       ),
-                    ),
-                    value: selectedAnswer == answers[listIndex],
-                    onChanged: (bool? value) {
-                      if (value == true) {
-                        controller.selectedAnswers[index.value] = answers[listIndex]; // Store answer by index
-                        controller.selectedResponse.add({
-                          "answer": "${answers[listIndex]}",
-                          "question": "${questionKey.value}",
-                        });
-                      } else {
-                        controller.selectedAnswers.remove(index.value);
-                        controller.selectedResponse.remove(questionKey.value);
-                      }
-                      setState(() {});
-                    },
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Divider(
-                    height: 15.h,
-                    thickness: 0.5.h,
-                    color: AppColors.borderColor,
-                  );
-                },
-                itemCount: answers.length),
-          ])
-          // Column(children: [
-          //   CheckboxListTile(
-          //     checkColor: AppColors.primaryColor,
-          //     side: BorderSide(color: AppColors.transparent),
-          //     checkboxShape: RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.circular(3.r),
-          //       side: BorderSide(
-          //         color: AppColors.whiteColor,
-          //         width: 0,
-          //       ),
-          //     ),
-          //     visualDensity: VisualDensity.standard,
-          //     contentPadding: EdgeInsets.zero,
-          //     title: Text(
-          //       answers[index.value],
-          //       style: TextStyle(
-          //         fontSize: 16.sp,
-          //         letterSpacing: 0.2,
-          //         fontWeight: FontWeight.w600,
-          //         color: AppColors.primaryColor,
-          //       ),
-          //     ),
-          //     value: selectedAnswer == answers[index.value],
-          //     onChanged: (bool? value) {
-          //       if (value == true) {
-          //         controller.selectedAnswers[index.value] = answers[index.value]; // Store answer by index
-          //         controller.selectedResponse[questionKey.value] = answers[index.value]; // Store answer by key
-          //       } else {
-          //         controller.selectedAnswers.remove(index.value);
-          //         controller.selectedResponse.remove(questionKey.value); // Remove the answer if unchecked
-          //       }
-          //       setState(() {});
-          //     },
-          //   ),
-          // ]
+                      value: selectedAnswer == answers[listIndex],
+                      onChanged: (bool? value) {
+                        log('Q&A===>onChanged 00  answers[listIndex]::${answers[listIndex]} value::$value');
+
+                        if (value == true) {
+                          log('Q&A===>onChanged 01 listIndex::$listIndex answers[listIndex]::${answers[listIndex]}');
+                          controller.selectedAnswers[index.value] = answers[listIndex]; // Store answer by index
+                          log('Q&A===>onChanged 02 BEFORE controller.selectedResponseList::${controller.selectedResponseList.toString()}');
+                          log('Q&A===>onChanged 02 BEFORE controller.selectedAnswers::${controller.selectedAnswers.toString()}');
+                          controller.selectedResponseList.removeWhere((element) => element.question == questionKey.value);
+
+                          controller.selectedResponseList.add(SelectedQnsAnsModel(
+                            answer: "${answers[listIndex]}",
+                            question: questionKey.value,
+                          ));
+                          log('Q&A===>onChanged 03 AFTER controller.selectedResponseList::${controller.selectedResponseList.toString()}');
+                          log('Q&A===>onChanged 03 AFTER controller.selectedAnswers::${controller.selectedAnswers.toString()}');
+                        } else {
+                          controller.selectedAnswers.remove(index.value);
+                          controller.selectedResponseList.removeWhere((element) => element.question == questionKey.value);
+                          log('Q&A===>onChanged 04 FALSE AFTER controller.selectedResponseList::${controller.selectedResponseList.toString()}');
+                          log('Q&A===>onChanged 04 FALSE AFTER controller.selectedAnswers::${controller.selectedAnswers.toString()}');
+                        }
+                        setState(() {});
+                      },
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return Divider(
+                      height: 15.h,
+                      thickness: 0.5.h,
+                      color: AppColors.borderColor,
+                    );
+                  },
+                  itemCount: answers.length),
+            ],
+          )
         ],
       ),
-    );
-  }
-
-  void _showSelectedAnswers(QuestionAndAnsController controller) {
-    print(controller.selectedResponse);
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          scrollable: true,
-          title: Text('Selected Answers'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: controller.selectedResponse.map((entry) {
-              return ListTile(
-                title: Text("$entry: $entry"),
-              );
-            }).toList(),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                controller.clearAll();
-              },
-              child: Text('Close'),
-            ),
-          ],
-        );
-      },
     );
   }
 }

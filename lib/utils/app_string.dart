@@ -8,12 +8,34 @@ class AppString {
   static const String beforeWeGetStarted = "Before we get started, let's complete your profile";
   static const String letsGetStarted = 'Lets Get Started';
   static const String mayIInquireAboutYourName = 'May I inquire about your name?';
+  static const String loginWithEmailID = 'Login With email ID';
+  static const String createANewPassword = 'Create a new password';
+  static const String createAccountWithEmail = 'Create account with Email';
+  static const String login = 'Login';
+  static const String save = 'Save';
   static const String tapToAdd = 'Tap to add';
+  static const String verify = 'Verify';
   static const String vehicleInformation = 'Vehicle information';
   static const String iLoveToKnowWhatToCallYou = "I'd love to know what to call you.";
+  static const String signInWithTheInformationYouUsedToMakeYourAccount = "Sign in with the information you used to make your account.";
+  static const String forgotSubText = "Don't worry we have your back. Let us know your email ID and we will help you recover your account.";
+  static const String otpSubText = "A security 6 digit code has been send to your registered email ID.";
+  static const String createNewPasswordSubText = "Great! Now create a strong password to secure your account.";
+  static const String createNewAccountSubText = "You can now use google or Email to Sign into your account.";
   static const String firstName = "First Name";
+  static const String didNotReceivedTheCode = "Didn’t received the code?";
+  static const String resendIn = "Resend in";
+  static const String signIn = "Sign in";
   static const String lastName = "Last Name";
+  static const String createAccount = "Create Account";
+  static const String forgotPassword = "Forgot password?";
+  static const String codeHasBeenSen = "A code has been sen";
   static const String email = "Email";
+  static const String password = "Password";
+  static const String newPassword = "New Password";
+  static const String createPassword = "Create Password";
+  static const String confirmPassword = "Confirm Password";
+  static const String enterPassword = "Enter password";
   static const String finish = "Finish";
   static const String emailEx = "Some@example.com";
   static const String postCode = "Post Code";
@@ -41,6 +63,7 @@ class AppString {
   static const String updateProfile = "Update Profile";
   static const String profile = "Profile";
   static const String logout = "Logout";
+  static const String alreadyWithUs = "Already with us?";
   static const String myVehicle = "My Vehicle";
   static const String newVehicle = "New Vehicle";
   static const String goodMorning = "Good Morning!";
@@ -57,6 +80,7 @@ class AppString {
   static const String repairedRecently = "Repaired Recently";
   static const String currentMileage = "Current mileage";
   static const String edit = "Edit";
+  static const String or = "or";
   static const String downloadPDF = "Download PDF";
   static const String delete = "Delete";
   static const String changeSubscriptionPlan = "Change Subscription Plan";
@@ -91,4 +115,8 @@ class AppString {
 
   /// SharedPreferences :::
   static const String authToken = "authToken";
+
+  ///STRING CONST FOR CONST
+  static const String editScreen = "Edit Screen";
+  static const String newVehicleAdd = "New Vehicle Add";
 }

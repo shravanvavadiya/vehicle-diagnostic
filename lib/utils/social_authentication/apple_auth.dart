@@ -28,9 +28,7 @@ class LoginController extends GetxController {
       print("credential.identityToken :: ${credential.identityToken}");
       appleEmail.value = credential.email ?? '';
       appleId.value = credential.userIdentifier ?? '';
-      Navigation.push(GetStartedScreen(
-
-      ));
+      Get.offAll(GetStartedScreen());
     } catch (e) {
       log('apple auth error :: $e');
     } finally {

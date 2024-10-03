@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../modules/authentication/models/authapi_res.dart';
 import '../../modules/authentication/widget/story_view_screen.dart';
+import '../../modules/profile/models/get_user_model.dart';
 import '../../utils/constants.dart';
 
 class SharedPreferencesHelper {
@@ -66,13 +67,13 @@ class SharedPreferencesHelper {
     return value ?? false;
   }
 
-  // Future setUserInfo(PersonalInformationModel? user) async {
-  //   await prefs?.setString(Constants.keyUser, jsonEncode(user));
-  // }
-  //
-  // PersonalInformationModel? getUserInfo() {
-  //   return PersonalInformationModel.fromJson(jsonDecode(prefs?.get(Constants.keyUser) as String? ?? ""));
-  // }
+  Future setUserInfo(GetUserProfileModel? user) async {
+    await prefs?.setString(Constants.keyUser, jsonEncode(user));
+  }
+
+  GetUserProfileModel? getUserInfo() {
+    return GetUserProfileModel.fromJson(jsonDecode(prefs?.get(Constants.keyUser) as String? ?? ""));
+  }
 
   // Future setUser(AuthApiRes? user) async {
   //   await prefs?.setString(Constants.keyUser, jsonEncode(user));

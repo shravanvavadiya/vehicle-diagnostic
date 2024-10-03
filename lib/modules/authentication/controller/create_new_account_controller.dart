@@ -53,13 +53,14 @@ class CreateNewAccountController extends GetxController with LoadingMixin, Loadi
         print("result $result");
         AppSnackBar.showErrorSnackBar(message: result.apiresponse!.data!.message ?? "", title: 'success');
         await Get.to(
-            OtpScreen(
-              screenNameFlag: AppString.createNewAccountFlag,
-              userEmailId: email,
-              confirmPassword: confirmPassword,
-              password: createPassword,
-            ),
-            transition: Transition.rightToLeft);
+          OtpScreen(
+            screenNameFlag: AppString.createNewAccountFlag,
+            userEmailId: email,
+            confirmPassword: confirmPassword,
+            password: createPassword,
+          ),
+          transition: Transition.rightToLeft,
+        );
       },
     );
 

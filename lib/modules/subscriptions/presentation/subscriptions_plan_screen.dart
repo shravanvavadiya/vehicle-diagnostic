@@ -16,8 +16,7 @@ class SubscriptionsPlanScreen extends StatefulWidget {
   const SubscriptionsPlanScreen({super.key});
 
   @override
-  State<SubscriptionsPlanScreen> createState() =>
-      _SubscriptionsPlanScreenState();
+  State<SubscriptionsPlanScreen> createState() => _SubscriptionsPlanScreenState();
 }
 
 class _SubscriptionsPlanScreenState extends State<SubscriptionsPlanScreen> {
@@ -49,18 +48,19 @@ class _SubscriptionsPlanScreenState extends State<SubscriptionsPlanScreen> {
           ).paddingOnly(left: 16.w),
           actions: [
             Container(
-              decoration: BoxDecoration(
-                  color: AppColors.whiteColor,
-                  borderRadius: BorderRadius.circular(30.r)),
-              child: AppText(
-                text: AppString.restore,
-                color: AppColors.primaryColor,
-                textDecoration: TextDecoration.underline,
-                fontWeight: FontWeight.w500,
-                fontSize: 14.sp,
-              ).paddingSymmetric(
-                vertical: 5.h,
-                horizontal: 12.w,
+              decoration: BoxDecoration(color: AppColors.whiteColor, borderRadius: BorderRadius.circular(30.r)),
+              child: Center(
+                child: AppText(
+                  textAlign: TextAlign.center,
+                  text: AppString.restore,
+                  color: AppColors.primaryColor,
+                  textDecoration: TextDecoration.underline,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14.sp,
+                ).paddingSymmetric(
+                  vertical: 5.h,
+                  horizontal: 12.w,
+                ),
               ),
             ).paddingSymmetric(
               vertical: 12.h,

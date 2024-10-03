@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_template/api/preferences/shared_preferences_helper.dart';
 import 'package:flutter_template/modules/dashboad/home/service/home_service.dart';
 import 'package:flutter_template/utils/common_api_caller.dart';
 import 'package:flutter_template/utils/loading_mixin.dart';
@@ -38,7 +39,6 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
     if (currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
       currentBackPressTime = now;
       Fluttertoast.showToast(msg: "Tap back again to leave");
-      // AppSnackBar();
       return Future.value(false);
     }
     return Future.value(true);
@@ -153,6 +153,9 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
         getUserProfileModel.value = data;
         log("profile image ::${data.profileResponse?.profileData?.photo}");
         log("${getUserProfileModel.value.profileResponse!.profileData!.firstName} ${getUserProfileModel.value.profileResponse!.profileData!.lastName}");
+        SharedPreferencesHelper().setUserInfo(getUserProfileModel.value);
+
+        log("user dave data ${SharedPreferencesHelper().getUserInfo()!.profileResponse!.profileData!.toJson()}");
       },
     );
   }

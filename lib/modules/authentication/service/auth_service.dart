@@ -92,11 +92,29 @@ class AuthService {
     } catch (e) {
       rethrow;
     }
+  }static Future<CreateNewAccountModel> forgotPasswordVerify(Map<String, dynamic> queryData) async {
+    try {
+      var result = await Api().post(url: ApiConstants.forgotPasswordVerify, queryData: queryData);
+      log('status: ${result.statusCode} body:${result.body}');
+      await ResponseHandler.checkResponseError(result);
+      return CreateNewAccountModel.fromJson(jsonDecode(utf8.decode(result.bodyBytes)));
+    } catch (e) {
+      rethrow;
+    }
   }
 
   static Future<CreateNewAccountModel?> resendOtp(Map<String, dynamic> queryData) async {
     try {
       var result = await Api().post(url: ApiConstants.resendOtp, queryData: queryData);
+      log('status: ${result.statusCode} body:${result.body}');
+      await ResponseHandler.checkResponseError(result);
+      return CreateNewAccountModel.fromJson(jsonDecode(utf8.decode(result.bodyBytes)));
+    } catch (e) {
+      rethrow;
+    }
+  }static Future<CreateNewAccountModel?> resetPassword(Map<String, dynamic> queryData) async {
+    try {
+      var result = await Api().post(url: ApiConstants.resetPassword, queryData: queryData);
       log('status: ${result.statusCode} body:${result.body}');
       await ResponseHandler.checkResponseError(result);
       return CreateNewAccountModel.fromJson(jsonDecode(utf8.decode(result.bodyBytes)));

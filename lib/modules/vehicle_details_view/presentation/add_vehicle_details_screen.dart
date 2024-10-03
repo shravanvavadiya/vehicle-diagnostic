@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:ffi';
 import 'dart:io';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -173,12 +174,105 @@ class AddVehicleDetailsScreen extends StatelessWidget {
                       text: AppString.vehicleYear,
                       keyboardType: TextInputType.number,
                       hintText: AppString.vehicleYear,
-                      maxLength: 4,
+                      readOnly: true,
+                      onTap: () {
+                        Get.bottomSheet(
+                            isDismissible: false,
+                            isScrollControlled: false,
+                            backgroundColor: AppColors.transparent,
+                            ClipRRect(
+                              borderRadius: BorderRadius.only(topLeft: Radius.circular(18.r), topRight: Radius.circular(18.r)),
+                              child: Container(
+                                color: AppColors.backgroundColor,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        AppText(
+                                          text: AppString.vehicleYear,
+                                          color: AppColors.blackColor,
+                                          fontSize: 22.sp,
+                                          fontWeight: FontWeight.w600,
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.back();
+                                          },
+                                          child: Container(
+                                            height: 40.h,
+                                            width: 40.h,
+                                            decoration: BoxDecoration(
+                                              color: AppColors.backgroundColor,
+                                              borderRadius: BorderRadius.circular(150.r),
+                                            ),
+                                            child: Center(
+                                              child: Icon(
+                                                Icons.clear,
+                                                color: AppColors.blackColor,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ).paddingOnly(left: 16.w, right: 16.w, top: 16.h),
+                                    Container(
+                                      height: 250.h,
+                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.r)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: CupertinoPicker(
+                                          diameterRatio: 1,
+                                          magnification: 1.1,
+                                          onSelectedItemChanged: (value) {
+                                            vehicleDetailController.selectedYear.value = vehicleDetailController.currentYear.value - value;
+                                            vehicleDetailController.vehicleYear.text = vehicleDetailController.selectedYear.value.toString();
+                                            vehicleDetailController.isValidateVYear.value = vehicleDetailController.vehicleYear.text.isNotEmpty;
+                                          },
+                                          itemExtent: 32.0,
+                                          children: List<Widget>.generate(
+                                            vehicleDetailController.currentYear.value - 1970 + 1,
+                                            (index) {
+                                              return Center(
+                                                child: AppText(
+                                                  text: '${vehicleDetailController.currentYear.value - index}',
+                                                ),
+                                              ).paddingOnly(top: 5.h, bottom: 5.w);
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ).paddingOnly(left: 16.w, right: 16.w),
+                                    CustomButton(
+                                      height: 50.h,
+                                      buttonColor: AppColors.highlightedColor,
+                                      onTap: () {
+                                        vehicleDetailController.vehicleYear.text = vehicleDetailController.selectedYear.value.toString();
+                                        vehicleDetailController.isValidateVYear.value = true;
+
+                                        Get.back();
+                                      },
+                                      text: AppString.save,
+                                    ).paddingOnly(left: 16.w, right: 15.w, bottom: 16.h)
+                                  ],
+                                ),
+                              ),
+                            ));
+                      },
                       validator: AppValidation.vehicleYearValidator,
                       controller: vehicleDetailController.vehicleYear,
-                      onChanged: (String) {
-                        vehicleDetailController.isValidateVYear.value = vehicleDetailController.vehicleYear.text.isNotEmpty;
-                      },
+                      suffixIcon: Transform.scale(
+                        scale: 0.3,
+                        child: SvgPicture.asset(
+                          IconAsset.downArrow,
+                        ),
+                      ),
+                      onChanged: (String) {},
                     ),
                     selectionTextField(
                       context,
@@ -237,7 +331,8 @@ class AddVehicleDetailsScreen extends StatelessWidget {
                                 vehicleDetailController.isValidateVModel.value &&
                                 vehicleDetailController.isValidateVType.value &&
                                 vehicleDetailController.isValidateVType.value &&
-                                vehicleDetailController.isValidateVFuelT.value)
+                                vehicleDetailController.isValidateVFuelT.value &&
+                                (vehicleDetailController.image.value.isNotEmpty || vehicleDetailController.networkImage.value.isNotEmpty))
                             ? false
                             : true,
                         height: 52.h,

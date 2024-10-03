@@ -178,7 +178,7 @@ class _OTPTextFieldState extends State<OTPTextField> {
           ),
       child: TextField(
         controller: _textControllers[index],
-        keyboardType: widget.keyboardType,
+        keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         style: widget.style,
         inputFormatters: widget.inputFormatter,

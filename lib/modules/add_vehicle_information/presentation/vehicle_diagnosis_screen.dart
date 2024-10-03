@@ -53,9 +53,10 @@ class _VehicleDiagnosisScreenState extends State<VehicleDiagnosisScreen> {
                     await questionAndAnsController.preLoadDataFunction(vehicleId: widget.vehicleId);
                     setState(() {});
                   }
-                  Get.to(
+                  await Get.to(
                     QuestionAndAnsScreen(screenName: widget.screenName, vehicleId: widget.vehicleId),
                   );
+                  setState(() {});
                 },
                 noOnTap: () {
                   widget.screenName == AppString.editScreenFlag ? Get.offAll(HomeScreen()) : Get.offAll(HomeScreen());

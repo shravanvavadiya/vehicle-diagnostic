@@ -54,6 +54,7 @@ class Utils {
               if (selectImage?.path.isNotEmpty ?? false) {
                 image?.value = selectImage?.path ?? "";
               }
+
             },
           ),
           CupertinoActionSheetAction(

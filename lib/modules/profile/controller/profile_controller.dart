@@ -43,11 +43,31 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
   void onInit() {
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
-        getUserProfileAPI();
+        getUserProfileModel.value = SharedPreferencesHelper().getUserInfo()!;
+        firstname.text = getUserProfileModel.value.profileResponse!.profileData!.firstName!;
+        lastname.text = getUserProfileModel.value.profileResponse!.profileData!.lastName!;
+        email.text = getUserProfileModel.value.profileResponse!.profileData!.email!;
+        postCode.text = getUserProfileModel.value.profileResponse!.profileData!.postCode!;
+        postCode.text = getUserProfileModel.value.profileResponse!.profileData!.postCode!;
+        image?.value = getUserProfileModel.value.profileResponse!.profileData!.photo!;
+        //
+
+        isValidateName.value = true;
+        isValidateLastName.value = true;
+        isValidateEmail.value = true;
+        isValidatePostCode.value = true;
+        isValidateImage.value = true;
+
+        firstname.addListener(checkIfModified);
+        lastname.addListener(checkIfModified);
+        email.addListener(checkIfModified);
+        postCode.addListener(checkIfModified);
       },
     );
     super.onInit();
   }
+
+  RxBool isModified = false.obs;
 
   clearData() {
     firstname.clear();
@@ -56,28 +76,15 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
     postCode.clear();
   }
 
-  /// GetUserAPI ::
-
-  Future<void> getUserProfileAPI() async {
-    processApi(
-      () => ProfileService.getUserAPI(userId: AppPreference.getInt("UserId")),
-      loading: handleLoading,
-      result: (data) {
-        log("profile image ::${data.profileResponse?.profileData?.photo}");
-        getUserProfileModel.value = data;
-        final profileData = getUserProfileModel.value.profileResponse?.profileData;
-        firstname.text = profileData?.firstName.toString() ?? "";
-        lastname.text = profileData?.lastName.toString() ?? "";
-        email.text = profileData?.email.toString() ?? "";
-        postCode.text = profileData?.postCode.toString() ?? "";
-        image?.value = profileData?.photo ?? "";
-        log("image.value ::${image?.value}");
-      },
-    );
+  void checkIfModified() {
+    isModified.value = firstname.text != getUserProfileModel.value.profileResponse?.profileData?.firstName ||
+        lastname.text != getUserProfileModel.value.profileResponse?.profileData?.lastName ||
+        email.text != getUserProfileModel.value.profileResponse?.profileData?.email ||
+        postCode.text != getUserProfileModel.value.profileResponse?.profileData?.postCode ||
+        image!.value != getUserProfileModel.value.profileResponse?.profileData?.photo;
   }
 
   /// Update User API::
-
   Future<void> updateUserProfileAPI({
     required String email,
     required String firstname,
@@ -98,7 +105,7 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
       result: (data) async {
         log("Controller Data :: ${data?.apiresponse?.data?.photo}");
         updateUserProfileModel.value = data!;
-        // Navigation.pushNamed(Routes.homeScreen);
+        SharedPreferencesHelper().setUserInfo(getUserProfileModel.value);
         Get.offAll(HomeScreen());
       },
     );

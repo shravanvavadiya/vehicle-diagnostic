@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_template/widget/app_snackbar.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -30,7 +31,7 @@ class ForgotPasswordController extends GetxController with LoadingMixin, Loading
 
   TextEditingController emailController = TextEditingController();
 
-  Future<CreateNewAccountModel?> resendOtp({required String email}) async {
+  Future<CreateNewAccountModel?> forgotPasswordOtpFunction({required String email}) async {
     handleLoading(true);
     Map<String, dynamic> mapData = {
       "email": email,
@@ -40,6 +41,7 @@ class ForgotPasswordController extends GetxController with LoadingMixin, Loading
       handleLoading(false);
     }, result: (result) async {
       print("forgot password $result");
+      AppSnackBar.showErrorSnackBar(message: result!.apiresponse!.data!.message ?? "", title: "success");
       Get.to(
         OtpScreen(
           screenNameFlag: AppString.forgotPasswordFlag,

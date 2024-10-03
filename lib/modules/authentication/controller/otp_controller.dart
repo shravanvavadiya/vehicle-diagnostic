@@ -36,7 +36,8 @@ class OtpController extends GetxController with LoadingMixin, LoadingApiMixin {
   RxString buttonName = AppString.verify.obs;
   RxString didNotReceivedTheCode = AppString.didNotReceivedTheCode.obs;
   RxBool textFieldValidation = false.obs;
-  OtpFieldController otpController = OtpFieldController();
+  TextEditingController pinController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   OtpController({required String flag}) {
     screenNameFlag.value = flag;
@@ -47,7 +48,11 @@ class OtpController extends GetxController with LoadingMixin, LoadingApiMixin {
   Timer? timer;
 
   void startTimer() {
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    timer?.cancel(); // Cancel any previous timer
+
+    secondsRemaining.value = maxSeconds; // Reset the timer to 60 seconds
+
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (secondsRemaining.value > 0) {
         secondsRemaining.value--;
       } else {
@@ -63,6 +68,7 @@ class OtpController extends GetxController with LoadingMixin, LoadingApiMixin {
   }
 
   Future<CreateNewAccountModel?> accountOtpVerifyFunction({required String email, required String otp}) async {
+    print("$email ::: ${otp}");
     handleLoading(true);
     Map<String, dynamic> mapData = {
       "email": email,
@@ -74,16 +80,12 @@ class OtpController extends GetxController with LoadingMixin, LoadingApiMixin {
     }, result: (result) async {
       print("result  ${result.apiresponse!.data!.toJson()}");
 
-      screenNameFlag.value != AppString.createNewAccountFlag
-          ? Get.back()
-          : {
-              log("${result.apiresponse?.data?.token}"),
-              await SharedPreferencesHelper.instance.setUserToken(result.apiresponse?.data?.token ?? ""),
-              SharedPreferencesHelper.instance.setString("email", result.apiresponse!.data!.email!),
-              print("user id ${AppPreference.getInt("UserId")}"),
-              log("user profile status :${result.apiresponse!.data!.profileCompleted}"),
-              Get.offAll(const UserInformationScreen(), transition: Transition.rightToLeft)
-            };
+      log("${result.apiresponse?.data?.token}");
+      await SharedPreferencesHelper.instance.setUserToken(result.apiresponse?.data?.token ?? "");
+      SharedPreferencesHelper.instance.setString("email", result.apiresponse!.data!.email!);
+      print("user id ${AppPreference.getInt("UserId")}");
+      log("user profile status :${result.apiresponse!.data!.profileCompleted}");
+      Get.offAll(const UserInformationScreen(), transition: Transition.rightToLeft);
     });
     return null;
   }
@@ -99,7 +101,30 @@ class OtpController extends GetxController with LoadingMixin, LoadingApiMixin {
     }, result: (result) async {
       print("resend otp verify success $result");
       startTimer();
-      Get.back();
+      AppSnackBar.showErrorSnackBar(message: "${result!.apiresponse!.data!.message}", title: "success");
+      // Get.back();
+      handleLoading(false);
+    });
+    handleLoading(false);
+    return null;
+  }
+
+  Future<CreateNewAccountModel?> forgotPasswordOtpVerifyFunction({required String email, required String otp}) async {
+    print("$email ::: ${otp}");
+    handleLoading(true);
+    Map<String, dynamic> mapData = {
+      "email": email,
+      "otp": otp,
+    };
+    await processApi(() => AuthService.forgotPasswordVerify(mapData), error: (error, stack) {
+      log("otp verify error ---> $error --- $stack");
+      handleLoading(false);
+    }, result: (result) async {
+      Get.to(
+          CreateNewPasswordScreen(
+            userEmail: email,
+          ),
+          transition: Transition.rightToLeft);
     });
     return null;
   }

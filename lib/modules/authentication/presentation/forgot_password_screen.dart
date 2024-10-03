@@ -19,7 +19,7 @@ import '../../../widget/info_text_widget.dart';
 import '../../dashboad/home/presentation/home_screen.dart';
 import '../../personal_information_view/presentation/user_information_screen.dart';
 import '../controller/forgot_password_controller.dart';
-import '../controller/log_in_with_email_id_controller.dart';
+import '../controller/create_new_password_controller.dart';
 import 'otp_screen.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
@@ -57,21 +57,21 @@ class ForgotPasswordScreen extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ).paddingOnly(bottom: 32.h),
                       customTextFormField(
-                              onChanged: (p0) {},
-                              text: AppString.email,
-                              hintText: AppString.emailEx,
-                              validator: AppValidation.emailValidator,
-                              textCapitalization: TextCapitalization.words,
-                              controller: controller.emailController,
-                              keyboardType: TextInputType.emailAddress)
-                          .paddingOnly(top: 24.h, bottom: 16.h),
+                        onChanged: (p0) {},
+                        text: AppString.email,
+                        hintText: AppString.emailEx,
+                        validator: AppValidation.emailValidator,
+                        textCapitalization: TextCapitalization.none,
+                        controller: controller.emailController,
+                        keyboardType: TextInputType.emailAddress,
+                      ).paddingOnly(top: 24.h, bottom: 16.h),
                       Container(
                         height: 68.h,
                         child: Center(
                           child: CustomButton(
                             height: 50.h,
                             onTap: () {
-                              controller.formKey.currentState!.validate() ? {controller.resendOtp(email: controller.emailController.text)} : {};
+                              controller.formKey.currentState!.validate() ? {controller.forgotPasswordOtpFunction(email: controller.emailController.text)} : {};
                             },
                             text: controller.buttonName.value,
                           ),

@@ -46,9 +46,9 @@ class MyApp extends StatelessWidget {
               ],
               title: AppString.appName,
               initialBinding: AppBidding(),
-              // initialRoute: Routes.logInWithEmailId,
+              // initialRoute: Routes.createNewPasswordScreen,
               initialRoute: Routes.splash,
-              // initialRoute: Routes.questionAndAnsScreenDemo,
+              // initialRoute: Routes.demo01,
               getPages: Routes.pages,
               builder: (context, child) {
                 return Scaffold(

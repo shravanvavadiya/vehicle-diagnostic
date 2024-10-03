@@ -23,8 +23,9 @@ import '../../../utils/utils.dart';
 import '../../../utils/validation_utils.dart';
 
 class UserInformationScreen extends StatelessWidget {
-
-  const UserInformationScreen({super.key, });
+  const UserInformationScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -213,19 +214,19 @@ class UserInformationScreen extends StatelessWidget {
   }
 }
 
-Widget customTextFormField({
-  String? Function(String?)? validator,
-  required String text,
-  required String hintText,
-  int? maxLength,
-  TextCapitalization? textCapitalization,
-  bool? readOnly,
-  Function(String)? onChanged,
-  required TextEditingController controller,
-  TextInputType keyboardType = TextInputType.text,
-  Widget? suffixIcon,
-  bool? showPassword,
-}) {
+Widget customTextFormField(
+    {String? Function(String?)? validator,
+    required String text,
+    required String hintText,
+    int? maxLength,
+    TextCapitalization? textCapitalization,
+    bool? readOnly,
+    Function(String)? onChanged,
+    required TextEditingController controller,
+    TextInputType keyboardType = TextInputType.text,
+    Widget? suffixIcon,
+    bool? showPassword,
+    VoidCallback? onTap}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -245,6 +246,7 @@ Widget customTextFormField({
         keyboardType: keyboardType,
         suffix: suffixIcon,
         isPassword: showPassword ?? false,
+        onTap: onTap,
       ),
     ],
   );

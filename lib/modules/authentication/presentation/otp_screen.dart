@@ -8,6 +8,7 @@ import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/widget/annotated_region.dart';
 import 'package:flutter_template/widget/app_snackbar.dart';
 import 'package:get/get.dart';
+import 'package:pinput/pinput.dart';
 
 import '../../../custome_package/lib/otp_field.dart';
 import '../../../custome_package/lib/otp_field_style.dart';
@@ -24,7 +25,7 @@ import '../../../widget/info_text_widget.dart';
 import '../../dashboad/home/presentation/home_screen.dart';
 import '../../personal_information_view/presentation/user_information_screen.dart';
 import '../controller/forgot_password_controller.dart';
-import '../controller/log_in_with_email_id_controller.dart';
+import '../controller/create_new_password_controller.dart';
 import '../controller/otp_controller.dart';
 import 'create_new_password_screen.dart';
 
@@ -53,11 +54,7 @@ class OtpScreen extends StatelessWidget {
             appBar: PreferredSize(
               preferredSize: Size(0, 45.h),
               child: AppBar(
-                leading: CustomBackArrowWidget(
-                  onTap: () {
-                    Get.back();
-                  },
-                ).paddingAll(6.r),
+                leading: const CustomBackArrowWidget().paddingAll(6.r),
                 backgroundColor: Colors.white,
                 elevation: 0,
               ),
@@ -68,7 +65,7 @@ class OtpScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     InfoTextWidget(
                       title: controller.screenName.value,
                       titleFontSize: 24.sp,
@@ -77,7 +74,7 @@ class OtpScreen extends StatelessWidget {
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
                     ).paddingOnly(bottom: 32.h),
-                    Align(
+                    /*Align(
                       alignment: Alignment.bottomLeft,
                       child: Center(
                         child: OTPTextField(
@@ -114,7 +111,80 @@ class OtpScreen extends StatelessWidget {
                               controller.textFieldValidation.value = true;
                             }),
                       ).paddingOnly(top: 24.h, bottom: 16.h),
-                    ),
+                    ),*/
+
+                    Form(
+                      key: controller.formKey,
+                      child: Center(
+                        child: Pinput(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          length: 6,
+                          keyboardType: TextInputType.number,
+                          controller: controller.pinController,
+                          autofocus: false,
+                          defaultPinTheme: PinTheme(
+                            width: 49.w,
+                            height: 56.h,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4.r),
+                              color: AppColors.backgroundColor,
+                            ),
+                          ),
+                          focusedPinTheme: PinTheme(
+                            width: 49.w,
+                            height: 56.h,
+                            textStyle:
+                                TextStyle(fontSize: 24.sp, color: AppColors.blackColor, fontWeight: FontWeight.w600, fontFamily: AppString.fontName),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4.r),
+                              color: AppColors.backgroundColor,
+                            ),
+                          ),
+                          pinputAutovalidateMode: PinputAutovalidateMode.disabled,
+                          validator: (value) {
+                            log(value!.length.toString());
+                            if (value.isEmpty) {
+                              return 'Please enter the OTP';
+                            }
+
+                            return null;
+                          },
+                          errorPinTheme: PinTheme(
+                            width: 49.w,
+                            height: 56.h,
+                            textStyle:
+                                TextStyle(fontSize: 24.sp, color: AppColors.blackColor, fontWeight: FontWeight.w600, fontFamily: AppString.fontName),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.redColor),
+                              borderRadius: BorderRadius.circular(4.r),
+                              color: AppColors.backgroundColor,
+                            ),
+                          ),
+                          submittedPinTheme: PinTheme(
+                            width: 49.w,
+                            height: 56.h,
+                            textStyle:
+                                TextStyle(fontSize: 24.sp, color: AppColors.blackColor, fontWeight: FontWeight.w600, fontFamily: AppString.fontName),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4.r),
+                              color: AppColors.backgroundColor,
+                            ),
+                          ),
+                          textInputAction: TextInputAction.next,
+                          cursor: Container(
+                            height: 30.h,
+                            color: AppColors.highlightedColor,
+                            width: 2,
+                          ),
+                          showCursor: true,
+                          onCompleted: (value) {
+                            print("onCompleted value $value");
+                            controller.textFieldValidation.value = true;
+                          },
+                        ),
+                      ),
+                    ).paddingOnly(bottom: 24.h),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -123,42 +193,47 @@ class OtpScreen extends StatelessWidget {
                           controller.didNotReceivedTheCode.value,
                           style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400, color: AppColors.primaryColor),
                         ),
-                        Row(
-                          children: [
-                            AppText(
-                              text: AppString.resendIn,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.primaryColor,
-                            ).paddingOnly(right: 7.w),
-                            GestureDetector(
-                              onTap: controller.formatTime(controller.secondsRemaining.value).value != "00:00"
-                                  ? () {}
-                                  : () {
-                                      controller.resendOtp(
-                                        email: userEmailId,
-                                      );
-                                    },
-                              child: Container(
-                                color: Colors.transparent,
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.watch_later,
-                                      color: Colors.black,
-                                    ).paddingOnly(right: 7.w),
-                                    AppText(
-                                      text: controller.formatTime(controller.secondsRemaining.value).value,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.blackColor,
-                                      fontSize: 13.sp,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        )
+                        controller.formatTime(controller.secondsRemaining.value).value == "00:00"
+                            ? GestureDetector(
+                                onTap: () {
+                                  controller.resendOtp(
+                                    email: userEmailId,
+                                  );
+                                },
+                                child: AppText(
+                                  text: AppString.resendOtp,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.blackColor,
+                                  fontSize: 13.sp,
+                                ).paddingOnly(right: 7.w),
+                              )
+                            : Row(
+                                children: [
+                                  AppText(
+                                    text: AppString.resendIn,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: AppColors.primaryColor,
+                                  ).paddingOnly(right: 7.w),
+                                  Container(
+                                    color: Colors.transparent,
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.watch_later,
+                                          color: Colors.black,
+                                        ).paddingOnly(right: 7.w),
+                                        AppText(
+                                          text: controller.formatTime(controller.secondsRemaining.value).value,
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColors.blackColor,
+                                          fontSize: 13.sp,
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              )
                       ],
                     ).paddingOnly(bottom: 24.h, top: 8.h),
                     Container(
@@ -166,15 +241,14 @@ class OtpScreen extends StatelessWidget {
                       child: Center(
                         child: CustomButton(
                           height: 50.h,
-                          buttonColor:
-                              controller.textFieldValidation.value == true ? AppColors.highlightedColor : AppColors.highlightedColor.withOpacity(0.5),
-                          onTap: controller.textFieldValidation.value == false
-                              ? () {}
-                              : () {
-                                  screenNameFlag == AppString.forgotPasswordFlag
-                                      ? {}
-                                      : {controller.accountOtpVerifyFunction(email: userEmailId, otp: controller.filledOtp.value)};
-                                },
+                          buttonColor: AppColors.highlightedColor,
+                          onTap: () {
+                            controller.formKey.currentState!.validate()
+                                ? screenNameFlag == AppString.forgotPasswordFlag
+                                    ? {controller.forgotPasswordOtpVerifyFunction(email: userEmailId, otp: controller.pinController.text)}
+                                    : {controller.accountOtpVerifyFunction(email: userEmailId, otp: controller.pinController.text)}
+                                : {};
+                          },
                           text: controller.buttonName.value,
                         ),
                       ),

@@ -6,7 +6,9 @@ class ApiConstants {
   static const String accountCreate = "auth/register";
   static const String accountLogin = "auth/login";
   static const String accountOtpVerify = "auth/user-verify";
+  static const String forgotPasswordVerify = "auth/password-otp-verify";
   static const String resendOtp = "auth/forgotpassword";
+  static const String resetPassword = "auth/reset-password";
   static const String user = "user/";
   static const String updateUser = "user/update";
   static const String getAllVehicle = "vehicle/all";

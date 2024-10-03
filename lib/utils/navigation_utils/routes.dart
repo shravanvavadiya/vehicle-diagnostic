@@ -13,6 +13,7 @@ import '../../demo/demo_1.dart';
 import '../../demo/pre_load_data.dart';
 import '../../modules/add_vehicle_information/presentation/question_answer.dart';
 import '../../modules/add_vehicle_information/presentation/vehicle_diagnosis_screen.dart';
+import '../../modules/authentication/presentation/create_new_password_screen.dart';
 import '../../modules/authentication/presentation/log_in_with_email_id.dart';
 import '../../modules/profile/presentation/account_information_screen.dart';
 import '../../modules/subscriptions/presentation/subscriptions_plan_screen.dart';
@@ -23,6 +24,7 @@ mixin Routes {
   // get started
   static const String questionAndAnsScreenDemo = '/QuestionAndAnsScreenDemo';
   static const String splash = '/splash';
+  static const String createNewPasswordScreen = '/CreateNewPasswordScreen';
   static const String demo01 = '/demo01';
   static const String logInWithEmailId = '/logInWithEmailId';
   static const String homeScreen = '/home';
@@ -42,12 +44,19 @@ mixin Routes {
   static List<GetPage<dynamic>> pages = [
     GetPage<dynamic>(
       name: demo01,
-      page: () => QuestionAndAnsScreenDemo(),
+      page: () => TextFieldButtonExample(),
       transition: defaultTransition,
     ),
     GetPage<dynamic>(
       name: logInWithEmailId,
       page: () => LogInWithEmailIdScreen(),
+      transition: defaultTransition,
+    ),
+    GetPage<dynamic>(
+      name: createNewPasswordScreen,
+      page: () => CreateNewPasswordScreen(
+        userEmail: "123@gmail.com",
+      ),
       transition: defaultTransition,
     ),
     GetPage<dynamic>(

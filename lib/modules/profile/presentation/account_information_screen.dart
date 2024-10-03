@@ -110,58 +110,27 @@ class AccountInformationScreen extends StatelessWidget {
                                                   height: 150.h,
                                                   width: 150.h,
                                                   fit: BoxFit.cover,
-                                                  errorBuilder: (context, error, stackTrace) => Image.file(
-                                                    File(profileController.image!.value),
-                                                    fit: BoxFit.cover,
-                                                    frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                                                      if (frame == null) {
-                                                        return Center(
-                                                          child: CircularProgressIndicator(color: AppColors.highlightedColor),
-                                                        );
-                                                      }
-                                                      return child;
-                                                    },
-                                                  ),
+                                                  errorBuilder: (context, error, stackTrace) {
+                                                    Future.microtask(
+                                                      () {
+                                                        profileController.isModified.value = profileController.image!.value !=
+                                                            profileController.getUserProfileModel.value.profileResponse?.profileData?.photo;
+                                                      },
+                                                    );
+                                                    return Image.file(
+                                                      File(profileController.image!.value),
+                                                      fit: BoxFit.cover,
+                                                      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                                                        if (frame == null) {
+                                                          return Center(
+                                                            child: CircularProgressIndicator(color: AppColors.highlightedColor),
+                                                          );
+                                                        }
+                                                        return child;
+                                                      },
+                                                    );
+                                                  },
                                                 ),
-
-                                                /*  CachedNetworkImage(
-                                                    color: Colors.transparent,
-                                                    imageUrl: profileController.image.value,
-                                                    fit: BoxFit.cover,
-
-                                                    imageBuilder: (context, imageProvider) => Container(
-                                                      height: 152.h,
-                                                      width: 152.w,
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.transparent,
-                                                        borderRadius: BorderRadius.circular(9.r),
-                                                        image: DecorationImage(
-                                                          image: imageProvider,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    placeholder: (context, url) => Center(
-                                                      child: CircularProgressIndicator(
-                                                        color: AppColors.highlightedColor,
-                                                      ),
-                                                    ),
-                                                    errorWidget: (context, url, error) =>  CircularProgressIndicator(
-                                                      color: AppColors.highlightedColor,
-                                                    ),
-                                                  ),*/
-
-                                                // Image.file(
-                                                //   File(editProfileController.pickedImage.value),
-                                                //   fit: BoxFit.cover,
-                                                // ):
-                                                // editProfileController.profileImage.value != null && editProfileController.profileImage.value != ""
-                                                //     ? CommonNetworkImageLoader(imageUrl: editProfileController.profileImage.value,)
-                                                //     : SvgPicture.asset(IconsAsset.placeHolderIconImage)
-                                                // : Image.asset(
-                                                //     ImagesAsset.profileImage,
-                                                //     fit: BoxFit.cover,
-                                                //   ),
                                               ),
                                             ),
                                           );
@@ -177,6 +146,7 @@ class AccountInformationScreen extends StatelessWidget {
                                                 await Utils()
                                                     .imagePickerModel(selectImage: profileController.imagePath, image: profileController.image);
 
+                                                log(" profileController.isModified.value ${profileController.isModified.value}");
                                                 profileController.isValidateImage.value = true;
                                               },
                                               child: ClipOval(
@@ -204,30 +174,6 @@ class AccountInformationScreen extends StatelessWidget {
                                 ],
                               ),
                             ).paddingOnly(top: 25.h),
-                            /*  Align(
-                              alignment: Alignment.center,
-                              child: GestureDetector(
-                                  onTap: () async {
-                                    log("profileController.imagePath ::${profileController.imagePath}");
-                                    await Utils().imagePickerModel(
-                                        selectImage: profileController.imagePath,
-                                        image: profileController.image);
-                                    log("profileController.imagePath 2::${profileController.imagePath}");
-                                  },
-                                  child: Container(
-                                    height: 150.w,
-                                    width: 150.w,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(165.r),
-                                        color: Colors.red,
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              " ${profileController.image.value}"),
-                                        )),
-                                  )),
-                            ).paddingOnly(
-                              top: 25,
-                            ),*/
                             customTextFormField(
                               text: AppString.firstName,
                               hintText: AppString.firstName,
@@ -288,12 +234,13 @@ class AccountInformationScreen extends StatelessWidget {
                       );
                     }
                   },
-                  /*   isDisabled: (profileController.isValidateName.value &&
-                            profileController.isValidateLastName.value &&
-                            profileController.isValidatePostCode.value&&
-                          profileController.image.value.isNotEmpty)
-                        ? false
-                        : true,*/
+                  isDisabled: (profileController.isModified.value &&
+                          profileController.isValidateName.value &&
+                          profileController.isValidateLastName.value &&
+                          profileController.isValidatePostCode.value &&
+                          profileController.image!.isNotEmpty)
+                      ? false
+                      : true,
                   height: 52.h,
                   buttonColor: AppColors.highlightedColor,
                   fontSize: 15.h,

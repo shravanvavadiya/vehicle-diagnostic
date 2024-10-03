@@ -28,8 +28,8 @@ class AddVehicleScreen extends StatelessWidget {
             bottom: 40.h,
             onTap: () {
               // Navigation.pushNamed(Routes.addVehicleDetail);
-              Get.offAll(const AddVehicleDetailsScreen(
-                screenName: "New Vehicle",
+              Get.to(const AddVehicleDetailsScreen(
+                screenName: AppString.newVehicleAddFlag,
               ));
             },
           ),

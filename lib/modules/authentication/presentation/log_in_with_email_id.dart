@@ -18,8 +18,8 @@ import '../../../widget/custom_button.dart';
 import '../../../widget/info_text_widget.dart';
 import '../../dashboad/home/presentation/home_screen.dart';
 import '../../personal_information_view/presentation/user_information_screen.dart';
-import '../controller/create_new_password_controller.dart';
 import '../controller/log_in_with_email_id_controller.dart';
+import '../controller/create_new_password_controller.dart';
 import 'forgot_password_screen.dart';
 
 class LogInWithEmailIdScreen extends StatelessWidget {
@@ -61,7 +61,7 @@ class LogInWithEmailIdScreen extends StatelessWidget {
                               text: AppString.email,
                               hintText: AppString.emailEx,
                               validator: AppValidation.emailValidator,
-                              textCapitalization: TextCapitalization.words,
+                              textCapitalization: TextCapitalization.none,
                               controller: controller.emailController,
                               keyboardType: TextInputType.emailAddress)
                           .paddingOnly(top: 24.h, bottom: 16.h),

@@ -10,8 +10,9 @@ import 'package:flutter_template/widget/lets_start_widget.dart';
 import 'package:get/get.dart';
 
 class GetStartedScreen extends StatelessWidget {
-
-  const GetStartedScreen({super.key, });
+  const GetStartedScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class GetStartedScreen extends StatelessWidget {
               bottom: 60.h,
               onTap: () {
                 // Navigation.pushNamed(Routes.personalInformation);
-                Get.offAll(const UserInformationScreen());
+                Get.to(const UserInformationScreen());
               },
             ),
           ),

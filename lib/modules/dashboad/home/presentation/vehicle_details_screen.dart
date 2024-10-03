@@ -345,8 +345,8 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                         ],
                       ).paddingSymmetric(horizontal: 16.w),
                       _args.moreAboutVehicle?.isEmpty == true
-                          // homeController.idDisplayErrorBox.value == false
                           ? homeController.idDisplayErrorBox.value == true
+                              // ? homeController.idDisplayErrorBox.value == true
                               ? SizedBox()
                               : Container(
                                       height: 58.h,

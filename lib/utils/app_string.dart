@@ -25,6 +25,7 @@ class AppString {
   static const String firstName = "First Name";
   static const String didNotReceivedTheCode = "Didn’t received the code?";
   static const String resendIn = "Resend in";
+  static const String resendOtp = "Resend Otp";
   static const String signIn = "Sign in";
   static const String lastName = "Last Name";
   static const String createAccount = "Create Account";
@@ -101,6 +102,7 @@ class AppString {
   static const String pleaseEnterName = "Please enter name";
   static const String pleaseEnterLastName = "Please enter last name";
   static const String pleaseEnterEmail = "Please enter email";
+  static const String pleaseEnterOtp = "Please enter otp";
   static const String pleaseEnterPassword = "Please enter password";
   static const String bothPasswordNotMatch = "Both Password Not Match";
   static const String emailAddressIsInvalid = "Email address is invalid";
@@ -124,4 +126,5 @@ class AppString {
   static const String newVehicleAddFlag = "New Vehicle Add";
   static const String createNewAccountFlag = "Create New Account";
   static const String forgotPasswordFlag = "Forgot Password Flag";
+  static const String getStartedFlag = "Get Started Flag";
 }

@@ -35,6 +35,7 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
             // fetchData.vehicleNumber = vehicleNumber.text,
             vehicleNumber.text = fetchData.vehicleNumber!,
             vehicleYear.text = fetchData.vehicleYear!,
+            selectedYear.value = int.parse(fetchData.vehicleYear!),
             selectedValueMake.value = fetchData.vehicleMake!,
             selectedValueModel.value = fetchData.vehicleModel!,
             selectedValueTType.value = fetchData.transmissionType!,
@@ -65,6 +66,8 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
   XFile? imagePath;
   RxString image = "".obs;
   RxString networkImage = "".obs;
+  RxInt selectedYear = 2024.obs;
+  final RxInt currentYear = DateTime.now().year.obs;
 
   RxString selectedValueMake = 'Select'.obs;
   RxString selectedValueModel = 'Select'.obs;

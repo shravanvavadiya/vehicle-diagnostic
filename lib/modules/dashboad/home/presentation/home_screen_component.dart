@@ -20,7 +20,6 @@ class HomeScreenComponent extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigation.pushNamed(Routes.vehicleDetailScreen, arg: getVehicleData);
-
       },
       child: Stack(
         alignment: Alignment.bottomLeft,

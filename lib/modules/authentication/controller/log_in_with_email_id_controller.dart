@@ -116,10 +116,11 @@ class LogInWithEmailIdController extends GetxController with LoadingMixin, Loadi
                     print("user id ${data.apiresponse!.data!.id!}"),
                     AppPreference.setInt("UserId", data.apiresponse!.data!.id!),
                     print("user id ${AppPreference.getInt("UserId")}"),
-                    // await Get.offAll(HomeScreen())
+                    SharedPreferencesHelper.instance.setLogInUser(value: data.apiresponse!.data!.profileCompleted!),
+                    await Get.offAll(HomeScreen())
                   }
                 : Get.offAll(
-                    const GetStartedScreen(),
+                    GetStartedScreen(),
                   );
           },
           loading: handleLoading,

@@ -12,8 +12,10 @@ import 'package:flutter_template/utils/assets.dart';
 import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:flutter_template/widget/annotated_region.dart';
 import 'package:get/get.dart';
+import '../../../../utils/constants.dart';
 import '../../../../widget/custom_listtile.dart';
 import '../../../add_vehicle_information/presentation/vehicle_diagnosis_screen.dart';
+import '../../../chat_view/presentation/chat_screen.dart';
 import '../../../vehicle_details_view/presentation/add_vehicle_details_screen.dart';
 import '../controller/home_controller.dart';
 import '../models/get_vehicle_data_model.dart';
@@ -67,7 +69,10 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                   PopupMenuItem(
                     onTap: () {
                       log("Edit");
-                      Get.to(AddVehicleDetailsScreen(screenName: AppString.editScreenFlag, vehicleData: _args));
+                      Get.to(AddVehicleDetailsScreen(
+                        screenName: AppString.editScreenFlag,
+                        vehicleData: _args,
+                      ));
                     },
                     height: 40.h,
                     padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -94,6 +99,12 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                     height: 40.h,
                     padding: EdgeInsets.symmetric(horizontal: 5.w),
                     value: 2,
+                    onTap: () {
+                      Get.to(ChatScreen(
+                        vehicleId: _args.id!,
+                        userId: _args.userId!,
+                      ));
+                    },
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.start,

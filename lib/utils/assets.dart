@@ -14,6 +14,9 @@ class ImagesAsset {
 
 class IconAsset {
   static const String icons = 'assets/icons/';
+  static const String appLogo = '${icons}app_logo.png';
+  static const String copyIcon = '${icons}ic_copy.svg';
+  static const String icEditIcon = '${icons}ic_edit.svg';
 
   static const String googleIcon = '${icons}google_icon.svg';
   static const String appleIcon = '${icons}apple_icon.svg';

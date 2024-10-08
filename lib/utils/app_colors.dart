@@ -20,6 +20,9 @@ class AppColors {
   static Color titleColor = const Color(0xFF4A4C62);
   static Color dividerColor = const Color(0xFFE8E8E8);
   static Color introHintColor = const Color(0xFF5E5E5E);
-  static Color transparent =  Colors.transparent;
-  static Color redColor =  Colors.red;
+  static Color editIconColor = const Color(0xFF616977);
+  static Color chatBgColor = const Color(0xFFF9F9F9);
+  static Color textFieldBorderColor = const Color(0xFFE4E4E5);
+  static Color transparent = Colors.transparent;
+  static Color redColor = Colors.red;
 }

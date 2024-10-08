@@ -5,11 +5,12 @@ import 'dart:ffi';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_template/modules/add_vehicle_information/models/selected_qns_ans_model.dart';
 import 'package:flutter_template/modules/dashboad/home/presentation/home_screen.dart';
+import 'package:flutter_template/utils/app_string.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 
 import '../models/submit_vehicle_request.dart';
 import '../models/vehicle_information_step_model.dart';
+import '../presentation/question_answer.dart';
 import '../services/vehicle_information_service.dart';
 import '../../../utils/common_api_caller.dart';
 import '../../../utils/loading_mixin.dart';
@@ -17,13 +18,24 @@ import '../../../utils/loading_mixin.dart';
 class QuestionAndAnsController extends GetxController with LoadingMixin, LoadingApiMixin {
   PageController pageController = PageController();
   RxInt currentStep = 0.obs;
-  Map<int, String> selectedAnswers = {}; // Store the selected answers by index
+  RxMap<int, String> selectedAnswers = <int, String>{}.obs; // Store the selected answers by index
   RxDouble progress = 0.1.obs;
   RxBool isLoading = false.obs;
   RxBool isResponseData = false.obs;
+  RxBool isPreLoadDataBool = false.obs;
   Rx<VehicleInformationModel> vehicleModel = VehicleInformationModel().obs;
-  List<SelectedQnsAnsModel> selectedResponseList = <SelectedQnsAnsModel>[];
-  RxInt userVehicleId = 0.obs;
+  RxList<SelectedQnsAnsModel> selectedResponseList = <SelectedQnsAnsModel>[].obs;
+  RxInt vehicleIdFlag = 0.obs;
+  RxString screenFlag = "".obs;
+
+  QuestionAndAnsController({required String navigationScreenFlag, required int userVehicleId}) {
+    if (navigationScreenFlag == AppString.editScreenFlag) {
+      log("preload function first call");
+      vehicleIdFlag.value = userVehicleId;
+      screenFlag.value = navigationScreenFlag;
+      // preLoadDataFunction(vehicleId: userVehicleId);
+    }
+  }
 
   void updateProgress() {
     progress.value = (currentStep.value + 1) / vehicleModel.value.apiresponse!.data!.length; // Update progress based on the current step
@@ -32,7 +44,7 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
   RxMap preLoadDataResponse = {}.obs;
 
   void clearAll() {
-    selectedAnswers.clear();
+    selectedAnswers.value.clear();
     selectedResponseList.clear();
     currentStep.value = 0;
     pageController.jumpToPage(0);
@@ -42,13 +54,14 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
   Future<void> getAllVehiclesQue() async {
     handleLoading(true);
     isLoading.value = true;
-    processApi(
+    await processApi(
       () => VehicleInformationService.getVehicleInformation(),
       error: (error, stack) => handleLoading(false),
       result: (data) {
         if (data.apiresponse!.data?.isEmpty != true) {
-          isResponseData.value = true;
           vehicleModel.value = data;
+          log("vehicle ${vehicleModel.value.apiresponse?.data?.length.toString()}");
+          isResponseData.value = true;
         } else {
           isResponseData.value = false;
         }
@@ -60,6 +73,7 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
 
   Future preLoadDataFunction({required int vehicleId}) async {
     log("preLoadDataFunction===>onTAP yes call");
+    isPreLoadDataBool.value = true;
     processApi(
       () => VehicleInformationService.getAnsByVehicleId(vehicleId: vehicleId),
       error: (error, stack) {
@@ -67,23 +81,30 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
         handleLoading(false);
       },
       result: (data) {
-        selectedResponseList = [];
+        selectedResponseList.value = [];
         log("preLoadDataFunction===>onTAP yes success Res::${data.toJson()}");
+        log("11111111111");
         for (var key in data.apiresponse?.data?.qaVehicleResponses ?? []) {
+          log("222222222222 ${vehicleModel.value.apiresponse?.data?.length}");
+
           int totleLength = vehicleModel.value.apiresponse?.data?.length ?? 0;
           for (int i = 0; i < totleLength; i++) {
+            log("333333333333");
+
             if (key.question == vehicleModel.value.apiresponse?.data?[i].key) {
+              log("4444444444");
+
               print("compere both data for pre load data ${key.question}----$i");
               // int datas = vehicleModel.value.apiresponse!.data![i].answers!.indexOf(key.answer!);
               // preLoadDataResponse[key.question] = datas;
-              selectedResponseList.add(SelectedQnsAnsModel(question: key.question, answer: key.answer));
-              selectedAnswers[i] = key.answer ?? ""; // Store answer by index
-              isResponseData.value = true;
+              selectedResponseList.value.add(SelectedQnsAnsModel(question: key.question, answer: key.answer));
+              selectedAnswers.value[i] = key.answer ?? ""; // Store answer by index
               break;
             }
           }
         }
-        log(" preLoadDataFunction final response:::${selectedResponseList}");
+        log(" preLoadDataFunction final response:::${selectedResponseList.value}");
+        isPreLoadDataBool.value = false;
       },
     );
   }

@@ -31,6 +31,7 @@ class AppString {
   static const String createAccount = "Create Account";
   static const String forgotPassword = "Forgot password?";
   static const String codeHasBeenSend = "A code has been send";
+  static const String typeAMessage = "Type a message";
   static const String email = "Email";
   static const String password = "Password";
   static const String newPassword = "New Password";

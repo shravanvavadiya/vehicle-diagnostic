@@ -51,14 +51,17 @@ class MyApp extends StatelessWidget {
               // initialRoute: Routes.demo01,
               getPages: Routes.pages,
               builder: (context, child) {
-                return Scaffold(
-                  backgroundColor: AppColors.whiteColor,
-                  resizeToAvoidBottomInset: false,
-                  body: GestureDetector(
-                    onTap: () {
-                      Utils.hideKeyboardInApp(context);
-                    },
-                    child: child,
+                return ScrollConfiguration(
+                  behavior: MyBehavior(),
+                  child: Scaffold(
+                    backgroundColor: AppColors.whiteColor,
+                    resizeToAvoidBottomInset: false,
+                    body: GestureDetector(
+                      onTap: () {
+                        Utils.hideKeyboardInApp(context);
+                      },
+                      child: child,
+                    ),
                   ),
                 );
               },
@@ -73,4 +76,11 @@ class MyApp extends StatelessWidget {
 class AppBidding extends Bindings {
   @override
   void dependencies() {}
+}
+
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildOverscrollIndicator(BuildContext context, Widget child, ScrollableDetails details) {
+    return child;
+  }
 }

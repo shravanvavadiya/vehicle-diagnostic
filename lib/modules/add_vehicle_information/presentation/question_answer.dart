@@ -29,7 +29,7 @@ class _QuestionAndAnsScreenState extends State<QuestionAndAnsScreen> {
   @override
   Widget build(BuildContext context) {
     return GetX<QuestionAndAnsController>(
-      init: QuestionAndAnsController(),
+      init: QuestionAndAnsController(navigationScreenFlag: widget.screenName, userVehicleId: widget.vehicleId),
       builder: (controller) => Scaffold(
         appBar: AppBar(
           leading: CustomBackArrowWidget(
@@ -88,40 +88,78 @@ class _QuestionAndAnsScreenState extends State<QuestionAndAnsScreen> {
                 minHeight: 2.h,
               ),
             ),
-            controller.isResponseData.value == true
-                ? Expanded(
-                    child: PageView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      controller: controller.pageController,
-                      onPageChanged: (int page) {
-                        controller.currentStep.value = page;
-                        controller.updateProgress();
-                      },
-                      itemCount: controller.vehicleModel.value.apiresponse!.data!.length,
-                      itemBuilder: (context, index) {
-                        return _buildStepPage(
-                            controller.vehicleModel.value.apiresponse!.data![index].question!.obs,
-                            controller.vehicleModel.value.apiresponse!.data![index].answers!,
-                            controller.vehicleModel.value.apiresponse!.data![index].key!.obs,
-                            index.obs,
-                            controller);
-                      },
-                    ),
-                  )
-                : Expanded(
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.highlightedColor,
+            if (widget.screenName == AppString.editScreenFlag) ...{
+              controller.isPreLoadDataBool.value == true
+                  ? Expanded(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.highlightedColor,
+                        ),
+                      ),
+                    )
+                  : controller.isResponseData.value == true
+                      ? Expanded(
+                          child: PageView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            controller: controller.pageController,
+                            onPageChanged: (int page) {
+                              controller.currentStep.value = page;
+                              controller.updateProgress();
+                            },
+                            itemCount: controller.vehicleModel.value.apiresponse!.data!.length,
+                            itemBuilder: (context, index) {
+                              return _buildStepPage(
+                                  controller.vehicleModel.value.apiresponse!.data![index].question!.obs,
+                                  controller.vehicleModel.value.apiresponse!.data![index].answers!,
+                                  controller.vehicleModel.value.apiresponse!.data![index].key!.obs,
+                                  index.obs,
+                                  controller);
+                            },
+                          ),
+                        )
+                      : Expanded(
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.highlightedColor,
+                            ),
+                          ),
+                        ),
+            } else ...{
+              controller.isResponseData.value == true
+                  ? Expanded(
+                      child: PageView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        controller: controller.pageController,
+                        onPageChanged: (int page) {
+                          controller.currentStep.value = page;
+                          controller.updateProgress();
+                        },
+                        itemCount: controller.vehicleModel.value.apiresponse!.data!.length,
+                        itemBuilder: (context, index) {
+                          return _buildStepPage(
+                              controller.vehicleModel.value.apiresponse!.data![index].question!.obs,
+                              controller.vehicleModel.value.apiresponse!.data![index].answers!,
+                              controller.vehicleModel.value.apiresponse!.data![index].key!.obs,
+                              index.obs,
+                              controller);
+                        },
+                      ),
+                    )
+                  : Expanded(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.highlightedColor,
+                        ),
                       ),
                     ),
-                  ),
+            },
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
         floatingActionButton: controller.isResponseData.value == true
             ? GestureDetector(
                 onTap: controller.currentStep.value < controller.vehicleModel.value.apiresponse!.data!.length - 1 &&
-                        controller.selectedAnswers.containsKey(controller.currentStep.value)
+                        controller.selectedAnswers.value.containsKey(controller.currentStep.value)
                     ? () {
                         controller.pageController.nextPage(
                           duration: const Duration(milliseconds: 300),
@@ -130,12 +168,12 @@ class _QuestionAndAnsScreenState extends State<QuestionAndAnsScreen> {
                         log("vehicle id ${widget.vehicleId}");
                       }
                     : controller.currentStep.value == controller.vehicleModel.value.apiresponse!.data!.length - 1 &&
-                            controller.selectedAnswers.containsKey(controller.currentStep)
+                            controller.selectedAnswers.value.containsKey(controller.currentStep)
                         ? () {
-                            log("controller.selectedResponse ${controller.selectedResponseList}");
+                            log("controller.selectedResponse ${controller.selectedResponseList.value}");
                             widget.screenName == AppString.editScreenFlag
-                                ? controller.EditForm(vehicleId: widget.vehicleId, selectedResponse: controller.selectedResponseList)
-                                : controller.submitForm(vehicleId: widget.vehicleId, selectedResponse: controller.selectedResponseList);
+                                ? controller.EditForm(vehicleId: widget.vehicleId, selectedResponse: controller.selectedResponseList.value)
+                                : controller.submitForm(vehicleId: widget.vehicleId, selectedResponse: controller.selectedResponseList.value);
                           }
                         : null,
                 child: Container(
@@ -143,7 +181,7 @@ class _QuestionAndAnsScreenState extends State<QuestionAndAnsScreen> {
                   width: 113.w,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(46.r),
-                    color: controller.selectedAnswers.containsKey(controller.currentStep.value)
+                    color: controller.selectedAnswers.value.containsKey(controller.currentStep.value)
                         ? AppColors.highlightedColor
                         : AppColors.highlightedColor.withOpacity(0.5),
                   ),
@@ -171,7 +209,7 @@ class _QuestionAndAnsScreenState extends State<QuestionAndAnsScreen> {
   }
 
   Widget _buildStepPage(RxString question, List<dynamic> answers, RxString questionKey, RxInt index, QuestionAndAnsController controller) {
-    String? selectedAnswer = controller.selectedAnswers[index.value]; // Get the selected answer for this page
+    String? selectedAnswer = controller.selectedAnswers.value[index.value]; // Get the selected answer for this page
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -220,22 +258,22 @@ class _QuestionAndAnsScreenState extends State<QuestionAndAnsScreen> {
 
                         if (value == true) {
                           log('Q&A===>onChanged 01 listIndex::$listIndex answers[listIndex]::${answers[listIndex]}');
-                          controller.selectedAnswers[index.value] = answers[listIndex]; // Store answer by index
-                          log('Q&A===>onChanged 02 BEFORE controller.selectedResponseList::${controller.selectedResponseList.toString()}');
-                          log('Q&A===>onChanged 02 BEFORE controller.selectedAnswers::${controller.selectedAnswers.toString()}');
-                          controller.selectedResponseList.removeWhere((element) => element.question == questionKey.value);
+                          controller.selectedAnswers.value[index.value] = answers[listIndex]; // Store answer by index
+                          log('Q&A===>onChanged 02 BEFORE controller.selectedResponseList::${controller.selectedResponseList.value.toString()}');
+                          log('Q&A===>onChanged 02 BEFORE controller.selectedAnswers::${controller.selectedAnswers.value.toString()}');
+                          controller.selectedResponseList.value.removeWhere((element) => element.question == questionKey.value);
 
-                          controller.selectedResponseList.add(SelectedQnsAnsModel(
+                          controller.selectedResponseList.value.add(SelectedQnsAnsModel(
                             answer: "${answers[listIndex]}",
                             question: questionKey.value,
                           ));
-                          log('Q&A===>onChanged 03 AFTER controller.selectedResponseList::${controller.selectedResponseList.toString()}');
-                          log('Q&A===>onChanged 03 AFTER controller.selectedAnswers::${controller.selectedAnswers.toString()}');
+                          log('Q&A===>onChanged 03 AFTER controller.selectedResponseList::${controller.selectedResponseList.value.toString()}');
+                          log('Q&A===>onChanged 03 AFTER controller.selectedAnswers::${controller.selectedAnswers.value.toString()}');
                         } else {
-                          controller.selectedAnswers.remove(index.value);
-                          controller.selectedResponseList.removeWhere((element) => element.question == questionKey.value);
-                          log('Q&A===>onChanged 04 FALSE AFTER controller.selectedResponseList::${controller.selectedResponseList.toString()}');
-                          log('Q&A===>onChanged 04 FALSE AFTER controller.selectedAnswers::${controller.selectedAnswers.toString()}');
+                          controller.selectedAnswers.value.remove(index.value);
+                          controller.selectedResponseList.value.removeWhere((element) => element.question == questionKey.value);
+                          log('Q&A===>onChanged 04 FALSE AFTER controller.selectedResponseList::${controller.selectedResponseList.value.toString()}');
+                          log('Q&A===>onChanged 04 FALSE AFTER controller.selectedAnswers::${controller.selectedAnswers.value.toString()}');
                         }
                         setState(() {});
                       },

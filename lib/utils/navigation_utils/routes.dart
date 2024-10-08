@@ -37,7 +37,7 @@ mixin Routes {
   static List<GetPage<dynamic>> pages = [
     /*GetPage<dynamic>(
       name: demo01,
-      page: () => TextFieldButtonExample(),
+      page: () => QuestionAnswerScreen(),
       transition: defaultTransition,
     ),*/
     GetPage<dynamic>(

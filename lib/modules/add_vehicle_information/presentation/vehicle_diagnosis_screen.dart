@@ -29,7 +29,7 @@ class _VehicleDiagnosisScreenState extends State<VehicleDiagnosisScreen> {
     log('token  :: ${SharedPreferencesHelper.instance.getLogInUser()}');
     log(widget.screenName);
     final QuestionAndAnsController questionAndAnsController =
-        Get.put(QuestionAndAnsController());
+        Get.put(QuestionAndAnsController(navigationScreenFlag: widget.screenName, userVehicleId: widget.vehicleId));
 
     return Scaffold(
       body: SafeArea(
@@ -45,8 +45,8 @@ class _VehicleDiagnosisScreenState extends State<VehicleDiagnosisScreen> {
                 bottom: MediaQuery.of(context).size.height * 0.15,
                 isStart: true,
                 yesOnTap: () async {
-                  questionAndAnsController.getAllVehiclesQue();
-                  log("preLoadDataFunction===>onTAP yes screenName::${widget.screenName}");
+                  await questionAndAnsController.getAllVehiclesQue();
+                  log("preLoadDataFunction===>onTAP yes screenName::${widget.screenName} ${questionAndAnsController.vehicleModel.value.apiresponse?.data?.length}");
                   if (widget.screenName == AppString.editScreenFlag) {
                     log("preLoadDataFunction===>onTAP yes IN IF screenName::${widget.screenName}");
                     await questionAndAnsController.preLoadDataFunction(

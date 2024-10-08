@@ -112,6 +112,8 @@ class OtpController extends GetxController with LoadingMixin, LoadingApiMixin {
       log("otp verify error ---> $error --- $stack");
       handleLoading(false);
     }, result: (result) async {
+      handleLoading(true);
+
       Get.to(
           CreateNewPasswordScreen(
             userEmail: email,

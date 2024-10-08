@@ -15,6 +15,9 @@ class ApiConstants {
   static const String getAllVehicleByUserId = "vehicle/user";
   static const String addVehicle = "vehicle/";
   static const String getVehicleQue = "questionanswer/all";
+  static const String chatGptQuestion = "moreaboutvehicle/chatGpt";
+  static const String userSubmitAnswer = "moreaboutvehicle/qaChatGpt";
+  static const String downloadReport = "moreaboutvehicle/vehicle";
   static const String submitVehicleRequest = "moreaboutvehicle/";
   static const String editVehicleRequest = "moreaboutvehicle/updateAboutVehicle";
   static const String deleteVehicle = "vehicle/delete/";

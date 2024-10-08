@@ -95,7 +95,9 @@ class PdfViewController extends GetxController {
         if (!await directory.exists()) {
           await directory.create(recursive: true);
         }*/
-        String filePath = await createSaveFilePath('NEOS-Mobile-${DateTime.now().millisecondsSinceEpoch}.pdf');
+
+
+        String filePath = await createSaveFilePath('Vehicle-report_${DateTime.now().millisecondsSinceEpoch}.pdf');
         print("filePath::::$filePath");
 
         final file = File(filePath);

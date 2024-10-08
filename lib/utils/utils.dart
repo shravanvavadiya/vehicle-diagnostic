@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_template/utils/app_colors.dart';
@@ -46,7 +47,7 @@ class Utils {
             ),
             onPressed: () async {
               Get.back();
-              log("--> ${selectImage}");
+              log("--> $selectImage");
               selectImage =
                   await Utils.imagePicker(source: ImageSource.gallery);
 

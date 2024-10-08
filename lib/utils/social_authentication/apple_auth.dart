@@ -1,8 +1,10 @@
 import 'dart:developer';
+
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
 import '../../modules/personal_information_view/get_started_screen.dart';
-import '../navigation_utils/navigation.dart';
 
 class LoginController extends GetxController {
   RxString appleEmail = ''.obs;
@@ -19,16 +21,19 @@ class LoginController extends GetxController {
           AppleIDAuthorizationScopes.fullName,
         ],
       );
-      print("credential :: $credential");
-      print("credential.email :: ${credential.email}");
-      print("credential.givenName :: ${credential.givenName}");
-      print("credential.familyName :: ${credential.familyName ?? ''}");
-      print("credential.userIdentifier :: ${credential.userIdentifier}");
-      print("credential.authorizationCode :: ${credential.authorizationCode}");
-      print("credential.identityToken :: ${credential.identityToken}");
+
+      if (kDebugMode) {
+        print("credential :: $credential");
+        print("credential.email :: ${credential.email}");
+        print("credential.givenName :: ${credential.givenName}");
+        print("credential.familyName :: ${credential.familyName ?? ''}");
+        print("credential.userIdentifier :: ${credential.userIdentifier}");
+        print("credential.authorizationCode :: ${credential.authorizationCode}");
+        print("credential.identityToken :: ${credential.identityToken}");
+      }
       appleEmail.value = credential.email ?? '';
       appleId.value = credential.userIdentifier ?? '';
-      Get.offAll(GetStartedScreen());
+      Get.offAll(const GetStartedScreen());
     } catch (e) {
       log('apple auth error :: $e');
     } finally {

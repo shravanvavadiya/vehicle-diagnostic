@@ -15,10 +15,12 @@ class SubscriptionsSummeryScreen extends StatefulWidget {
   const SubscriptionsSummeryScreen({super.key});
 
   @override
-  State<SubscriptionsSummeryScreen> createState() => _SubscriptionsPlanSSummeryScreen();
+  State<SubscriptionsSummeryScreen> createState() =>
+      _SubscriptionsPlanSSummeryScreen();
 }
 
-class _SubscriptionsPlanSSummeryScreen extends State<SubscriptionsSummeryScreen> {
+class _SubscriptionsPlanSSummeryScreen
+    extends State<SubscriptionsSummeryScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomAnnotatedRegions(
@@ -51,7 +53,9 @@ class _SubscriptionsPlanSSummeryScreen extends State<SubscriptionsSummeryScreen>
                 width: Get.width,
                 padding: EdgeInsets.all(16.h),
                 margin: EdgeInsets.all(16.h),
-                decoration: BoxDecoration(color: AppColors.backgroundColor, borderRadius: BorderRadius.circular(4.r)),
+                decoration: BoxDecoration(
+                    color: AppColors.backgroundColor,
+                    borderRadius: BorderRadius.circular(4.r)),
                 child: Column(
                   children: [
                     Row(
@@ -120,7 +124,6 @@ class _SubscriptionsPlanSSummeryScreen extends State<SubscriptionsSummeryScreen>
                 ),
               ),
               CustomButton(
-                buttonColor: AppColors.highlightedColor,
                 onTap: () {
                   //Navigation.pushNamed(Routes.accountInformation);
                   Get.back();
@@ -129,7 +132,10 @@ class _SubscriptionsPlanSSummeryScreen extends State<SubscriptionsSummeryScreen>
                 fontSize: 15.h,
                 text: AppString.changeSubscriptionPlan,
                 borderRadius: BorderRadius.circular(8.r),
-              ).paddingSymmetric(horizontal: 16.w, vertical: 25.h),
+              ).paddingSymmetric(
+                horizontal: 16.w,
+                vertical: 25.h,
+              ),
               SizedBox(
                 height: 54.h,
                 width: Get.width,

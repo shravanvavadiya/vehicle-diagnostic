@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_template/modules/profile/controller/profile_controller.dart';
 import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/utils/app_text.dart';
 import 'package:flutter_template/utils/navigation_utils/navigation.dart';
@@ -7,21 +8,19 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../api/preferences/shared_preferences_helper.dart';
+import '../../../utils/app_preferences.dart';
 import '../../../utils/app_string.dart';
 import '../../../utils/navigation_utils/routes.dart';
 
-void showCustomDialog(
-    /*BuildContext context, String title, String subTitle, String cancelButtonText, String acceptButtonText,
-    {Function()? onTap}*/
-    ) async {
+void showDeleteDialog(ProfileController profileController) async {
   return showDialog(
       context: Get.context!,
       builder: (context) {
         return Dialog(
           backgroundColor: AppColors.whiteColor,
-          shape: const RoundedRectangleBorder(
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
-              Radius.circular(10),
+              Radius.circular(10.r),
             ),
           ),
           insetPadding: EdgeInsets.symmetric(horizontal: 55.w),
@@ -29,8 +28,7 @@ void showCustomDialog(
             mainAxisSize: MainAxisSize.min,
             children: [
               AppText(
-                //  text: title,
-                text: AppString.doYouWantToLogout,
+                text: AppString.doYouWantToDelete,
                 fontWeight: FontWeight.w500,
                 color: AppColors.blackColor,
                 fontSize: 18.sp,
@@ -41,27 +39,11 @@ void showCustomDialog(
                 top: 5.h,
                 bottom: 20.h,
               ),
-              /*AppText(
-                // text: subTitle,
-                text: "Ready to say goodbye? Deleting your account will remove all your data from our Car Fixer app.",
-                fontWeight: FontWeight.w400,
-                fontSize: 12.5.sp,
-                color: AppColors.grey60,
-                letterSpacing: 0.3,
-                height: 1.4.h,
-                textAlign: TextAlign.center,
-              ).paddingOnly(
-                top: 20.h,
-                bottom: 20.h,
-                left: 16.w,
-                right: 16.w,
-              ),*/
               GestureDetector(
                 onTap: () {
-                  SharedPreferencesHelper.instance.clearSharedPreferences();
-                  Navigation.replaceAll(Routes.signIn);
-                  GoogleSignIn().signOut();
-                  SharedPreferencesHelper.instance.setLogInUser(value: false);
+                  profileController.deleteAccount(
+                    userId: AppPreference.getInt("UserId"),
+                  );
                 },
                 child: Container(
                   width: double.infinity,
@@ -78,7 +60,7 @@ void showCustomDialog(
                   ),
                   child: AppText(
                     textAlign: TextAlign.center,
-                    text: AppString.logout,
+                    text: AppString.delete,
                     color: AppColors.logoutColor,
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,

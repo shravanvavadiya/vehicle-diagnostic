@@ -1,6 +1,6 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_template/api/preferences/shared_preferences_helper.dart';
 import 'package:flutter_template/my_app.dart';
 import 'package:flutter_template/utils/app_preferences.dart';

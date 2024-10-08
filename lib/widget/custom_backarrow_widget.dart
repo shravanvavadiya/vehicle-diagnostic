@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,6 +17,7 @@ class CustomBackArrowWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onTap?? (){
         Navigation.pop();
+        log("can pop ::");
       },
       child: Container(
         height: 36.h,

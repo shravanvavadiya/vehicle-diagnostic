@@ -1,16 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:flutter_template/api/api.dart';
 import 'package:flutter_template/api/exception/app_exception.dart';
 import 'package:flutter_template/api/responce_handler.dart';
 import 'package:flutter_template/modules/personal_information_view/model/personal_information_model.dart';
 import 'package:flutter_template/modules/profile/models/get_user_model.dart';
-import 'package:flutter_template/modules/profile/models/update_user_model.dart';
 import 'package:flutter_template/utils/api_constants.dart';
-
-import '../../../api/preferences/shared_preferences_helper.dart';
-import '../../../utils/constants.dart';
-import '../../authentication/models/authapi_res.dart';
 
 class ProfileService {
   /// User profile ::
@@ -35,7 +31,7 @@ class ProfileService {
     required String postCode,
   }) async {
     try {
-      log("imagePath :: 111 :${imagePath}");
+      log("imagePath :: 111 :$imagePath");
 
       var result = await Api().multiPartRequestUpdateUserData(
           email: email,
@@ -57,6 +53,28 @@ class ProfileService {
 
     }
   }
+
+  static Future<void> deleteUserAccount({
+    required int userId,
+  }) async {
+    try {
+      var result = await Api().delete(
+        "${ApiConstants.deleteUserAccount}$userId",
+      );
+      await ResponseHandler.checkResponseError(result);
+      if (result.statusCode == 200) {
+        log("User deleted successfully");
+      } else {
+        log("Failed to delete user: ${result.statusCode}");
+      }
+    } catch (e, st) {
+      log("Error: $e, $st");
+      rethrow;
+    }
+  }
+
+
+
 
 /* static Future<UpdateUserModel> updateUserAPI({required Map<String, dynamic> bodyData}) async {
     try {

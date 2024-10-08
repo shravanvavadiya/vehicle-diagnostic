@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_template/utils/app_colors.dart';
+import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/utils/assets.dart';
 import 'package:flutter_template/widget/custom_button.dart';
 import 'package:flutter_template/widget/info_text_widget.dart';
@@ -13,6 +14,7 @@ class LetsStartWidget extends StatelessWidget {
   final String buttonText;
   final bool? isStart;
   final double bottom;
+  final double? height;
   final VoidCallback? onTap;
   final VoidCallback? yesOnTap;
   final VoidCallback? noOnTap;
@@ -26,6 +28,7 @@ class LetsStartWidget extends StatelessWidget {
     this.isStart,
     required this.bottom,
     this.onTap,
+    this.height,
     this.yesOnTap,
     this.noOnTap,
   });
@@ -66,10 +69,11 @@ class LetsStartWidget extends StatelessWidget {
                   titleFontWeight: FontWeight.w500,
                   description: description,
                   fontSize: 16.sp,
+                  height: height,
                   bottomSpace: 14.h,
                   fontWeight: FontWeight.w400,
                 ).paddingOnly(
-                  bottom: 20.h,
+                  bottom: 15.h,
                   left: 16.w,
                   right: 16.w,
                 ),
@@ -83,10 +87,11 @@ class LetsStartWidget extends StatelessWidget {
                         child: CustomButton(
                           height: 50.h,
                           onTap: noOnTap,
-                          text: "No",
-                          textColor: AppColors.highlightedColor,
+                          text: AppString.no,
+                          borderWidth: 1.w,
+                          textColor: AppColors.primaryColor,
                           needBorderColor: true,
-                          buttonBorderColor: AppColors.highlightedColor,
+                          buttonBorderColor: AppColors.primaryColor,
                           buttonColor: Colors.transparent,
                         ),
                       ),
@@ -97,16 +102,22 @@ class LetsStartWidget extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                           height: 50.h,
                           onTap: yesOnTap,
-                          text: "Yes",
+                          text: AppString.yes,
                         ),
                       ),
                     ],
-                  ).paddingSymmetric(horizontal: 16.w, vertical: 25.h)
+                  ).paddingSymmetric(
+                    horizontal: 16.w,
+                    vertical: 25.h,
+                  )
                 : CustomButton(
                     height: 50.h,
                     onTap: onTap,
                     text: buttonText,
-                  ).paddingSymmetric(horizontal: 16.w, vertical: 25.h),
+                  ).paddingSymmetric(
+                    horizontal: 16.w,
+                    vertical: 25.h,
+                  ),
           ],
         ),
       ),

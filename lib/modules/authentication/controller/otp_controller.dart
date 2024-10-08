@@ -1,37 +1,25 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:ffi';
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_template/modules/dashboad/home/presentation/home_screen.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:flutter_template/modules/personal_information_view/get_started_screen.dart';
+import 'package:get/get.dart';
 
 import '../../../api/preferences/shared_preferences_helper.dart';
-import '../../../custome_package/lib/otp_field.dart';
-import '../../../utils/api_constants.dart';
 import '../../../utils/app_preferences.dart';
 import '../../../utils/app_string.dart';
 import '../../../utils/common_api_caller.dart';
-import '../../../utils/constants.dart';
 import '../../../utils/loading_mixin.dart';
-import '../../../utils/navigation_utils/navigation.dart';
-import '../../../utils/navigation_utils/routes.dart';
 import '../../../widget/app_snackbar.dart';
-import '../../personal_information_view/get_started_screen.dart';
-import '../../personal_information_view/presentation/user_information_screen.dart';
 import '../models/create_new_account_model.dart';
 import '../presentation/create_new_password_screen.dart';
 import '../service/auth_service.dart';
-import '../service/social_service.dart';
-import 'package:get/get.dart';
 
 class OtpController extends GetxController with LoadingMixin, LoadingApiMixin {
   RxString screenName = AppString.codeHasBeenSend.obs;
   RxString filledOtp = "".obs;
   RxString screenNameFlag = "".obs;
+  RxBool isValidateOtp = false.obs;
   RxString subText = AppString.otpSubText.obs;
   RxString buttonName = AppString.verify.obs;
   RxString didNotReceivedTheCode = AppString.didNotReceivedTheCode.obs;
@@ -85,7 +73,11 @@ class OtpController extends GetxController with LoadingMixin, LoadingApiMixin {
       SharedPreferencesHelper.instance.setString("email", result.apiresponse!.data!.email!);
       print("user id ${AppPreference.getInt("UserId")}");
       log("user profile status :${result.apiresponse!.data!.profileCompleted}");
-      Get.offAll(const UserInformationScreen(), transition: Transition.rightToLeft);
+      Get.offAll(
+        const  GetStartedScreen(),
+
+      );
+      //Get.offAll(const UserInformationScreen(), transition: Transition.rightToLeft);
     });
     return null;
   }

@@ -13,6 +13,7 @@ class InfoTextWidget extends StatelessWidget {
       this.titleFontSize,
       this.fontWeight,
       this.fontSize,
+      this.height,
       this.bottomSpace});
 
   final String title;
@@ -21,6 +22,7 @@ class InfoTextWidget extends StatelessWidget {
   final double? titleFontSize;
   final FontWeight? fontWeight;
   final double? fontSize;
+  final double? height;
   final double? bottomSpace;
 
   @override
@@ -42,6 +44,7 @@ class InfoTextWidget extends StatelessWidget {
           textAlign: TextAlign.start,
           fontSize: fontSize,
           letterSpacing: 0.4,
+          height: height,
           fontWeight: fontWeight,
           color: AppColors.secondaryColor,
         ),

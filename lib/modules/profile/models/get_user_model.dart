@@ -8,7 +8,7 @@ class GetUserProfileModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (profileResponse != null) {
       data['apiresponse'] = profileResponse!.toJson();
     }
@@ -30,7 +30,7 @@ class ProfileResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> profileData = Map<String, dynamic>();
+    final Map<String, dynamic> profileData = <String, dynamic>{};
     profileData['dataArray'] = dataArray;
     if (this.profileData != null) {
       profileData['data'] = this.profileData!.toJson();
@@ -78,7 +78,7 @@ class ProfileData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['creationDate'] = creationDate;
     data['lastModifiedDate'] = lastModifiedDate;
     data['id'] = id;

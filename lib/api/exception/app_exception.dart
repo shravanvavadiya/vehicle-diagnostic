@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter_template/utils/app_string.dart';
 import 'package:flutter_template/widget/app_snackbar.dart';
 
 class AppException implements Exception {
@@ -33,29 +34,29 @@ class AppException implements Exception {
     } else if (exception is SocketException) {
       AppException(
         errorCode: exception.osError?.errorCode ?? 0,
-        message: exception.osError?.message ?? "Internet is not Available",
+        message: exception.osError?.message ?? AppString.internetIsNotAvailable,
       ).show();
     } else if (exception is HttpException) {
-      AppException(message: "Couldn't find the requested data", errorCode: 0).show();
+      AppException(message: AppString.couldFindTheRequestedData, errorCode: 0).show();
     } else if (exception is FormatException) {
       AppException(message: exception.message, errorCode: 0).show();
     } else {
-      AppException(message: "Something went wrong", errorCode: 0).show();
+      AppException(message: AppString.somethingWentWrong, errorCode: 0).show();
     }
   }
   static dynamic exceptionHandler(exception, [stackTrace]) {
     if (exception is AppException) {
       throw exception;
     } else if (exception is SocketException) {
-      throw AppException(message: "No Internet connection", errorCode: exception.osError?.errorCode ?? 0);
+      throw AppException(message:AppString.noInternetYet, errorCode: exception.osError?.errorCode ?? 0);
     } else if (exception is HttpException) {
-      throw AppException(message: "Couldn't find the requested data", errorCode: 0);
+      throw AppException(message: AppString.couldFindTheRequestedData, errorCode: 0);
     } else if (exception is FormatException) {
-      throw AppException(message: "Bad response format", errorCode: 0);
+      throw AppException(message: AppString.badResponseFormat, errorCode: 0);
     }
-    throw AppException(message: "Unknown error", errorCode: 0);
+    throw AppException(message: AppString.unknownError, errorCode: 0);
   }
   void show() {
-    AppSnackBar.showErrorSnackBar(message: message, title: 'Error');
+    AppSnackBar.showErrorSnackBar(message: message, title: AppString.error);
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_template/utils/app_colors.dart';
 
 import 'otp_field_style.dart';
@@ -69,7 +68,7 @@ class OTPTextField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatter;
 
   const OTPTextField({
-    Key? key,
+    super.key,
     this.length = 4,
     this.width = 10,
     this.controller,
@@ -90,8 +89,7 @@ class OTPTextField extends StatefulWidget {
     this.contentPadding = const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
     this.isDense = false,
     this.onCompleted,
-  })  : assert(length > 1),
-        super(key: key);
+  })  : assert(length > 1);
 
   @override
   _OTPTextFieldState createState() => _OTPTextFieldState();

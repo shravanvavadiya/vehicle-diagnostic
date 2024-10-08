@@ -31,15 +31,15 @@ class MyVehicleData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['vehicleNumber'] = this.vehicleNumber;
-    data['vehicleYear'] = this.vehicleYear;
-    data['vehicleMake'] = this.vehicleMake;
-    data['vehicleModel'] = this.vehicleModel;
-    data['transmissionType'] = this.transmissionType;
-    data['fuelType'] = this.fuelType;
-    data['userId'] = this.userId;
+    final Map<String, dynamic> data =  <String, dynamic>{};
+    data['id'] = id;
+    data['vehicleNumber'] = vehicleNumber;
+    data['vehicleYear'] = vehicleYear;
+    data['vehicleMake'] = vehicleMake;
+    data['vehicleModel'] = vehicleModel;
+    data['transmissionType'] = transmissionType;
+    data['fuelType'] = fuelType;
+    data['userId'] = userId;
     return data;
   }
 }

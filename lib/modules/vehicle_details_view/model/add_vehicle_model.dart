@@ -5,14 +5,14 @@ class AddVehicleModel {
 
   AddVehicleModel.fromJson(Map<String, dynamic> json) {
     apiresponse = json['apiresponse'] != null
-        ? new Apiresponse.fromJson(json['apiresponse'])
+        ?  Apiresponse.fromJson(json['apiresponse'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.apiresponse != null) {
-      data['apiresponse'] = this.apiresponse!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (apiresponse != null) {
+      data['apiresponse'] = apiresponse!.toJson();
     }
     return data;
   }
@@ -27,17 +27,17 @@ class Apiresponse {
 
   Apiresponse.fromJson(Map<String, dynamic> json) {
     dataArray = json['dataArray'];
-    data = json['data'] != null ? new AddVehicleData.fromJson(json['data']) : null;
+    data = json['data'] != null ?  AddVehicleData.fromJson(json['data']) : null;
     timestamp = json['timestamp'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['dataArray'] = this.dataArray;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['dataArray'] = dataArray;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
-    data['timestamp'] = this.timestamp;
+    data['timestamp'] = timestamp;
     return data;
   }
 }
@@ -77,16 +77,16 @@ class AddVehicleData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['photo'] = this.photo;
-    data['vehicleNumber'] = this.vehicleNumber;
-    data['vehicleYear'] = this.vehicleYear;
-    data['vehicleMake'] = this.vehicleMake;
-    data['vehicleModel'] = this.vehicleModel;
-    data['transmissionType'] = this.transmissionType;
-    data['fuelType'] = this.fuelType;
-    data['userId'] = this.userId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['photo'] = photo;
+    data['vehicleNumber'] = vehicleNumber;
+    data['vehicleYear'] = vehicleYear;
+    data['vehicleMake'] = vehicleMake;
+    data['vehicleModel'] = vehicleModel;
+    data['transmissionType'] = transmissionType;
+    data['fuelType'] = fuelType;
+    data['userId'] = userId;
     return data;
   }
 }

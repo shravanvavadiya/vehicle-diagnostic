@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:flutter_template/api/api.dart';
 import 'package:flutter_template/api/exception/app_exception.dart';
-import 'package:flutter_template/api/responce_handler.dart';
 import 'package:flutter_template/modules/personal_information_view/model/personal_information_model.dart';
 import 'package:flutter_template/utils/api_constants.dart';
-import 'package:image_picker/image_picker.dart';
 
 /// Personal Information ::
 class PersonalInformationService {
@@ -21,7 +20,7 @@ class PersonalInformationService {
   //   }
   // }
   static Future<PersonalInformationModel> personalInformation({
-    required String imagePath,
+     String? imagePath,
     required String email,
     required String firstName,
     required String lastName,

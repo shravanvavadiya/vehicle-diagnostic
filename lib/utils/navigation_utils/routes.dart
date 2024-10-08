@@ -2,19 +2,12 @@ import 'package:flutter_template/modules/authentication/presentation/google_logi
 import 'package:flutter_template/modules/dashboad/home/presentation/home_screen.dart';
 import 'package:flutter_template/modules/dashboad/home/presentation/vehicle_details_screen.dart';
 import 'package:flutter_template/modules/personal_information_view/get_started_screen.dart';
-import 'package:flutter_template/modules/personal_information_view/presentation/user_information_screen.dart';
 import 'package:flutter_template/modules/profile/presentation/profile_screen.dart';
-import 'package:flutter_template/modules/subscriptions/presentation/subscriptions_summery_screen.dart';
-import 'package:flutter_template/modules/vehicle_details_view/presentation/add_vehicle_screen.dart';
-import 'package:flutter_template/modules/vehicle_details_view/presentation/add_vehicle_details_screen.dart';
 import 'package:flutter_template/modules/splash/presentation/splash_screen.dart';
+import 'package:flutter_template/modules/subscriptions/presentation/subscriptions_summery_screen.dart';
 import 'package:get/get.dart';
-import '../../demo/demo_1.dart';
-import '../../demo/pre_load_data.dart';
-import '../../modules/add_vehicle_information/presentation/question_answer.dart';
-import '../../modules/add_vehicle_information/presentation/vehicle_diagnosis_screen.dart';
 import '../../modules/authentication/presentation/create_new_password_screen.dart';
-import '../../modules/authentication/presentation/log_in_with_email_id.dart';
+import '../../modules/authentication/presentation/log_in_with_email_screen.dart';
 import '../../modules/profile/presentation/account_information_screen.dart';
 import '../../modules/subscriptions/presentation/subscriptions_plan_screen.dart';
 
@@ -42,19 +35,19 @@ mixin Routes {
   static const String subscriptionsPlanScreen = '/subscriptionsPlanScreen';
 
   static List<GetPage<dynamic>> pages = [
-    GetPage<dynamic>(
+    /*GetPage<dynamic>(
       name: demo01,
       page: () => TextFieldButtonExample(),
       transition: defaultTransition,
-    ),
+    ),*/
     GetPage<dynamic>(
       name: logInWithEmailId,
-      page: () => LogInWithEmailIdScreen(),
+      page: () => const LogInWithEmailScreen(),
       transition: defaultTransition,
     ),
     GetPage<dynamic>(
       name: createNewPasswordScreen,
-      page: () => CreateNewPasswordScreen(
+      page: () => const CreateNewPasswordScreen(
         userEmail: "123@gmail.com",
       ),
       transition: defaultTransition,
@@ -66,7 +59,7 @@ mixin Routes {
     ),
     GetPage<dynamic>(
       name: signIn,
-      page: () => GoogleLogInScreen(),
+      page: () => const GoogleLogInScreen(),
       transition: defaultTransition,
     ),
 

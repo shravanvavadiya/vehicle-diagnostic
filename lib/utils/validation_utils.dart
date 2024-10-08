@@ -17,7 +17,8 @@ class AppValidation {
   }
 
   static String? emailValidator(String? value) {
-    const Pattern pattern = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+    const Pattern pattern =
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
     final RegExp regex = RegExp(pattern.toString());
     if (value!.isEmpty) {
       return AppString.pleaseEnterEmail;
@@ -48,7 +49,7 @@ class AppValidation {
     return null;
   }
 
-  static String? postCode(String? value) {
+/*  static String? post(String? value) {
     if (value!.isEmpty) {
       return AppString.pleaseEnterPostCode;
     } else if (value.length != 6) {
@@ -58,6 +59,17 @@ class AppValidation {
     } else {
       return null;
     }
+  }*/
+
+  static String? postCode(String? value) {
+    if (value == null || value.isEmpty) {
+      return AppString.pleaseEnterPostCode;
+    } else if (value.length <= 3) {
+      return AppString.postCodeMustBeDigits;
+    } else if (RegExp(r'^[A-Za-z0-9\s\-]{3,10}$').hasMatch(value)) {
+      return AppString.postCodeMustContainOnlyDigits;
+    }
+    return null;
   }
 
   static String? vehicleNumberValidator(String? value) {
@@ -106,34 +118,6 @@ class AppValidation {
     return null;
   }
 
-/* static String? passwordValidator(String? value) {
-    log("-->$value");
-    if (value!.isEmpty) {
-      return AppString.pleaseEnterPassword;
-    }  else if (value.length < 6) {
-      return AppString.passwordLengthMustBeAtLeastCharacter.tr;
-    } else if (!RegExp(r'[A-Z]').hasMatch(value)) {
-      return AppString.passwordMustContainUppercase.tr;
-    } else if (!RegExp(r'[a-z]').hasMatch(value)) {
-      return AppString.passwordMustContainLowercase.tr;
-    } else if (!RegExp(r'[0-9]').hasMatch(value)) {
-      return AppString.passwordMustContainNumber.tr;
-    } else if (!RegExp(r'[!@#\$&*~]').hasMatch(value)) {
-      return AppString.passwordMustContainSpecialCharacter.tr;
-    } else {
-      return null;
-    }
-  }*/
-
-/*  String? _validateConfirmPassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please confirm your password';
-    } else if (value != _passwordController.text) {
-      return 'Passwords do not match';
-    }
-    return null;
-  }
-  */
 }
 
 /*extension Validator on String {

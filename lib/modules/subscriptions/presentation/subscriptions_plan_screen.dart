@@ -16,7 +16,8 @@ class SubscriptionsPlanScreen extends StatefulWidget {
   const SubscriptionsPlanScreen({super.key});
 
   @override
-  State<SubscriptionsPlanScreen> createState() => _SubscriptionsPlanScreenState();
+  State<SubscriptionsPlanScreen> createState() =>
+      _SubscriptionsPlanScreenState();
 }
 
 class _SubscriptionsPlanScreenState extends State<SubscriptionsPlanScreen> {
@@ -48,7 +49,10 @@ class _SubscriptionsPlanScreenState extends State<SubscriptionsPlanScreen> {
           ).paddingOnly(left: 16.w),
           actions: [
             Container(
-              decoration: BoxDecoration(color: AppColors.whiteColor, borderRadius: BorderRadius.circular(30.r)),
+              decoration: BoxDecoration(
+                color: AppColors.whiteColor,
+                borderRadius: BorderRadius.circular(30.r),
+              ),
               child: Center(
                 child: AppText(
                   textAlign: TextAlign.center,
@@ -90,7 +94,6 @@ class _SubscriptionsPlanScreenState extends State<SubscriptionsPlanScreen> {
                 ),
               ),
               CustomButton(
-                buttonColor: AppColors.highlightedColor,
                 onTap: () {
                   Navigation.pushNamed(Routes.subscriptionsSummeryScreen);
                 },

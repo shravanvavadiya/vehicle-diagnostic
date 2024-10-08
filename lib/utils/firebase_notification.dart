@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_template/utils/constants.dart';
 import 'package:rxdart/rxdart.dart';
@@ -94,12 +94,16 @@ class FireBaseNotification {
     );
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse: (NotificationResponse? payload) => selectNotification(payload?.payload));
-    print("flutterLocalNotificationsPlugin Complete");
+    if (kDebugMode) {
+      print("flutterLocalNotificationsPlugin Complete");
+    }
   }
 
   Future selectNotification(String? payload) async {
     if (payload != null && payload.isNotEmpty) {
-      print('selectNotificationSubject: $payload');
+      if (kDebugMode) {
+        print('selectNotificationSubject: $payload');
+      }
       _selectNotificationSubject.add(payload);
     }
   }
@@ -161,17 +165,25 @@ class FireBaseNotification {
   }
 
   void configureDidReceiveLocalNotificationSubject() {
-    print('configureDidReceiveLocalNotificationSubject stream listen"');
+    if (kDebugMode) {
+      print('configureDidReceiveLocalNotificationSubject stream listen"');
+    }
     didReceiveLocalNotificationStream.listen((ReceivedNotification receivedNotification) async {
-      print("payloadNotification: $receivedNotification");
+      if (kDebugMode) {
+        print("payloadNotification: $receivedNotification");
+      }
       notificationToNavigate();
     });
   }
 
   void configureSelectNotificationSubject() {
-    print("configureSelectNotificationSubject stream listen");
+    if (kDebugMode) {
+      print("configureSelectNotificationSubject stream listen");
+    }
     selectNotificationStream.listen((String? payload) {
-      print("payloadNotification: $payload");
+      if (kDebugMode) {
+        print("payloadNotification: $payload");
+      }
       notificationToNavigate();
     });
   }

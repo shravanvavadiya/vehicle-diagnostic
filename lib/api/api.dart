@@ -1,25 +1,19 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_template/api/logger_interceptor.dart';
 import 'package:flutter_template/api/preferences/shared_preferences_helper.dart';
-import 'package:flutter_template/modules/vehicle_details_view/model/add_vehicle_model.dart';
 import 'package:flutter_template/modules/vehicle_details_view/model/my_vehicle_model.dart';
 import 'package:flutter_template/utils/api_constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_interceptor/http_interceptor.dart';
-import 'package:image_picker/image_picker.dart';
-
-import '../utils/constants.dart';
 
 Map<String, String> headers() {
   final Map<String, String> headers = <String, String>{};
   headers["accept"] = "*/*";
   if (SharedPreferencesHelper.instance.getUserToken()?.isNotEmpty ?? false) {
     ///remove after test
-    String token =
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzI2ODM1MTk3LCJleHAiOjE3Mjc0Mzk5OTd9.QC8sQqIWJF9G_B1b1nTQXCjgF4ZpaZTajWH9tNxmD0XDmV9jiyUbBbfSRDCRCdXUHsrO3pcxYJDUP9hY9ERDEA";
     /* headers["Authorization"] = token;*/
     headers["Authorization"] = '${SharedPreferencesHelper.instance.getUserToken()}';
     log("headers ::: $headers");
@@ -63,14 +57,16 @@ class Api {
     Map<String, dynamic>? queryData,
     Map<String, dynamic>? bodyData,
   }) async {
-    log("post ${await headers()}}");
+    log("post ${headers()}}");
     log("post url::::: ${getUrl(url, queryParameters: queryData)}");
     final response = await dio.post(
       getUrl(url, queryParameters: queryData),
       body: jsonEncode(bodyData),
       headers: queryData == null ? contentHeader() : headers(),
     );
-    print("response $response");
+    if (kDebugMode) {
+      print("response $response");
+    }
     return response;
   }
 
@@ -79,7 +75,7 @@ class Api {
     Map<String, dynamic>? queryData,
     Map<String, dynamic>? bodyData,
   }) async {
-    log("put ${await headers()}}");
+    log("put ${headers()}}");
     final response =
         await dio.put(getUrl(url, queryParameters: queryData), body: jsonEncode(bodyData), headers: queryData == null ? contentHeader() : headers());
     return response;
@@ -195,7 +191,7 @@ class Api {
     required String firstName,
     required String lastName,
     required String postCode,
-    required String imagePath,
+    required String? imagePath,
   }) async {
     try {
       var headers = {'accept': '*/*', 'Authorization': '${SharedPreferencesHelper.instance.getUserToken()}'};
@@ -207,14 +203,23 @@ class Api {
         'postCode': postCode,
       };
 
-      request.files.add(await http.MultipartFile.fromPath('photo', imagePath));
+      log("imagePath ::-->$imagePath");
+
+
+      if (imagePath != null && imagePath.isNotEmpty) {
+        request.files.add(await http.MultipartFile.fromPath('photo', imagePath));
+      }
+
+
 
       request.fields.addAll(body);
       request.headers.addAll(headers);
 
       http.Response response = await http.Response.fromStream(await request.send());
       if (response.statusCode == 200) {
-        print(response);
+        if (kDebugMode) {
+          print(response);
+        }
         return response.body;
       }
     } catch (e, st) {
@@ -250,9 +255,13 @@ class Api {
 
       http.Response response = await http.Response.fromStream(await request.send());
       if (response.statusCode == 200) {
-        print(response);
-        log("imagePath ::${imagePath}");
-        print("response ::${response.body}");
+        if (kDebugMode) {
+          print(response);
+        }
+        log("imagePath ::$imagePath");
+        if (kDebugMode) {
+          print("response ::${response.body}");
+        }
         return response.body;
       }
     } catch (e, st) {

@@ -75,7 +75,6 @@ class CustomTextField extends StatelessWidget {
               letterSpacing: 0.5,
             ),
             onTap: onTap,
-
             obscureText: isObscure,
             obscuringCharacter: '*',
             onChanged: onChanged,
@@ -89,7 +88,6 @@ class CustomTextField extends StatelessWidget {
             cursorColor: cursorColor,
             textAlign: textAlign ?? TextAlign.start,
             enabled: enabled,
-
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(4.r),
@@ -124,6 +122,7 @@ class CustomTextField extends StatelessWidget {
                 fontSize: 15.sp,
                 letterSpacing: 0.5,
               ),
+              errorMaxLines: 3,
               filled: true,
               fillColor: AppColors.backgroundColor,
               disabledBorder: OutlineInputBorder(

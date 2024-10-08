@@ -37,12 +37,12 @@ class Apiresponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['dataArray'] = this.dataArray;
+    final Map<String, dynamic> data =  <String, dynamic>{};
+    data['dataArray'] =dataArray;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    data['timestamp'] = this.timestamp;
+    data['timestamp'] = timestamp;
     return data;
   }
 }
@@ -73,13 +73,13 @@ class QueData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['creationDate'] = this.creationDate;
-    data['lastModifiedDate'] = this.lastModifiedDate;
-    data['id'] = this.id;
-    data['question'] = this.question;
-    data['answers'] = this.answers;
-    data['key'] = this.key;
+    final Map<String, dynamic> data =  <String, dynamic>{};
+    data['creationDate'] = creationDate;
+    data['lastModifiedDate'] = lastModifiedDate;
+    data['id'] = id;
+    data['question'] = question;
+    data['answers'] = answers;
+    data['key'] = key;
     return data;
   }
 }

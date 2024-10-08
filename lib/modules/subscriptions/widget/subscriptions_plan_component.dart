@@ -1,10 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_template/utils/app_colors.dart';
+import 'package:flutter_template/utils/app_string.dart';
 import 'package:get/get.dart';
+
 import '../../../utils/app_text.dart';
 import '../../../utils/assets.dart';
 
@@ -60,13 +60,13 @@ class SubscriptionsPlanComponent extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AppText(
-                        text: "Free Plan",
+                        text: AppString.freePlan,
                         fontWeight: FontWeight.w600,
                         color: AppColors.primaryColor,
                         fontSize: 16.sp,
                       ),
                       AppText(
-                        text: "Basic Diagnostics",
+                        text: AppString.basicDiagnostics,
                         fontWeight: FontWeight.w500,
                         color: AppColors.grey60,
                         fontSize: 12.sp,
@@ -83,7 +83,7 @@ class SubscriptionsPlanComponent extends StatelessWidget {
                       fontSize: 22.sp,
                     ),
                     AppText(
-                      text: " /month",
+                      text: " /${AppString.month}",
                       fontWeight: FontWeight.w500,
                       color: AppColors.blackColor,
                       fontSize: 12.sp,
@@ -96,7 +96,7 @@ class SubscriptionsPlanComponent extends StatelessWidget {
               height: 15.h,
               thickness: 0.5.h,
               color: AppColors.borderColor,
-            ).paddingOnly(top: 20.h, bottom: 10.h),
+            ).paddingOnly(top: 20.h, bottom: 10.h,),
             SizedBox(
               width: Get.width,
               child: Column(
@@ -104,7 +104,7 @@ class SubscriptionsPlanComponent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AppText(
-                    text: "Credit:",
+                    text: "${AppString.credit} :",
                     fontWeight: FontWeight.w500,
                     color: AppColors.titleColor,
                     fontSize: 15.sp,
@@ -128,7 +128,7 @@ class SubscriptionsPlanComponent extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       AppText(
-                        text: "Feature :",
+                        text: "${AppString.feature} :",
                         fontWeight: FontWeight.w500,
                         color: AppColors.titleColor,
                         fontSize: 15.sp,

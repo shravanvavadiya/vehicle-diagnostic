@@ -1,18 +1,16 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_template/modules/add_vehicle_information/models/selected_qns_ans_model.dart';
 import 'package:flutter_template/modules/dashboad/home/presentation/home_screen.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 
+import '../../../utils/common_api_caller.dart';
+import '../../../utils/loading_mixin.dart';
 import '../models/submit_vehicle_request.dart';
 import '../models/vehicle_information_step_model.dart';
 import '../services/vehicle_information_service.dart';
-import '../../../utils/common_api_caller.dart';
-import '../../../utils/loading_mixin.dart';
 
 class QuestionAndAnsController extends GetxController with LoadingMixin, LoadingApiMixin {
   PageController pageController = PageController();

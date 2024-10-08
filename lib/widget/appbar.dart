@@ -4,7 +4,7 @@ import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
-    Key? key,
+    super.key,
     required this.title,
     this.automaticallyImplyLeading,
     this.actions,
@@ -13,7 +13,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.bottom,
     this.leading,
     this.color,
-  }) : super(key: key);
+  });
   final String title;
   final bool? automaticallyImplyLeading;
   final bool? centerTitle;

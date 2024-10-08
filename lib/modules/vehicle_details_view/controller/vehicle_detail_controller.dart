@@ -1,23 +1,17 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_template/modules/vehicle_details_view/model/add_vehicle_model.dart';
 import 'package:flutter_template/modules/vehicle_details_view/model/my_vehicle_model.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../api/preferences/shared_preferences_helper.dart';
 import '../../../utils/app_preferences.dart';
 import '../../../utils/app_string.dart';
 import '../../../utils/common_api_caller.dart';
 import '../../../utils/loading_mixin.dart';
-import '../../../utils/navigation_utils/navigation.dart';
-import '../../../utils/navigation_utils/routes.dart';
-import '../../../widget/app_snackbar.dart';
 import '../../add_vehicle_information/presentation/vehicle_diagnosis_screen.dart';
 import '../../dashboad/home/models/get_vehicle_data_model.dart';
 import '../service/add_vehicle_service.dart';
@@ -27,7 +21,9 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
   RxInt vehicleUserId = 0.obs;
 
   VehicleDetailController({required String name, required Vehicle fetchData}) {
-    print(name);
+    if (kDebugMode) {
+      print(name);
+    }
     name == AppString.editScreenFlag
         ? {
             screenName.value = AppString.editYourVehicleDetails,
@@ -135,11 +131,16 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
       },
       result: (result) async {
         if (result != null) {
-          print("result $result");
+          if (kDebugMode) {
+            print("result $result");
+          }
           Map<String, dynamic> jsonData = jsonDecode(result ?? "");
           int vehicleId = jsonData['apiresponse']['data']['id'];
-          print('Vehicle ID: $vehicleId');
+          if (kDebugMode) {
+            print('Vehicle ID: $vehicleId');
+          }
           AppPreference.setInt("VEHICLEID", vehicleId);
+
 
           await Get.offAll(VehicleDiagnosisScreen(
             screenName: AppString.newVehicleAddFlag,
@@ -175,10 +176,14 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
         handleLoading(false);
       },
       result: (result) async {
-        print("result ${result}");
+        if (kDebugMode) {
+          print("result $result");
+        }
         Map<String, dynamic> jsonData = jsonDecode(result!);
         int vehicleId = jsonData['apiresponse']['data']['vehicleId'];
-        print('Vehicle ID: $vehicleId');
+        if (kDebugMode) {
+          print('Vehicle ID: $vehicleId');
+        }
         AppPreference.setInt("VEHICLEID", vehicleId);
         Get.to(VehicleDiagnosisScreen(
           screenName: AppString.editScreenFlag,

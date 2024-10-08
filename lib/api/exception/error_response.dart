@@ -5,14 +5,14 @@ class ErrorResponse {
 
   ErrorResponse.fromJson(Map<String, dynamic> json) {
     apiError = json['apierror'] != null
-        ? new ApiError.fromJson(json['apierror'])
+        ?  ApiError.fromJson(json['apierror'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.apiError != null) {
-      data['apierror'] = this.apiError!.toJson();
+    final Map<String, dynamic> data =  <String, dynamic>{};
+    if (apiError != null) {
+      data['apierror'] = apiError!.toJson();
     }
     return data;
   }
@@ -41,7 +41,7 @@ class ApiError {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     data['timestamp'] = timestamp;
     data['message'] = message;

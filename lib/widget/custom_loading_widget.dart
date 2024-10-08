@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomLoadingWidget extends StatelessWidget {
-  const CustomLoadingWidget({Key? key, this.color, this.size}) : super(key: key);
+  const CustomLoadingWidget({super.key, this.color, this.size});
   final double? size;
   final Color? color;
 

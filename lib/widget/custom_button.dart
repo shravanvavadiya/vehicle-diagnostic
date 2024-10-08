@@ -29,7 +29,7 @@ class CustomButton extends StatefulWidget {
   final double? borderWidth;
 
   const CustomButton(
-      {Key? key,
+      {super.key,
       this.height,
       this.width,
       this.text,
@@ -51,8 +51,7 @@ class CustomButton extends StatefulWidget {
       this.needBorderColor = true,
       this.borderRadius,
       this.borderWidth,
-      this.svgPadding})
-      : super(key: key);
+      this.svgPadding});
 
   @override
   CustomButtonState createState() => CustomButtonState();
@@ -63,8 +62,7 @@ class CustomButtonState extends State<CustomButton> {
   Widget build(BuildContext context) {
     final buttonColor = (widget.isDisabled)
         ? widget.disableButtonColor ?? AppColors.disableButtonColor
-        : widget.buttonColor ?? AppColors.highlightedColor;
-
+        : widget.buttonColor ??  AppColors.primaryColor;
     return GestureDetector(
       onTap: (widget.isLoader || widget.isDisabled) ? null : widget.onTap,
       child: Container(
@@ -74,7 +72,7 @@ class CustomButtonState extends State<CustomButton> {
         decoration: BoxDecoration(
           borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
           color: widget.isDisabled
-              ? AppColors.highlightedColor.withOpacity(0.2)
+              ? AppColors.primaryColor.withOpacity(0.5)
               : buttonColor,
           border: Border.all(
               color: widget.isDisabled?AppColors.transparent:(widget.buttonBorderColor != null)

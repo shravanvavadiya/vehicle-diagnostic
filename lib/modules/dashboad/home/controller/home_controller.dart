@@ -9,12 +9,8 @@ import 'package:flutter_template/utils/common_api_caller.dart';
 import 'package:flutter_template/utils/loading_mixin.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 
 import '../../../../utils/app_preferences.dart';
-import '../../../../utils/app_string.dart';
-import '../../../../utils/navigation_utils/navigation.dart';
-import '../../../../utils/navigation_utils/routes.dart';
 import '../../../profile/models/get_user_model.dart';
 import '../../../profile/service/profile_service.dart';
 import '../models/get_vehicle_data_model.dart';
@@ -46,7 +42,7 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
 
   @override
   void onInit() {
-    print("refresh data");
+    log("In it call  :::");
     SchedulerBinding.instance.addPostFrameCallback((_) {
       getUserProfileAPI();
       print("refresh data 1 ");

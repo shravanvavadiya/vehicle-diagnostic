@@ -5,8 +5,10 @@ import 'package:flutter_template/widget/info_text_widget.dart';
 import 'package:get/get.dart';
 import 'package:story/story.dart';
 
+import '../models/story_model.dart';
+
 class StoryViewScreen extends StatefulWidget {
-  StoryViewScreen({super.key});
+  const StoryViewScreen({super.key});
 
   @override
   State<StoryViewScreen> createState() => _StoryViewScreenState();
@@ -14,16 +16,16 @@ class StoryViewScreen extends StatefulWidget {
 
 class _StoryViewScreenState extends State<StoryViewScreen> {
   late ValueNotifier<IndicatorAnimationCommand> indicatorAnimationController;
-  static final sampleUsers = [
-    UserModel(
+   final storyList = [
+    StoryModel(
       [
-        StoryModel("assets/images/onboard1.png", "Diagnose Vehicle Faults",
+        StoryData("assets/images/onboard1.png", "Diagnose Vehicle Faults",
             "Your personal AI Mechanic will learn about your vehicles"),
-        StoryModel(
-            "assets/images/onboard2.png", "Explain the Issues Clearly",
+        StoryData("assets/images/onboard2.png", "Explain the Issues Clearly",
             "It will give a detailed explanation of the potential faults it finds"),
-        StoryModel(
-            "assets/images/onboard3.png", "Resolve or Refer to a Specialist",
+        StoryData(
+            "assets/images/onboard3.png",
+            "Resolve or Refer to a Specialist",
             "Your AI Mechanic will give you guidance on self repair, or provide an explanation that you can relay to your real mechanic")
       ],
     )
@@ -45,40 +47,13 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-      StoryPageView(
+      body: StoryPageView(
         indicatorVisitedColor: AppColors.highlightedColor,
         backgroundColor: AppColors.backgroundColor,
         itemBuilder: (context, pageIndex, storyIndex) {
-          final user = sampleUsers[pageIndex];
+          final user = storyList[pageIndex];
           final story = user.stories[storyIndex];
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                color: AppColors.backgroundColor,
-                height: 350.h,
-                width: double.infinity,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: StoryImage(
-                    key: ValueKey(story.imageUrl),
-                    imageProvider: AssetImage(
-                      story.imageUrl,
-                    ),
-                  ),
-                ),
-              ).paddingOnly(top: 50.h),
-              InfoTextWidget(
-                title: story.title,
-                titleFontSize: 40.sp,
-                titleFontWeight: FontWeight.w600,
-                description: story.subTitle,
-                fontSize: 15.3.sp,
-                fontWeight: FontWeight.w400,
-              ).paddingSymmetric(horizontal: 16.w),
-            ],
-          );
+          return _buildStoryContent(story);
         },
         indicatorAnimationController: indicatorAnimationController,
         initialStoryIndex: (pageIndex) {
@@ -87,10 +62,9 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
           }
           return 0;
         },
-
-        pageLength: sampleUsers.length,
+        pageLength: storyList.length,
         storyLength: (int pageIndex) {
-          return sampleUsers[pageIndex].stories.length;
+          return storyList[pageIndex].stories.length;
         },
         onPageLimitReached: () {},
         indicatorUnvisitedColor: AppColors.highlightedColor.withOpacity(0.17),
@@ -98,7 +72,7 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
     );
   }
 
-  Widget _buildStoryContent(StoryModel story) {
+  Widget _buildStoryContent(StoryData story) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -125,18 +99,4 @@ class _StoryViewScreenState extends State<StoryViewScreen> {
       ],
     );
   }
-}
-
-class UserModel {
-  UserModel(this.stories);
-
-  final List<StoryModel> stories;
-}
-
-class StoryModel {
-  StoryModel(this.imageUrl, this.title, this.subTitle);
-
-  final String imageUrl;
-  final String title;
-  final String subTitle;
 }

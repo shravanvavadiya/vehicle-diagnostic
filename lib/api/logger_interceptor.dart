@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:http_interceptor/models/interceptor_contract.dart';
 
@@ -8,9 +9,11 @@ class LoggerInterceptor extends InterceptorContract {
   Future<BaseRequest> interceptRequest({
     required BaseRequest request,
   }) async {
-    print('----- Request -----');
-    print(request.toString());
-    print(request.headers.toString());
+    if (kDebugMode) {
+      print('----- Request -----');
+      print(request.toString());
+      print(request.headers.toString());
+    }
     return request;
   }
 

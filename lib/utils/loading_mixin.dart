@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_template/utils/context_extensions.dart';
 import 'package:flutter_template/widget/app_loader.dart';
 import 'package:get/get.dart';
-import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 
 mixin LoadingMixin {

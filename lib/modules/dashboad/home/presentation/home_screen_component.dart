@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_template/modules/dashboad/home/controller/home_controller.dart';
 import 'package:flutter_template/utils/assets.dart';
 import 'package:get/get.dart';
+
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_text.dart';
-import '../../../../utils/custom_catch_image.dart';
 import '../../../../utils/navigation_utils/navigation.dart';
 import '../../../../utils/navigation_utils/routes.dart';
 import '../models/get_vehicle_data_model.dart';
@@ -13,7 +12,7 @@ import '../models/get_vehicle_data_model.dart';
 class HomeScreenComponent extends StatelessWidget {
   final Vehicle? getVehicleData;
 
-  HomeScreenComponent({super.key, required this.getVehicleData});
+  const HomeScreenComponent({super.key, required this.getVehicleData});
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +23,14 @@ class HomeScreenComponent extends StatelessWidget {
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          /*  CustomCachedImage(imageUrl:"${getVehicleData?.photo}",height: 210.h, width: Get.width),*/
           Container(
             height: 200.h,
             decoration: BoxDecoration(
               border: Border.all(color: AppColors.borderColor, width: 0.2),
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: getVehicleData?.photo != null && getVehicleData!.photo!.isNotEmpty
+                image: getVehicleData?.photo != null &&
+                        getVehicleData!.photo!.isNotEmpty
                     ? NetworkImage("${getVehicleData?.photo}")
                     : const AssetImage(ImagesAsset.imgPlaceholder),
               ),
@@ -75,8 +74,13 @@ class HomeScreenComponent extends StatelessWidget {
                   letterSpacing: 0.4,
                   color: Colors.white,
                 ),
-                AppText(text: "${getVehicleData?.vehicleMake}", fontSize: 13.sp, letterSpacing: 0.3, fontWeight: FontWeight.w500, color: Colors.white)
-                    .paddingOnly(top: 4.h),
+                AppText(
+                  text: "${getVehicleData?.vehicleMake}",
+                  fontSize: 13.sp,
+                  letterSpacing: 0.3,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ).paddingOnly(top: 4.h),
               ],
             ),
           ),

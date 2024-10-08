@@ -18,6 +18,7 @@ class ApiConstants {
   static const String submitVehicleRequest = "moreaboutvehicle/";
   static const String editVehicleRequest = "moreaboutvehicle/updateAboutVehicle";
   static const String deleteVehicle = "vehicle/delete/";
+  static const String deleteUserAccount = "user/delete/";
 }
 
 class ApiKeyConstants {

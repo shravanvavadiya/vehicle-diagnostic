@@ -1,11 +1,12 @@
 import 'dart:developer';
-import 'package:flutter_template/modules/authentication/models/authapi_res.dart';
+
 import 'package:flutter_template/modules/dashboad/home/presentation/home_screen.dart';
-import 'package:flutter_template/utils/navigation_utils/navigation.dart';
-import 'package:flutter_template/utils/navigation_utils/routes.dart';
 import 'package:get/get.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+
 import '../../../api/preferences/shared_preferences_helper.dart';
-import '../../../utils/app_preferences.dart';
+import '../../../utils/navigation_utils/navigation.dart';
+import '../../../widget/no_internet_popup.dart';
 import '../../authentication/presentation/google_login_screen.dart';
 
 class SplashController extends GetxController {
@@ -16,7 +17,30 @@ class SplashController extends GetxController {
         navigateFurther();
       });
     } on Exception catch (e) {}
+    checkNetwork();
     super.onInit();
+  }
+
+  bool isInternet = false;
+
+  void checkNetwork() async {
+    isInternet = await InternetConnectionChecker().hasConnection;
+    InternetConnectionChecker().onStatusChange.listen(
+          (InternetConnectionStatus status) async {
+        switch (status) {
+          case InternetConnectionStatus.connected:
+            if (!isInternet) {
+              Navigation.pop();
+            }
+            isInternet = true;
+            break;
+          case InternetConnectionStatus.disconnected:
+            isInternet = false;
+            commonNoInternetDialog(Get.context!);
+            break;
+        }
+      },
+    );
   }
 
   Future<void> navigateFurther() async {
@@ -39,7 +63,7 @@ class SplashController extends GetxController {
     if (token == true) {
       Get.offAll(HomeScreen());
     } else {
-      Get.offAll(GoogleLogInScreen());
+      Get.offAll(const GoogleLogInScreen());
     }
   }
 }

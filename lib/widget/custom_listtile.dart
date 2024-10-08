@@ -31,7 +31,7 @@ class CustomListTile extends StatelessWidget {
             fontSize: 15.sp,
             fontWeight: FontWeight.w600,
           ),
-          SizedBox(width: 50.w),
+          SizedBox(width: 60.w),
           Expanded(
             child: Align(
               alignment: Alignment.topRight,

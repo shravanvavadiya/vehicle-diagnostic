@@ -87,7 +87,7 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
     required String? imagePath,
   }) async {
     print("imagePath :: ===$imagePath");
-   await processApi(
+    await processApi(
       () => ProfileService.updateUserAPI(
           id: AppPreference.getInt("UserId"),
           email: email,
@@ -99,7 +99,7 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
       result: (data) async {
         log("Controller Data :: ${data?.apiresponse?.data?.photo}");
         updateUserProfileModel.value = data!;
-        SharedPreferencesHelper().setUserInfo(getUserProfileModel.value);
+        await SharedPreferencesHelper().setUserInfo(getUserProfileModel.value);
         Get.offAll(HomeScreen());
       },
     );

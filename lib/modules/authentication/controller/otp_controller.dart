@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_template/modules/personal_information_view/get_started_screen.dart';
+import 'package:flutter_template/utils/utils.dart';
 import 'package:get/get.dart';
 
 import '../../../api/preferences/shared_preferences_helper.dart';
@@ -74,8 +75,7 @@ class OtpController extends GetxController with LoadingMixin, LoadingApiMixin {
       print("user id ${AppPreference.getInt("UserId")}");
       log("user profile status :${result.apiresponse!.data!.profileCompleted}");
       Get.offAll(
-        const  GetStartedScreen(),
-
+        const GetStartedScreen(),
       );
       //Get.offAll(const UserInformationScreen(), transition: Transition.rightToLeft);
     });
@@ -112,13 +112,14 @@ class OtpController extends GetxController with LoadingMixin, LoadingApiMixin {
       log("otp verify error ---> $error --- $stack");
       handleLoading(false);
     }, result: (result) async {
-      handleLoading(true);
-
-      Get.to(
+      handleLoading(false);
+      Utils.hideKeyboardInApp(context);
+      Get.off(
           CreateNewPasswordScreen(
             userEmail: email,
           ),
           transition: Transition.rightToLeft);
+      handleLoading(false);
     });
     return null;
   }

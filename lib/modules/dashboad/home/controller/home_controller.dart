@@ -68,7 +68,7 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
   Future<void> getAllVehicles({required int currentPage}) async {
     isLoading.value = true;
     handleLoading(true);
-   await processApi(
+    await processApi(
       () => HomeService.getAllVehicle(currentPage: currentPage),
       error: (error, stack) => handleLoading(false),
       result: (data) {
@@ -90,7 +90,7 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
       isLoading.value = true;
       paginationLoading.value = false;
       handleLoading(true);
-     await processApi(
+      await processApi(
         () => HomeService.getAllVehicle(currentPage: currentPage),
         error: (error, stack) => handleLoading(false),
         result: (data) {
@@ -140,20 +140,20 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
   Rx<GetUserProfileModel> getUserProfileModel = GetUserProfileModel().obs;
 
   Future<void> getUserProfileAPI() async {
-   await processApi(
-      () => ProfileService.getUserAPI(
-        userId: AppPreference.getInt("UserId"),
-      ),
-      loading: handleLoading,
-      result: (data) {
+    await processApi(
+        () => ProfileService.getUserAPI(
+              userId: AppPreference.getInt("UserId"),
+            ),
+        loading: handleLoading, result: (data) {
+      if (data != null) {
         getUserProfileModel.value = data;
         log("profile image ::${data.profileResponse?.profileData?.photo}");
         log("${getUserProfileModel.value.profileResponse!.profileData!.firstName} ${getUserProfileModel.value.profileResponse!.profileData!.lastName}");
         SharedPreferencesHelper().setUserInfo(getUserProfileModel.value);
 
-        log("user dave data ${SharedPreferencesHelper().getUserInfo()!.profileResponse!.profileData!.toJson()}");
-      },
-    );
+        log("user dave data ${SharedPreferencesHelper().getUserInfo()?.profileResponse?.profileData?.toJson()}");
+      }
+    });
   }
 
   @override

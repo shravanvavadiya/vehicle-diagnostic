@@ -65,7 +65,7 @@ class Api {
       headers: queryData == null ? contentHeader() : headers(),
     );
     if (kDebugMode) {
-      print("response $response");
+      print("post function response :::::::: $response");
     }
     return response;
   }
@@ -142,10 +142,13 @@ class Api {
 
       request.headers.addAll(headers);
       http.Response response = await http.Response.fromStream(await request.send());
+      print("Out Side status code 200");
+      log("find error ${response.statusCode}");
       if (response.statusCode == 200 || response.statusCode == 201) {
+        print("inside status code 200");
         return response.body;
       }
-      log("response ${response.body}");
+      log("response add vehicle api ${response.body}");
     } catch (e, st) {
       log('multiPartRequest Error :: $e ::: $st');
     }
@@ -178,7 +181,7 @@ class Api {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response.body;
       }
-      log("response ${response.body}");
+      log("add edit vehicle api screen::::: ${response.body}");
     } catch (e, st) {
       log('multiPartRequest Error :: $e ::: $st');
     }
@@ -205,21 +208,17 @@ class Api {
 
       log("imagePath ::-->$imagePath");
 
-
       if (imagePath != null && imagePath.isNotEmpty) {
         request.files.add(await http.MultipartFile.fromPath('photo', imagePath));
       }
-
-
 
       request.fields.addAll(body);
       request.headers.addAll(headers);
 
       http.Response response = await http.Response.fromStream(await request.send());
       if (response.statusCode == 200) {
-        if (kDebugMode) {
-          print(response);
-        }
+        print(response);
+
         return response.body;
       }
     } catch (e, st) {
@@ -255,13 +254,12 @@ class Api {
 
       http.Response response = await http.Response.fromStream(await request.send());
       if (response.statusCode == 200) {
-        if (kDebugMode) {
-          print(response);
-        }
+        print(response);
+
         log("imagePath ::$imagePath");
-        if (kDebugMode) {
-          print("response ::${response.body}");
-        }
+
+        print("response ::${response.body}");
+
         return response.body;
       }
     } catch (e, st) {

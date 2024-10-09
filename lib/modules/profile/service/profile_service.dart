@@ -52,6 +52,7 @@ class ProfileService {
       throw AppException.exceptionHandler(exception);
 
     }
+    return null;
   }
 
   static Future<void> deleteUserAccount({

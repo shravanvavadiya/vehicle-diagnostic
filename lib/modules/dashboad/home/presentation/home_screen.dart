@@ -113,9 +113,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   maxHeightDiskCache: 150,
                                   maxWidthDiskCache: 150,
                                   color: Colors.transparent,
-                                  imageUrl: SharedPreferencesHelper.instance.getUserInfo()?.profileResponse?.profileData?.photo ?? "",
-
-                                  // imageUrl: homeController.getUserProfileModel.value.profileResponse?.profileData!.photo ?? "",
+                                  // imageUrl: SharedPreferencesHelper.instance.getUserInfo()?.profileResponse?.profileData?.photo ?? "",
+                                  //
+                                  imageUrl: homeController.getUserProfileModel.value.profileResponse?.profileData!.photo ?? "",
                                   fit: BoxFit.cover,
                                   imageBuilder: (context, imageProvider) => Container(
                                     height: 20.h,

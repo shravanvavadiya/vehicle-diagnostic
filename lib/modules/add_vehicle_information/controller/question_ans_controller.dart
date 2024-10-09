@@ -146,7 +146,7 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
       result: (data) {
         log("data::: ${data.toJson()}");
         // Navigation.pushNamed(Routes.homeScreen);
-        Get.offAll(HomeScreen());
+        Get.to(HomeScreen());
         clearAll();
         handleLoading(false);
       },

@@ -16,8 +16,7 @@ class VehicleDiagnosisScreen extends StatefulWidget {
   final String screenName;
   final int vehicleId;
 
-  const VehicleDiagnosisScreen(
-      {super.key, required this.screenName, required this.vehicleId});
+  const VehicleDiagnosisScreen({super.key, required this.screenName, required this.vehicleId});
 
   @override
   State<VehicleDiagnosisScreen> createState() => _VehicleDiagnosisScreenState();
@@ -40,30 +39,26 @@ class _VehicleDiagnosisScreenState extends State<VehicleDiagnosisScreen> {
                 title: AppString.letsStartTheDiagnosis,
                 description: AppString.letsStartTheDiagnosisDes,
                 buttonText: AppString.addVehicleDetails,
-                //bottom: 100.h,
                 height: 1.5,
                 bottom: MediaQuery.of(context).size.height * 0.15,
                 isStart: true,
                 yesOnTap: () async {
+                  questionAndAnsController.getAllVehiclesQue();
+                  log("preLoadDataFunction===>onTAP yes screenName::${widget.screenName}");
                   await questionAndAnsController.getAllVehiclesQue();
                   log("preLoadDataFunction===>onTAP yes screenName::${widget.screenName} ${questionAndAnsController.vehicleModel.value.apiresponse?.data?.length}");
                   if (widget.screenName == AppString.editScreenFlag) {
                     log("preLoadDataFunction===>onTAP yes IN IF screenName::${widget.screenName}");
-                    await questionAndAnsController.preLoadDataFunction(
-                        vehicleId: widget.vehicleId);
+                    await questionAndAnsController.preLoadDataFunction(vehicleId: widget.vehicleId);
                     setState(() {});
                   }
                   await Get.to(
-                    QuestionAndAnsScreen(
-                        screenName: widget.screenName,
-                        vehicleId: widget.vehicleId),
+                    QuestionAndAnsScreen(screenName: widget.screenName, vehicleId: widget.vehicleId),
                   );
                   setState(() {});
                 },
                 noOnTap: () {
-                  widget.screenName == AppString.editScreenFlag
-                      ? Get.offAll(HomeScreen())
-                      : Get.offAll(HomeScreen());
+                  widget.screenName == AppString.editScreenFlag ? Get.offAll(HomeScreen()) : Get.offAll(HomeScreen());
                 }),
           ),
         ),

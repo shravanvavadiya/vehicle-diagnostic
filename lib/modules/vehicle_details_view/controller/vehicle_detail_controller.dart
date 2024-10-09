@@ -21,9 +21,7 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
   RxInt vehicleUserId = 0.obs;
 
   VehicleDetailController({required String name, required Vehicle fetchData}) {
-    if (kDebugMode) {
-      print(name);
-    }
+    print(name);
     name == AppString.editScreenFlag
         ? {
             screenName.value = AppString.editYourVehicleDetails,
@@ -140,7 +138,6 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
             print('Vehicle ID: $vehicleId');
           }
           AppPreference.setInt("VEHICLEID", vehicleId);
-
 
           await Get.offAll(VehicleDiagnosisScreen(
             screenName: AppString.newVehicleAddFlag,

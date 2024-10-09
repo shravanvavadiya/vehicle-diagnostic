@@ -72,7 +72,6 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
       () => HomeService.getAllVehicle(currentPage: currentPage),
       error: (error, stack) => handleLoading(false),
       result: (data) {
-        // data.apiresponse!.data!.vehicle!.isNotEmpty
         data.apiresponse?.dataArray == null
             ? {
                 isResponseData.value = true,

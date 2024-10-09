@@ -22,15 +22,14 @@ class LoginController extends GetxController {
         ],
       );
 
-      if (kDebugMode) {
-        print("credential :: $credential");
-        print("credential.email :: ${credential.email}");
-        print("credential.givenName :: ${credential.givenName}");
-        print("credential.familyName :: ${credential.familyName ?? ''}");
-        print("credential.userIdentifier :: ${credential.userIdentifier}");
-        print("credential.authorizationCode :: ${credential.authorizationCode}");
-        print("credential.identityToken :: ${credential.identityToken}");
-      }
+      print("credential :: $credential");
+      print("credential.email :: ${credential.email}");
+      print("credential.givenName :: ${credential.givenName}");
+      print("credential.familyName :: ${credential.familyName ?? ''}");
+      print("credential.userIdentifier :: ${credential.userIdentifier}");
+      print("credential.authorizationCode :: ${credential.authorizationCode}");
+      print("credential.identityToken :: ${credential.identityToken}");
+
       appleEmail.value = credential.email ?? '';
       appleId.value = credential.userIdentifier ?? '';
       Get.offAll(const GetStartedScreen());

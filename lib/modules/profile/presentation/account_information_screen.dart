@@ -69,9 +69,7 @@ class AccountInformationScreen extends StatelessWidget {
             firstname: profileController.firstname.text,
             lastname: profileController.lastname.text,
             postCode: profileController.postCode.text,
-            imagePath: profileController.image!.value.contains("http")
-                ? null
-                : profileController.image!.value,
+            imagePath: profileController.image!.value.contains("http") ? null : profileController.image!.value,
           );
         }
       },
@@ -99,12 +97,10 @@ class AccountInformationScreen extends StatelessWidget {
       text: AppString.postCode,
       hintText: AppString.postCode,
       validator: AppValidation.postCode,
-      keyboardType: TextInputType.number,
       maxLength: 10,
       controller: profileController.postCode,
       onChanged: (val) {
-        profileController.isValidatePostCode.value =
-            profileController.postCode.text.isNotEmpty;
+        profileController.isValidatePostCode.value = profileController.postCode.text.isNotEmpty;
       },
     );
   }
@@ -131,8 +127,7 @@ class AccountInformationScreen extends StatelessWidget {
       textCapitalization: TextCapitalization.words,
       controller: profileController.lastname,
       onChanged: (val) {
-        profileController.isValidateLastName.value =
-            profileController.lastname.text.isNotEmpty;
+        profileController.isValidateLastName.value = profileController.lastname.text.isNotEmpty;
       },
     );
   }
@@ -145,8 +140,7 @@ class AccountInformationScreen extends StatelessWidget {
       textCapitalization: TextCapitalization.words,
       controller: profileController.firstname,
       onChanged: (val) {
-        profileController.isValidateName.value =
-            profileController.firstname.text.isNotEmpty;
+        profileController.isValidateName.value = profileController.firstname.text.isNotEmpty;
       },
     ).paddingOnly(
       top: 24.h,
@@ -161,29 +155,31 @@ class AccountInformationScreen extends StatelessWidget {
         alignment: Alignment.bottomRight,
         children: [
           Obx(() {
-            log("image val ::${profileController.image!.value }");
-            return profileController.image!.value.isEmpty ||
-                    profileController.image == null
-                ? Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: AppColors.borderColor,
-                        width: 0.5.w,
+            log("image val ::${profileController.image!.value}");
+            return profileController.image!.value.isEmpty || profileController.image == null
+                ? GestureDetector(
+                    onTap: () async {
+                      await Utils().imagePickerModel(selectImage: profileController.imagePath, image: profileController.image);
+                      profileController.isValidateImage.value = true;
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.borderColor,
+                          width: 0.5.w,
+                        ),
                       ),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(80.r),
-                      child: Image.asset(ImagesAsset.user,
-                          fit: BoxFit.cover, height: 150.h, width: 150.h),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(80.r),
+                        child: Image.asset(ImagesAsset.user, fit: BoxFit.cover, height: 150.h, width: 150.h),
+                      ),
                     ),
                   )
                 : ClipOval(
                     child: GestureDetector(
                       onTap: () async {
-                        await Utils().imagePickerModel(
-                            selectImage: profileController.imagePath,
-                            image: profileController.image);
+                        await Utils().imagePickerModel(selectImage: profileController.imagePath, image: profileController.image);
                         profileController.isValidateImage.value = true;
                       },
                       child: Container(
@@ -198,14 +194,12 @@ class AccountInformationScreen extends StatelessWidget {
                         width: 150.h,
                         child: Image.network(
                           profileController.image!.value,
-                          loadingBuilder: (BuildContext context, Widget child,
-                              ImageChunkEvent? loadingProgress) {
+                          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                             if (loadingProgress == null) {
                               return child;
                             }
                             return Center(
-                              child: CircularProgressIndicator(
-                                  color: AppColors.highlightedColor),
+                              child: CircularProgressIndicator(color: AppColors.highlightedColor),
                             );
                           },
                           height: 150.h,
@@ -215,24 +209,16 @@ class AccountInformationScreen extends StatelessWidget {
                             Future.microtask(
                               () {
                                 profileController.isModified.value =
-                                    profileController.image!.value !=
-                                        profileController
-                                            .getUserProfileModel
-                                            .value
-                                            .profileResponse
-                                            ?.profileData
-                                            ?.photo;
+                                    profileController.image!.value != profileController.getUserProfileModel.value.profileResponse?.profileData?.photo;
                               },
                             );
                             return Image.file(
                               File(profileController.image!.value),
                               fit: BoxFit.cover,
-                              frameBuilder: (context, child, frame,
-                                  wasSynchronouslyLoaded) {
+                              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                                 if (frame == null) {
                                   return Center(
-                                    child: CircularProgressIndicator(
-                                        color: AppColors.highlightedColor),
+                                    child: CircularProgressIndicator(color: AppColors.highlightedColor),
                                   );
                                 }
                                 return child;
@@ -245,17 +231,14 @@ class AccountInformationScreen extends StatelessWidget {
                   );
           }),
           Obx(
-            () => profileController.image?.value != null &&
-                    profileController.image!.value.isEmpty
+            () => profileController.image?.value != null && profileController.image!.value.isEmpty
                 ? const SizedBox()
                 : Positioned(
                     right: 6.w,
                     bottom: 6.h,
                     child: GestureDetector(
                       onTap: () async {
-                        await Utils().imagePickerModel(
-                            selectImage: profileController.imagePath,
-                            image: profileController.image);
+                        await Utils().imagePickerModel(selectImage: profileController.imagePath, image: profileController.image);
 
                         log(" profileController.isModified.value ${profileController.isModified.value}");
                         profileController.isValidateImage.value = true;
@@ -276,9 +259,7 @@ class AccountInformationScreen extends StatelessWidget {
                             ],
                             color: AppColors.whiteColor,
                           ),
-                          child: SvgPicture.asset(IconAsset.editIcon,
-                                  color: AppColors.primaryColor)
-                              .paddingAll(3.w),
+                          child: SvgPicture.asset(IconAsset.editIcon, color: AppColors.primaryColor).paddingAll(3.w),
                         ),
                       ),
                     ),

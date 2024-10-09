@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_template/utils/app_colors.dart';
+import 'package:flutter_template/utils/app_preferences.dart';
 import 'package:flutter_template/utils/app_text.dart';
 import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:get/get.dart';
@@ -62,18 +63,15 @@ void showCustomDialog(
                   Navigation.replaceAll(Routes.signIn);
                   GoogleSignIn().signOut();
                   SharedPreferencesHelper.instance.setLogInUser(value: false);
+                  AppPreference.clearSharedPreferences();
                 },
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: AppColors.whiteColor,
                     border: Border(
-                      top: BorderSide(
-                          color: AppColors.borderColor.withOpacity(0.6),
-                          width: 0.5.w),
-                      bottom: BorderSide(
-                          color: AppColors.borderColor.withOpacity(0.6),
-                          width: 0.5.w),
+                      top: BorderSide(color: AppColors.borderColor.withOpacity(0.6), width: 0.5.w),
+                      bottom: BorderSide(color: AppColors.borderColor.withOpacity(0.6), width: 0.5.w),
                     ),
                   ),
                   child: AppText(

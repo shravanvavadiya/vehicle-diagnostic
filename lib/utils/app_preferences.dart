@@ -13,7 +13,7 @@ class AppPreference {
     _prefs = await SharedPreferences.getInstance();
   }
 
-  void clearSharedPreferences() {
+  static void clearSharedPreferences() {
     _prefs.clear();
     return;
   }
@@ -72,11 +72,8 @@ class AppPreference {
   }
 
   static AuthApiRes? getUser() {
-    return AuthApiRes.fromJson(jsonDecode(_prefs.get(Constants.keyUser)as String ?? ""));
+    return AuthApiRes.fromJson(jsonDecode(_prefs.get(Constants.keyUser) as String ?? ""));
   }
-
-
-
 
   // static Future setUser(User? user) async {
   //   user?.jwtToken = "";

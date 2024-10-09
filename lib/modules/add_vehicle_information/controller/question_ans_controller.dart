@@ -73,7 +73,7 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
   Future preLoadDataFunction({required int vehicleId}) async {
     log("preLoadDataFunction===>onTAP yes call");
     isPreLoadDataBool.value = true;
-    processApi(
+    await processApi(
       () => VehicleInformationService.getAnsByVehicleId(vehicleId: vehicleId),
       error: (error, stack) {
         log("preLoadDataFunction===>onTAP yes error $error");

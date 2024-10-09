@@ -16,7 +16,7 @@ class VehicleDiagnosisScreen extends StatefulWidget {
   final String screenName;
   final int vehicleId;
 
-  VehicleDiagnosisScreen(
+  const VehicleDiagnosisScreen(
       {super.key, required this.screenName, required this.vehicleId});
 
   @override

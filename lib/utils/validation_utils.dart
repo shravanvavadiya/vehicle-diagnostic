@@ -49,10 +49,10 @@ class AppValidation {
     return null;
   }
 
-/*  static String? post(String? value) {
+/*  static String? postCode(String? value) {
     if (value!.isEmpty) {
       return AppString.pleaseEnterPostCode;
-    } else if (value.length != 6) {
+    } else if (value.length <= 3) {
       return AppString.postCodeMustBeDigits;
     } else if (!RegExp(r'^[0-9]{6}$').hasMatch(value)) {
       return AppString.postCodeMustContainOnlyDigits;

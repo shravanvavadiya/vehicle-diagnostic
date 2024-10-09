@@ -48,7 +48,7 @@ class LetsStartWidget extends StatelessWidget {
             Column(
               children: [
                 SizedBox(
-                  height: 30.h,
+                  height: 25.h,
                 ),
                 Center(
                   child: Image.asset(
@@ -60,7 +60,7 @@ class LetsStartWidget extends StatelessWidget {
                   image,
                   height: 256.h,
                 ).paddingOnly(
-                  top: 68.h,
+                  top: 50.h,
                   bottom: bottom,
                 ),
                 InfoTextWidget(

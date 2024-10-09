@@ -54,11 +54,11 @@ class _QuestionAndAnsScreenState extends State<QuestionAndAnsScreen> {
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 18.sp,
-                          color: AppColors.blackColor,
+                          color: AppColors.primaryColor,
                         ),
                       ),
                       TextSpan(
-                        text: "/${controller.vehicleModel.value.apiresponse?.data?.length ?? 0} Steps",
+                        text: "/${controller.vehicleModel.value.apiresponse?.data?.length ?? 0} ${AppString.steps}",
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 14.sp,
@@ -178,8 +178,8 @@ class _QuestionAndAnsScreenState extends State<QuestionAndAnsScreen> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(46.r),
                     color: controller.selectedAnswers.value.containsKey(controller.currentStep.value)
-                        ? AppColors.highlightedColor
-                        : AppColors.highlightedColor.withOpacity(0.5),
+                        ? AppColors.primaryColor
+                        : AppColors.primaryColor.withOpacity(0.5),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

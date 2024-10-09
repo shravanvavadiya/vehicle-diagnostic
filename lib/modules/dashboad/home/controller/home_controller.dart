@@ -42,6 +42,7 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
 
   @override
   void onInit() {
+    print("refresh data");
     log("In it call  :::");
     SchedulerBinding.instance.addPostFrameCallback((_) {
       getUserProfileAPI();

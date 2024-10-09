@@ -110,12 +110,13 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SvgPicture.asset(
-                          IconAsset.download,
+                          IconAsset.
+                          download,
                           color: AppColors.primaryColor,
                           height: 24.h,
                         ),
                         AppText(
-                          text: AppString.downloadPDF,
+                          text: AppString.generateReport,
                           color: AppColors.primaryColor,
                           fontWeight: FontWeight.w600,
                           fontSize: 14.sp,

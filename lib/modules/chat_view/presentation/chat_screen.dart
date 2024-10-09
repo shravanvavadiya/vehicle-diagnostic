@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_template/utils/utils.dart';
@@ -52,7 +53,7 @@ class ChatScreen extends StatelessWidget {
                     // controller.isResponse.value = false;
                     // controller.getAllChatQuestion();
                     log("userId ${userId}");
-                    controller.downloadUserReport(userId:userId);
+                    controller.downloadUserReport(userId: userId);
                   },
                   child: Container(
                     width: 72.w,
@@ -108,8 +109,14 @@ class ChatScreen extends StatelessWidget {
                                         )
                                       ],
                                     ),
-                                    SvgPicture.asset(IconAsset.copyIcon).paddingOnly(
-                                      left: 38.w,
+                                    GestureDetector(
+                                      onTap: () async {
+                                        print("object ${controller.questionAndAnswerList[index].question}");
+                                        await Clipboard.setData(ClipboardData(text: "${controller.questionAndAnswerList[index].question}"));
+                                      },
+                                      child: SvgPicture.asset(IconAsset.copyIcon).paddingOnly(
+                                        left: 38.w,
+                                      ),
                                     )
                                   ],
                                 ).paddingOnly(left: 16.w, right: 16.w, top: 16.h),

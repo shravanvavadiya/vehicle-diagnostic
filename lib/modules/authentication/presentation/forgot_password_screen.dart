@@ -25,21 +25,18 @@ class ForgotPasswordScreen extends StatelessWidget {
           init: ForgotPasswordController(),
           builder: (controller) => Scaffold(
             appBar: _buildAppbar(),
-            body: ScrollConfiguration(
-              behavior: MyBehavior(),
-              child: SingleChildScrollView(
-                child: Form(
-                  key: controller.formKey,
-                  child: Column(
-                    children: [
-                      _buildInfoText(controller),
-                      _buildEmailTextFormField(controller),
-                      _buildVerifyBtn(controller),
-                    ],
-                  ),
+            body: SingleChildScrollView(
+              child: Form(
+                key: controller.formKey,
+                child: Column(
+                  children: [
+                    _buildInfoText(controller),
+                    _buildEmailTextFormField(controller),
+                    _buildVerifyBtn(controller),
+                  ],
                 ),
-              ).paddingSymmetric(horizontal: 16.w),
-            ),
+              ),
+            ).paddingSymmetric(horizontal: 16.w),
           ),
         ),
       ),
@@ -62,27 +59,19 @@ class ForgotPasswordScreen extends StatelessWidget {
       child: CustomButton(
         height: 52.h,
         disableTextColor: AppColors.whiteColor,
-        isDisabled: (controller.isValidateEmail.value)
-            ? false
-            : true,
+        isDisabled: (controller.isValidateEmail.value) ? false : true,
         onTap: () {
-          controller.formKey.currentState!.validate()
-              ? {
-                  controller.forgotPasswordOtpFunction(
-                      email: controller.emailController.text)
-                }
-              : {};
+          controller.formKey.currentState!.validate() ? {controller.forgotPasswordOtpFunction(email: controller.emailController.text)} : {};
         },
         text: controller.buttonName.value,
       ),
     ).paddingOnly(top: 16.h);
-
   }
 
   Widget _buildEmailTextFormField(ForgotPasswordController controller) {
     return customTextFormField(
       onChanged: (p0) {
-        controller.isValidateEmail.value= controller.emailController.text.isNotEmpty;
+        controller.isValidateEmail.value = controller.emailController.text.isNotEmpty;
       },
       text: AppString.email,
       hintText: AppString.emailEx,

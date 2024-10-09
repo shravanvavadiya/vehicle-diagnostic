@@ -67,6 +67,7 @@ class VehicleInformationService {
     try {
       var result = await Api().put(ApiConstants.editVehicleRequest, bodyData: requestBody);
       await ResponseHandler.checkResponseError(result);
+      log("result.bodyBytes ${result.bodyBytes}");
       return VehicleQuestionAndAns.fromJson(
         jsonDecode(
           utf8.decode(result.bodyBytes),

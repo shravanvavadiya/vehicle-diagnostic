@@ -60,7 +60,7 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
   XFile? imagePath;
   RxString image = "".obs;
   RxString networkImage = "".obs;
-  RxInt selectedYear = 2024.obs;
+  RxInt selectedYear = 2010.obs;
   final RxInt currentYear = DateTime.now().year.obs;
 
   RxString selectedValueMake = 'Select'.obs;

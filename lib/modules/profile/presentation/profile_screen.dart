@@ -42,8 +42,7 @@ class ProfileScreen extends StatelessWidget {
     ),
   ];
 
-
-  final ProfileController profileController =Get.put(ProfileController());
+  final ProfileController profileController = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +118,7 @@ class ProfileScreen extends StatelessWidget {
           return GestureDetector(
             onTap: () {
               if (index == 0) {
-                Get.to(AccountInformationScreen());
+                Get.to(const AccountInformationScreen());
               } else if (index == 1) {
                 Navigation.pushNamed(Routes.subscriptionsPlanScreen);
               } else if (index == 2) {
@@ -128,9 +127,7 @@ class ProfileScreen extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5.r),
-                border: Border.all(
-                    color: AppColors.secondaryColor.withOpacity(0.4),
-                    width: 0.3),
+                border: Border.all(color: AppColors.secondaryColor.withOpacity(0.4), width: 0.3),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,10 +140,7 @@ class ProfileScreen extends StatelessWidget {
                     padding: EdgeInsets.only(top: 8.h),
                     child: Text(
                       profileDataList[index].title,
-                      style: TextStyle(
-                          color: AppColors.grey60,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15.sp),
+                      style: TextStyle(color: AppColors.grey60, fontWeight: FontWeight.w500, fontSize: 15.sp),
                     ),
                   )
                 ],
@@ -174,7 +168,7 @@ class ProfileScreen extends StatelessWidget {
       ),
       leading: GestureDetector(
         onTap: () {
-          Navigation.pop();
+          Get.back();
         },
         child: SvgPicture.asset(
           IconAsset.leftArrow,

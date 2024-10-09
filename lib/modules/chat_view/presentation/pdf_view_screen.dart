@@ -9,6 +9,7 @@ import '../../../utils/app_string.dart';
 import '../../../utils/app_text.dart';
 import '../../../widget/custom_backarrow_widget.dart';
 import '../controller/pdf_view_controller.dart';
+import 'download_pop_up.dart';
 
 class PdfViewScreen extends StatefulWidget {
   final Uint8List pdfData;
@@ -37,7 +38,7 @@ class _PdfViewScreenState extends State<PdfViewScreen> {
             Center(
               child: GestureDetector(
                 onTap: () {
-                  controller.downloadPdf(responseData: widget.pdfData);
+                  showDownloadDialog(controller, widget.pdfData);
                 },
                 child: Container(
                   height: 28.h,

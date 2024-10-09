@@ -50,7 +50,7 @@ class ChatServices {
   static Future<Uint8List> downloadReport({required int userId}) async {
     try {
       var result = await Api().get(
-        "${ApiConstants.downloadReport}/227/download",
+        "${ApiConstants.downloadReport}/$userId/download",
       );
       log(result.body);
       await ResponseHandler.checkResponseError(result);

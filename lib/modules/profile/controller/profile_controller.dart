@@ -15,8 +15,7 @@ import '../../../utils/app_preferences.dart';
 import '../../authentication/presentation/google_login_screen.dart';
 import '../../personal_information_view/model/personal_information_model.dart';
 
-class ProfileController extends GetxController
-    with LoadingMixin, LoadingApiMixin {
+class ProfileController extends GetxController with LoadingMixin, LoadingApiMixin {
   RxString screenName = AppString.accountInformation.obs;
   final TextEditingController firstname = TextEditingController();
   final TextEditingController lastname = TextEditingController();
@@ -25,8 +24,7 @@ class ProfileController extends GetxController
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> updateFormKey = GlobalKey<FormState>();
   Rx<GetUserProfileModel> getUserProfileModel = GetUserProfileModel().obs;
-  Rx<PersonalInformationModel> updateUserProfileModel =
-      PersonalInformationModel().obs;
+  Rx<PersonalInformationModel> updateUserProfileModel = PersonalInformationModel().obs;
   RxBool isValidateName = false.obs;
   RxBool isValidateLastName = false.obs;
   RxBool isValidateEmail = false.obs;
@@ -40,19 +38,13 @@ class ProfileController extends GetxController
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
         getUserProfileModel.value = SharedPreferencesHelper().getUserInfo()!;
-        firstname.text =
-            getUserProfileModel.value.profileResponse!.profileData!.firstName!;
-        lastname.text =
-            getUserProfileModel.value.profileResponse!.profileData!.lastName!;
-        email.text =
-            getUserProfileModel.value.profileResponse!.profileData!.email!;
-        postCode.text =
-            getUserProfileModel.value.profileResponse!.profileData!.postCode!;
-        image?.value = getUserProfileModel.value.profileResponse?.profileData?.photo !=
-                    null
-                ? getUserProfileModel.value.profileResponse!.profileData!.photo!
-                : "";
-
+        firstname.text = getUserProfileModel.value.profileResponse!.profileData!.firstName!;
+        lastname.text = getUserProfileModel.value.profileResponse!.profileData!.lastName!;
+        email.text = getUserProfileModel.value.profileResponse!.profileData!.email!;
+        postCode.text = getUserProfileModel.value.profileResponse!.profileData!.postCode!;
+        image?.value = getUserProfileModel.value.profileResponse?.profileData?.photo != null
+            ? getUserProfileModel.value.profileResponse!.profileData!.photo!
+            : "";
 
         isValidateName.value = true;
         isValidateLastName.value = true;
@@ -72,23 +64,18 @@ class ProfileController extends GetxController
   RxBool isModified = false.obs;
 
   clearData() {
-    firstname.text = "";
-    lastname.text = "";
-    email.text = "";
-    postCode.text = "";
+    firstname.clear();
+    lastname.clear();
+    email.clear();
+    postCode.clear();
   }
 
   void checkIfModified() {
-    isModified.value = firstname.text !=
-            getUserProfileModel.value.profileResponse?.profileData?.firstName ||
-        lastname.text !=
-            getUserProfileModel.value.profileResponse?.profileData?.lastName ||
-        email.text !=
-            getUserProfileModel.value.profileResponse?.profileData?.email ||
-        postCode.text !=
-            getUserProfileModel.value.profileResponse?.profileData?.postCode ||
-        image!.value !=
-            getUserProfileModel.value.profileResponse?.profileData?.photo;
+    isModified.value = firstname.text != getUserProfileModel.value.profileResponse?.profileData?.firstName ||
+        lastname.text != getUserProfileModel.value.profileResponse?.profileData?.lastName ||
+        email.text != getUserProfileModel.value.profileResponse?.profileData?.email ||
+        postCode.text != getUserProfileModel.value.profileResponse?.profileData?.postCode ||
+        image!.value != getUserProfileModel.value.profileResponse?.profileData?.photo;
   }
 
   /// Update User API::
@@ -100,14 +87,14 @@ class ProfileController extends GetxController
     required String? imagePath,
   }) async {
     print("imagePath :: ===$imagePath");
-    processApi(
+   await processApi(
       () => ProfileService.updateUserAPI(
           id: AppPreference.getInt("UserId"),
           email: email,
           firstName: firstname,
           lastName: lastname,
           postCode: postCode,
-          imagePath: imagePath),
+          imagePath: imagePath ?? null),
       loading: handleLoading,
       result: (data) async {
         log("Controller Data :: ${data?.apiresponse?.data?.photo}");
@@ -121,8 +108,8 @@ class ProfileController extends GetxController
   Future<void> deleteAccount({required int userId}) async {
     log("user Id ::$userId");
     handleLoading(true);
-      await processApi(
-          () => ProfileService.deleteUserAccount(userId: userId),
+    await processApi(
+      () => ProfileService.deleteUserAccount(userId: userId),
       error: (error, stack) {
         handleLoading(false);
       },

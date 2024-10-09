@@ -68,7 +68,7 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
   Future<void> getAllVehicles({required int currentPage}) async {
     isLoading.value = true;
     handleLoading(true);
-    processApi(
+   await processApi(
       () => HomeService.getAllVehicle(currentPage: currentPage),
       error: (error, stack) => handleLoading(false),
       result: (data) {
@@ -90,7 +90,7 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
       isLoading.value = true;
       paginationLoading.value = false;
       handleLoading(true);
-      processApi(
+     await processApi(
         () => HomeService.getAllVehicle(currentPage: currentPage),
         error: (error, stack) => handleLoading(false),
         result: (data) {
@@ -140,7 +140,7 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
   Rx<GetUserProfileModel> getUserProfileModel = GetUserProfileModel().obs;
 
   Future<void> getUserProfileAPI() async {
-    processApi(
+   await processApi(
       () => ProfileService.getUserAPI(
         userId: AppPreference.getInt("UserId"),
       ),

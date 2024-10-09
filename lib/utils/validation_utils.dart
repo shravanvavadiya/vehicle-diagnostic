@@ -17,8 +17,7 @@ class AppValidation {
   }
 
   static String? emailValidator(String? value) {
-    const Pattern pattern =
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+    const Pattern pattern = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
     final RegExp regex = RegExp(pattern.toString());
     if (value!.isEmpty) {
       return AppString.pleaseEnterEmail;
@@ -66,7 +65,7 @@ class AppValidation {
       return AppString.pleaseEnterPostCode;
     } else if (value.length <= 3) {
       return AppString.postCodeMustBeDigits;
-    } else if (RegExp(r'^[A-Za-z0-9\s\-]{3,10}$').hasMatch(value)) {
+    } else if (RegExp(r'^[A-Za-z]{1,2}\d[A-Za-z\d]?\s?\d[A-Za-z]{2}$').hasMatch(value)) {
       return AppString.postCodeMustContainOnlyDigits;
     }
     return null;
@@ -117,7 +116,6 @@ class AppValidation {
     }
     return null;
   }
-
 }
 
 /*extension Validator on String {

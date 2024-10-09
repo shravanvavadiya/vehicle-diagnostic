@@ -29,7 +29,26 @@ class AccountInformationScreen extends StatelessWidget {
         child: GetX<ProfileController>(
           init: ProfileController(),
           builder: (profileController) => Scaffold(
-            appBar: _buildAppBar(profileController),
+            appBar: AppBar(
+              backgroundColor: AppColors.backgroundColor,
+              leadingWidth: 30,
+              elevation: 0,
+              title: AppText(
+                text: profileController.screenName.value,
+                color: AppColors.blackColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 17.sp,
+              ),
+              leading: GestureDetector(
+                onTap: () {
+                  Get.back();
+                },
+                child: SvgPicture.asset(
+                  IconAsset.leftArrow,
+                  height: 18.h,
+                ),
+              ).paddingOnly(left: 16.w),
+            ),
             body: Column(
               children: [
                 Expanded(
@@ -268,28 +287,5 @@ class AccountInformationScreen extends StatelessWidget {
         ],
       ),
     ).paddingOnly(top: 25.h);
-  }
-
-  AppBar _buildAppBar(ProfileController profileController) {
-    return AppBar(
-      backgroundColor: AppColors.backgroundColor,
-      leadingWidth: 30,
-      elevation: 0,
-      title: AppText(
-        text: profileController.screenName.value,
-        color: AppColors.blackColor,
-        fontWeight: FontWeight.w600,
-        fontSize: 17.sp,
-      ),
-      leading: GestureDetector(
-        onTap: () {
-          Navigation.pop();
-        },
-        child: SvgPicture.asset(
-          IconAsset.leftArrow,
-          height: 18.h,
-        ),
-      ).paddingOnly(left: 16.w),
-    );
   }
 }

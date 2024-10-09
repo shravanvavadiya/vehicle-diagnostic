@@ -68,43 +68,13 @@ class PdfViewController extends GetxController {
 
   Future<void> downloadPdf({required Uint8List responseData}) async {
     try {
-      // Check storage permission
       if (await requestPermission()) {
-        // Get the downloads directory
-        /*   Directory? directory;
-        if (Platform.isAndroid) {
-          directory = await getExternalStorageDirectory();
-          String newPath = '';
-          List<String> paths = directory!.path.split("/");
-          for (int x = 1; x < paths.length; x++) {
-            String folder = paths[x];
-            if (folder != 'Android') {
-              newPath += "/$folder";
-            } else {
-              break;
-            }
-          }
-          print("paths ${paths}");
-          newPath = '$newPath/Download/VehicleReports';
-          print("newPath ${newPath}");
-          directory = Directory(newPath);
-        } else {
-          directory = await getApplicationDocumentsDirectory();
-        }
-
-        if (!await directory.exists()) {
-          await directory.create(recursive: true);
-        }*/
-
-
         String filePath = await createSaveFilePath('Vehicle-report_${DateTime.now().millisecondsSinceEpoch}.pdf');
         print("filePath::::$filePath");
-
         final file = File(filePath);
         await file.writeAsBytes(responseData);
-
         AppSnackBar.showErrorSnackBar(
-          message: "File downloaded to ${filePath}",
+          message: "File downloaded to $filePath",
           title: "success",
         );
       } else {

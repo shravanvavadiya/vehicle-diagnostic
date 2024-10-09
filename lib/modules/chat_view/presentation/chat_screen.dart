@@ -113,6 +113,8 @@ class ChatScreen extends StatelessWidget {
                                       onTap: () async {
                                         print("object ${controller.questionAndAnswerList[index].question}");
                                         await Clipboard.setData(ClipboardData(text: "${controller.questionAndAnswerList[index].question}"));
+                                        controller.answerController.value.text = controller.questionAndAnswerList[index].question ?? "";
+                                        controller.isCheckText.value = true;
                                       },
                                       child: SvgPicture.asset(IconAsset.copyIcon).paddingOnly(
                                         left: 38.w,
@@ -129,19 +131,17 @@ class ChatScreen extends StatelessWidget {
                                           children: [
                                             Container(
                                               height: 44.h,
-                                              width: Get.width / 1.5,
+                                              // width: Get.width / 1.5,
                                               decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.circular(6.r),
                                                 color: AppColors.chatBgColor,
                                               ),
-                                              child: Center(
-                                                child: AppText(
-                                                  text: controller.questionAndAnswerList[index].answer.toString(),
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14.sp,
-                                                  color: AppColors.grey60,
-                                                  textAlign: TextAlign.end,
-                                                ),
+                                              child: AppText(
+                                                text: controller.questionAndAnswerList[index].answer.toString(),
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 14.sp,
+                                                color: AppColors.grey60,
+                                                textAlign: TextAlign.end,
                                               ).paddingAll(10),
                                             ),
                                             SvgPicture.asset(

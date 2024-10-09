@@ -67,11 +67,11 @@ class LogInWithEmailIdController extends GetxController with LoadingMixin, Loadi
 
   continueWithGoogle() async {
     handleLoading(true);
-    processApi(
+   await processApi(
       () => SocialLoginService.signInWithGoogle(),
       error: (error, stack) => handleLoading(false),
-      result: (data) {
-        processApi(
+      result: (data) async{
+       await processApi(
           () {
             print("data $data");
             return AuthService.googleTokenVerify({ApiKeyConstants.deviceType: Constants.android, ApiKeyConstants.token: data});
@@ -103,11 +103,11 @@ class LogInWithEmailIdController extends GetxController with LoadingMixin, Loadi
 
   continueWithApple() async {
     handleLoading(true);
-    processApi(
+   await processApi(
       () => SocialLoginService.signInWithApple(),
       error: (error, stack) => handleLoading(false),
-      result: (data) {
-        processApi(
+      result: (data)async {
+      await  processApi(
           () => AuthService.appleTokenVerify({ApiKeyConstants.appleToken: data}),
           result: (data) async {
             await SharedPreferencesHelper.instance.setUserToken(data.apiresponse?.data?.token ?? "");

@@ -20,7 +20,7 @@ class PersonalInformationService {
   //   }
   // }
   static Future<PersonalInformationModel> personalInformation({
-     String? imagePath,
+    String? imagePath,
     required String email,
     required String firstName,
     required String lastName,

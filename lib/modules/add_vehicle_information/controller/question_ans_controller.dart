@@ -9,6 +9,8 @@ import 'package:get/get.dart';
 
 import '../../../utils/common_api_caller.dart';
 import '../../../utils/loading_mixin.dart';
+import '../../../utils/navigation_utils/navigation.dart';
+import '../../../utils/navigation_utils/routes.dart';
 import '../models/submit_vehicle_request.dart';
 import '../models/vehicle_information_step_model.dart';
 import '../presentation/question_answer.dart';
@@ -120,7 +122,7 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
     };
     handleLoading(true);
     log("bodybody ${body}");
-    processApi(
+    await processApi(
       () => VehicleInformationService.submitVehicleRequest(body),
       error: (error, stack) => handleLoading(false),
       result: (data) {
@@ -140,13 +142,12 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
     };
     log("body :: ${body.entries}");
     handleLoading(true);
-    processApi(
+    await processApi(
       () => VehicleInformationService.editVehicleRequest(body),
       error: (error, stack) => handleLoading(false),
       result: (data) {
         log("data::: ${data.toJson()}");
-        // Navigation.pushNamed(Routes.homeScreen);
-        Get.to(HomeScreen());
+        Get.offAll(HomeScreen());
         clearAll();
         handleLoading(false);
       },

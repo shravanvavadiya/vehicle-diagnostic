@@ -98,6 +98,7 @@ class AppString {
   static const String edit = "Edit";
   static const String or = "or";
   static const String downloadPDF = "Download PDF";
+  static const String download = "Download";
   static const String generateReport = "Generate Report";
   static const String delete = "Delete";
   static const String deleteVehicle = "Delete Vehicle";
@@ -130,7 +131,7 @@ class AppString {
   static const String passwordCodeMustBeDigits = "Password must be 6 digits";
   static const String vehicleYearMustBeDigits = "Vehicle year must be 4 digits";
   static const String pleaseEnterValidVehicleNumber = "Please enter valid vehicle number";
-  static const String postCodeMustContainOnlyDigits = "Invalid postal code. Please enter a valid postal code between 3 to 10 characters, containing only letters, numbers, spaces, or hyphens.";
+  static const String postCodeMustContainOnlyDigits = "Invalid postal code. Please enter a valid postal code between 3 to 10 characters, containing only letters, numbers, spaces";
   static const String vehicleYearMustContainOnlyDigits = "Vehicle year must contain only digits";
   static const String selectVehicleMake = "Please select vehicle make";
   static const String selectVehicleModel = "Please select vehicle model";
@@ -145,9 +146,11 @@ class AppString {
   static const String feature = "Feature";
   static const String doYouWantToLogout = "Do you want to logout the\naccount?";
   static const String doYouWantToDelete = "Do you want to delete the \naccount?";
+  static const String doYouWantToDownload = "Do you want to download the report?";
   static const String cancel = "Cancel";
   static const String moreAboutYourVehicle = "More about your vehicle";
   static const String isThereAProblemWithVehicle = "Is there a problem with your \nvehicle?";
+  static const String downloadSubText = "Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing";
 
   /// SharedPreferences :::
   static const String authToken = "authToken";

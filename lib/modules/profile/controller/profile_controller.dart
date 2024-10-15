@@ -37,21 +37,20 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
   void onInit() {
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
+        log("000");
         getUserProfileModel.value = SharedPreferencesHelper().getUserInfo()!;
         firstname.text = getUserProfileModel.value.profileResponse!.profileData!.firstName!;
         lastname.text = getUserProfileModel.value.profileResponse!.profileData!.lastName!;
         email.text = getUserProfileModel.value.profileResponse!.profileData!.email!;
         postCode.text = getUserProfileModel.value.profileResponse!.profileData!.postCode!;
-        image?.value = getUserProfileModel.value.profileResponse?.profileData?.photo != null
-            ? getUserProfileModel.value.profileResponse!.profileData!.photo!
-            : "";
 
+        log("111");
         isValidateName.value = true;
         isValidateLastName.value = true;
         isValidateEmail.value = true;
         isValidatePostCode.value = true;
         isValidateImage.value = true;
-
+        log("222");
         firstname.addListener(checkIfModified);
         lastname.addListener(checkIfModified);
         email.addListener(checkIfModified);
@@ -71,11 +70,15 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
   }
 
   void checkIfModified() {
+    log("333");
+
     isModified.value = firstname.text != getUserProfileModel.value.profileResponse?.profileData?.firstName ||
         lastname.text != getUserProfileModel.value.profileResponse?.profileData?.lastName ||
         email.text != getUserProfileModel.value.profileResponse?.profileData?.email ||
-        postCode.text != getUserProfileModel.value.profileResponse?.profileData?.postCode ||
-        image!.value != getUserProfileModel.value.profileResponse?.profileData?.photo;
+        postCode.text != getUserProfileModel.value.profileResponse?.profileData?.postCode;
+
+    log("isModified.value ${isModified.value}");
+    log("444");
   }
 
   /// Update User API::

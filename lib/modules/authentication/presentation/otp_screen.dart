@@ -64,22 +64,12 @@ class OtpScreen extends StatelessWidget {
         onTap: () {
           controller.formKey.currentState!.validate()
               ? screenNameFlag == AppString.forgotPasswordFlag
-                  ? {
-                      controller.forgotPasswordOtpVerifyFunction(
-                          email: userEmailId,
-                          otp: controller.pinController.text)
-                    }
-                  : {
-                      controller.accountOtpVerifyFunction(
-                          email: userEmailId,
-                          otp: controller.pinController.text)
-                    }
+                  ? {controller.forgotPasswordOtpVerifyFunction(email: userEmailId, otp: controller.pinController.text)}
+                  : {controller.accountOtpVerifyFunction(email: userEmailId, otp: controller.pinController.text)}
               : {};
         },
         disableTextColor: AppColors.whiteColor,
-        isDisabled: (controller.isValidateOtp.value)
-            ? false
-            : true,
+        isDisabled: (controller.isValidateOtp.value) ? false : true,
         text: controller.buttonName.value,
       ),
     ).paddingOnly(top: 8.h);
@@ -98,8 +88,7 @@ class OtpScreen extends StatelessWidget {
             color: AppColors.blackColor,
           ),
         ),
-        controller.formatTime(controller.secondsRemaining.value).value ==
-                "00:00"
+        controller.formatTime(controller.secondsRemaining.value).value == "00:00"
             ? GestureDetector(
                 onTap: () {
                   controller.resendOtp(
@@ -130,9 +119,7 @@ class OtpScreen extends StatelessWidget {
                           color: Colors.black,
                         ).paddingOnly(right: 7.w),
                         AppText(
-                          text: controller
-                              .formatTime(controller.secondsRemaining.value)
-                              .value,
+                          text: controller.formatTime(controller.secondsRemaining.value).value,
                           fontWeight: FontWeight.w600,
                           color: AppColors.blackColor,
                           fontSize: 13.sp,
@@ -159,9 +146,10 @@ class OtpScreen extends StatelessWidget {
           length: 6,
           keyboardType: TextInputType.number,
           controller: controller.pinController,
-          onChanged: (val){
-            controller.isValidateOtp.value =
-                controller.pinController.text.isNotEmpty;
+          onChanged: (val) {
+            controller.pinController.value.text.length == 6 ? controller.isValidateOtp.value = true : controller.isValidateOtp.value = false;
+
+            // controller.isValidateOtp.value = controller.pinController.text.isNotEmpty;
           },
           autofocus: false,
           defaultPinTheme: PinTheme(
@@ -175,11 +163,7 @@ class OtpScreen extends StatelessWidget {
           focusedPinTheme: PinTheme(
             width: 49.w,
             height: 56.h,
-            textStyle: TextStyle(
-                fontSize: 24.sp,
-                color: AppColors.blackColor,
-                fontWeight: FontWeight.w600,
-                fontFamily: AppString.fontName),
+            textStyle: TextStyle(fontSize: 24.sp, color: AppColors.blackColor, fontWeight: FontWeight.w600, fontFamily: AppString.fontName),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4.r),
               color: AppColors.backgroundColor,
@@ -190,6 +174,8 @@ class OtpScreen extends StatelessWidget {
             log(value!.length.toString());
             if (value.isEmpty) {
               return AppString.pleaseEnterTheOTP;
+            } else if (value.length >= 6) {
+              print("object");
             }
 
             return null;
@@ -197,11 +183,7 @@ class OtpScreen extends StatelessWidget {
           errorPinTheme: PinTheme(
             width: 49.w,
             height: 56.h,
-            textStyle: TextStyle(
-                fontSize: 24.sp,
-                color: AppColors.blackColor,
-                fontWeight: FontWeight.w600,
-                fontFamily: AppString.fontName),
+            textStyle: TextStyle(fontSize: 24.sp, color: AppColors.blackColor, fontWeight: FontWeight.w600, fontFamily: AppString.fontName),
             decoration: BoxDecoration(
               border: Border.all(color: AppColors.redColor),
               borderRadius: BorderRadius.circular(4.r),
@@ -211,11 +193,7 @@ class OtpScreen extends StatelessWidget {
           submittedPinTheme: PinTheme(
             width: 49.w,
             height: 56.h,
-            textStyle: TextStyle(
-                fontSize: 24.sp,
-                color: AppColors.blackColor,
-                fontWeight: FontWeight.w600,
-                fontFamily: AppString.fontName),
+            textStyle: TextStyle(fontSize: 24.sp, color: AppColors.blackColor, fontWeight: FontWeight.w600, fontFamily: AppString.fontName),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4.r),
               color: AppColors.backgroundColor,

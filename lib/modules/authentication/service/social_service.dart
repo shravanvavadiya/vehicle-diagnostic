@@ -30,6 +30,7 @@ class SocialLoginService {
   }
 
   static Future<String> signInWithApple() async {
+    print("object");
     AuthorizationCredentialAppleID? credential;
     List<AppleIDAuthorizationScopes> scopes = [
       AppleIDAuthorizationScopes.email,

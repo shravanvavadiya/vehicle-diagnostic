@@ -45,7 +45,6 @@ class MyApp extends StatelessWidget {
               ],
               title: AppString.appName,
               initialBinding: AppBidding(),
-              // initialRoute: Routes.createNewPasswordScreen,
               initialRoute: Routes.splash,
               // initialRoute: Routes.demo01,
               getPages: Routes.pages,

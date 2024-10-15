@@ -55,9 +55,11 @@ class LogInWithEmailIdController extends GetxController with LoadingMixin, Loadi
         SharedPreferencesHelper.instance.setString("email", result.apiresponse!.data!.email!);
         log("email data ::${SharedPreferencesHelper.instance.getString("email")}");
         log("auth token :: ${result.apiresponse?.data?.token}");
-        result.apiresponse!.data!.profileCompleted == true ? Get.offAll(HomeScreen()) :Get.offAll(
-          const GetStartedScreen(),
-        ); /*Get.offAll(const UserInformationScreen())*/
+        result.apiresponse!.data!.profileCompleted == true
+            ? Get.offAll(HomeScreen())
+            : Get.offAll(
+                const GetStartedScreen(),
+              ); /*Get.offAll(const UserInformationScreen())*/
       },
     );
 
@@ -67,11 +69,11 @@ class LogInWithEmailIdController extends GetxController with LoadingMixin, Loadi
 
   continueWithGoogle() async {
     handleLoading(true);
-   await processApi(
+    await processApi(
       () => SocialLoginService.signInWithGoogle(),
       error: (error, stack) => handleLoading(false),
-      result: (data) async{
-       await processApi(
+      result: (data) async {
+        await processApi(
           () {
             print("data $data");
             return AuthService.googleTokenVerify({ApiKeyConstants.deviceType: Constants.android, ApiKeyConstants.token: data});
@@ -103,15 +105,18 @@ class LogInWithEmailIdController extends GetxController with LoadingMixin, Loadi
 
   continueWithApple() async {
     handleLoading(true);
-   await processApi(
+    await processApi(
       () => SocialLoginService.signInWithApple(),
       error: (error, stack) => handleLoading(false),
-      result: (data)async {
-      await  processApi(
+      result: (data) async {
+        await processApi(
           () => AuthService.appleTokenVerify({ApiKeyConstants.appleToken: data}),
           result: (data) async {
+            log("${data.apiresponse?.data?.token}");
             await SharedPreferencesHelper.instance.setUserToken(data.apiresponse?.data?.token ?? "");
             log("user email id :${data.apiresponse!.data!.email}");
+            SharedPreferencesHelper.instance.setString("email", data.apiresponse!.data!.email!);
+            log("email data ::${SharedPreferencesHelper.instance.getString("email")}");
             log("user profile status :${data.apiresponse!.data!.profileCompleted}");
             data.apiresponse!.data!.profileCompleted == true
                 ? {

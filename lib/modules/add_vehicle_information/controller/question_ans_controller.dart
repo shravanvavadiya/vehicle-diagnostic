@@ -3,10 +3,12 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_template/modules/add_vehicle_information/models/selected_qns_ans_model.dart';
+import 'package:flutter_template/modules/chat_view/presentation/chat_screen.dart';
 import 'package:flutter_template/modules/dashboad/home/presentation/home_screen.dart';
 import 'package:flutter_template/utils/app_string.dart';
 import 'package:get/get.dart';
 
+import '../../../utils/app_preferences.dart';
 import '../../../utils/common_api_caller.dart';
 import '../../../utils/loading_mixin.dart';
 import '../../../utils/navigation_utils/navigation.dart';
@@ -32,10 +34,10 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
   QuestionAndAnsController({required String navigationScreenFlag, required int userVehicleId}) {
     if (navigationScreenFlag == AppString.editScreenFlag) {
       log("preload function first call");
-      vehicleIdFlag.value = userVehicleId;
       screenFlag.value = navigationScreenFlag;
       // preLoadDataFunction(vehicleId: userVehicleId);
     }
+    vehicleIdFlag.value = userVehicleId;
   }
 
   void updateProgress() {
@@ -87,17 +89,12 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
         log("11111111111");
         for (var key in data.apiresponse?.data?.qaVehicleResponses ?? []) {
           log("222222222222 ${vehicleModel.value.apiresponse?.data?.length}");
-
           int totleLength = vehicleModel.value.apiresponse?.data?.length ?? 0;
           for (int i = 0; i < totleLength; i++) {
             log("333333333333");
-
             if (key.question == vehicleModel.value.apiresponse?.data?[i].key) {
               log("4444444444");
-
               print("compere both data for pre load data ${key.question}----$i");
-              // int datas = vehicleModel.value.apiresponse!.data![i].answers!.indexOf(key.answer!);
-              // preLoadDataResponse[key.question] = datas;
               selectedResponseList.value.add(SelectedQnsAnsModel(question: key.question, answer: key.answer));
               selectedAnswers.value[i] = key.answer ?? ""; // Store answer by index
               break;
@@ -108,10 +105,6 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
         isPreLoadDataBool.value = false;
       },
     );
-  }
-
-  void finalResponse() {
-    Map response = {};
   }
 
   Future submitForm({required int vehicleId, required List<SelectedQnsAnsModel> selectedResponse}) async {
@@ -127,7 +120,14 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
       error: (error, stack) => handleLoading(false),
       result: (data) {
         log("data::: ${data.toJson()}");
-        Get.offAll(HomeScreen());
+        log("data::: ${AppPreference.getInt("UserId")}");
+        // Get.offAll(HomeScreen());
+        Get.offAll(ChatScreen(
+          vehicleId: vehicleIdFlag.value,
+          userId: AppPreference.getInt("UserId"),
+          screenFlag: "",
+        ));
+
         clearAll();
         handleLoading(false);
       },
@@ -147,7 +147,12 @@ class QuestionAndAnsController extends GetxController with LoadingMixin, Loading
       error: (error, stack) => handleLoading(false),
       result: (data) {
         log("data::: ${data.toJson()}");
-        Get.offAll(HomeScreen());
+        // Get.offAll(HomeScreen());
+        Get.offAll(ChatScreen(
+          vehicleId: vehicleIdFlag.value,
+          userId: AppPreference.getInt("UserId"),
+          screenFlag: "",
+        ));
         clearAll();
         handleLoading(false);
       },

@@ -14,6 +14,7 @@ class AppString {
   static const String login = 'Login';
   static const String select = 'Select';
   static const String steps = 'Steps';
+  static const String ok = 'Ok';
   static const String save = 'Save';
   static const String submit = 'Submit';
   static const String tapToAdd = 'Tap to add';
@@ -42,6 +43,7 @@ class AppString {
   static const String confirmPassword = "Confirm Password";
   static const String enterPassword = "Enter password";
   static const String finish = "Finish";
+  static const String generate = "Generate";
   static const String emailEx = "Some@example.com";
   static const String postCode = "Post Code";
   static const String next = "Next";
@@ -123,7 +125,7 @@ class AppString {
   static const String pleaseEnterEmail = "Please enter email";
   static const String pleaseEnterOtp = "Please enter otp";
   static const String pleaseEnterPassword = "Please enter password";
-  static const String bothPasswordNotMatch = "Both Password Not Match";
+  static const String bothPasswordNotMatch = "Both password is not match";
   static const String emailAddressIsInvalid = "Email address is invalid";
   static const String pleaseEnterPostCode = "Please enter post code";
   static const String postCodeMustBeDigits = "Post code must be 3 digits";
@@ -131,7 +133,8 @@ class AppString {
   static const String passwordCodeMustBeDigits = "Password must be 6 digits";
   static const String vehicleYearMustBeDigits = "Vehicle year must be 4 digits";
   static const String pleaseEnterValidVehicleNumber = "Please enter valid vehicle number";
-  static const String postCodeMustContainOnlyDigits = "Invalid postal code. Please enter a valid postal code between 3 to 10 characters, containing only letters, numbers, spaces";
+  static const String postCodeMustContainOnlyDigits =
+      "Invalid postal code. Please enter a valid postal code between 3 to 10 characters, containing only letters, numbers, spaces";
   static const String vehicleYearMustContainOnlyDigits = "Vehicle year must contain only digits";
   static const String selectVehicleMake = "Please select vehicle make";
   static const String selectVehicleModel = "Please select vehicle model";
@@ -147,10 +150,12 @@ class AppString {
   static const String doYouWantToLogout = "Do you want to logout the\naccount?";
   static const String doYouWantToDelete = "Do you want to delete the \naccount?";
   static const String doYouWantToDownload = "Do you want to download the report?";
+  static const String doYouWantToGenerate = "Do you want to generate a report?";
   static const String cancel = "Cancel";
   static const String moreAboutYourVehicle = "More about your vehicle";
   static const String isThereAProblemWithVehicle = "Is there a problem with your \nvehicle?";
-  static const String downloadSubText = "Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing";
+  static const String downloadSubText = "Your report is ready. Click 'Download' to save it to your device.";
+  static const String waitSubText = "Please wait a few moments as your report is being generated";
 
   /// SharedPreferences :::
   static const String authToken = "authToken";
@@ -161,4 +166,5 @@ class AppString {
   static const String createNewAccountFlag = "Create New Account";
   static const String forgotPasswordFlag = "Forgot Password Flag";
   static const String getStartedFlag = "Get Started Flag";
+  static const String generateReportFlag = "Generate Report Flag";
 }

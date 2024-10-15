@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_template/utils/assets.dart';
@@ -23,18 +24,51 @@ class HomeScreenComponent extends StatelessWidget {
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
+          // Container(
+          //   height: 200.h,
+          //   decoration: BoxDecoration(
+          //     border: Border.all(color: AppColors.borderColor, width: 0.2),
+          //     image: DecorationImage(
+          //       fit: BoxFit.cover,
+          //       image: getVehicleData?.photo != null && getVehicleData!.photo!.isNotEmpty
+          //           ? NetworkImage("${getVehicleData?.photo}")
+          //           : const AssetImage(ImagesAsset.imgPlaceholder),
+          //     ),
+          //     borderRadius: BorderRadius.circular(5.r),
+          //   ),
+          // ),
           Container(
             height: 200.h,
-            decoration: BoxDecoration(
-              border: Border.all(color: AppColors.borderColor, width: 0.2),
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: getVehicleData?.photo != null &&
-                        getVehicleData!.photo!.isNotEmpty
-                    ? NetworkImage("${getVehicleData?.photo}")
-                    : const AssetImage(ImagesAsset.imgPlaceholder),
+            child: CachedNetworkImage(
+              maxHeightDiskCache: 1500,
+              maxWidthDiskCache: 1500,
+              color: Colors.transparent,
+              imageUrl: getVehicleData?.photo ?? "",
+              fit: BoxFit.cover,
+              imageBuilder: (context, imageProvider) => Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(9.r),
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
               ),
-              borderRadius: BorderRadius.circular(5.r),
+              placeholder: (context, url) => Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.dividerColor,
+                ),
+              ),
+              errorWidget: (context, url, error) => ClipRRect(
+                borderRadius: BorderRadius.circular(65.r),
+                child: Image.asset(
+                  ImagesAsset.user,
+                  height: 20,
+                ),
+              ),
             ),
           ),
           Container(

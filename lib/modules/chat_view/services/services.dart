@@ -47,10 +47,10 @@ class ChatServices {
     }
   }
 
-  static Future<Uint8List> downloadReport({required int userId}) async {
+  static Future<Uint8List> downloadReport({required int vehicle}) async {
     try {
       var result = await Api().get(
-        "${ApiConstants.downloadReport}/$userId/download",
+        "${ApiConstants.downloadReport}/$vehicle/download",
       );
       log(result.body);
       await ResponseHandler.checkResponseError(result);

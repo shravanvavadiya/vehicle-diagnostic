@@ -47,7 +47,7 @@ class AuthService {
   static Future<AuthApiRes> appleTokenVerify(Map<String, dynamic> request) async {
     try {
       var result = await Api().post(
-        bodyData: request,
+        queryData: request,
         url: ApiConstants.appleTokenVerify,
       );
       log("status: ${result.statusCode} body:${result.body}");

@@ -42,3 +42,7 @@ class IconAsset {
   static const String light = '${icons}light.svg';
   static const String userPlaceholder = '${icons}user_icon.svg';
 }
+
+class JsonAnimation {
+  static const String carJson = "assets/json/car_animation.json";
+}

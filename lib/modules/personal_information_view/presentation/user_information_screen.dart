@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_template/modules/personal_information_view/controller/user_information_controller.dart';
@@ -41,7 +42,7 @@ class UserInformationScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildInfoText(personalInformationController),
-                      _buildUserImage(personalInformationController),
+                      // _buildUserImage(personalInformationController),
                       _buildFirstNameField(personalInformationController),
                       _buildLastNameField(personalInformationController),
                       _buildEmailField(personalInformationController),
@@ -51,29 +52,24 @@ class UserInformationScreen extends StatelessWidget {
                 ),
               ),
             ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.endContained,
-            floatingActionButton:
-                _buildNextButton(personalInformationController),
+            floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
+            floatingActionButton: _buildNextButton(personalInformationController),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildNextButton(
-      UserInformationController personalInformationController) {
+  Widget _buildNextButton(UserInformationController personalInformationController) {
     return CustomButton(
       onTap: () async {
-        if (personalInformationController.formKey.currentState?.validate() ??
-            false) {
+        if (personalInformationController.formKey.currentState?.validate() ?? false) {
           await personalInformationController.personalInformationAPI(
-              email: personalInformationController.email.text,
-              firstname: personalInformationController.firstname.text,
-              lastname: personalInformationController.lastname.text,
-              postCode: personalInformationController.postCode.text,
-              imagePath: personalInformationController.image?.value);
-
+            email: personalInformationController.email.text,
+            firstname: personalInformationController.firstname.text,
+            lastname: personalInformationController.lastname.text,
+            postCode: personalInformationController.postCode.text, /*imagePath: personalInformationController.image?.value*/
+          );
         }
       },
       isLoader: personalInformationController.isPersonalInformation.value,
@@ -95,12 +91,10 @@ class UserInformationScreen extends StatelessWidget {
     ).paddingOnly(bottom: 25.h);
   }
 
-  Widget buildPostCodeField(
-      UserInformationController personalInformationController) {
+  Widget buildPostCodeField(UserInformationController personalInformationController) {
     return customTextFormField(
       onChanged: (p0) {
-        personalInformationController.isValidatePostCode.value =
-            personalInformationController.postCode.text.isNotEmpty;
+        personalInformationController.isValidatePostCode.value = personalInformationController.postCode.text.isNotEmpty;
       },
       text: AppString.postCode,
       hintText: AppString.postCode,
@@ -110,8 +104,7 @@ class UserInformationScreen extends StatelessWidget {
     ).paddingOnly(bottom: 90.h);
   }
 
-  Widget _buildEmailField(
-      UserInformationController personalInformationController) {
+  Widget _buildEmailField(UserInformationController personalInformationController) {
     return customTextFormField(
       readOnly: true,
       /*  onChanged: (p0) {
@@ -125,12 +118,10 @@ class UserInformationScreen extends StatelessWidget {
     ).paddingSymmetric(vertical: 16.h);
   }
 
-  Widget _buildLastNameField(
-      UserInformationController personalInformationController) {
+  Widget _buildLastNameField(UserInformationController personalInformationController) {
     return customTextFormField(
       onChanged: (p0) {
-        personalInformationController.isValidateLastName.value =
-            personalInformationController.lastname.text.isNotEmpty;
+        personalInformationController.isValidateLastName.value = personalInformationController.lastname.text.isNotEmpty;
       },
       text: AppString.lastName,
       hintText: AppString.lastName,
@@ -140,12 +131,10 @@ class UserInformationScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFirstNameField(
-      UserInformationController personalInformationController) {
+  Widget _buildFirstNameField(UserInformationController personalInformationController) {
     return customTextFormField(
       onChanged: (p0) {
-        personalInformationController.isValidateName.value =
-            personalInformationController.firstname.text.isNotEmpty;
+        personalInformationController.isValidateName.value = personalInformationController.firstname.text.isNotEmpty;
       },
       text: AppString.firstName,
       hintText: AppString.firstName,
@@ -155,8 +144,7 @@ class UserInformationScreen extends StatelessWidget {
     ).paddingOnly(top: 24.h, bottom: 16.h);
   }
 
-  Widget _buildInfoText(
-      UserInformationController personalInformationController) {
+  Widget _buildInfoText(UserInformationController personalInformationController) {
     return InfoTextWidget(
       title: personalInformationController.screenName.value,
       titleFontSize: 24.sp,
@@ -198,9 +186,7 @@ class UserInformationScreen extends StatelessWidget {
               ),
               child: GestureDetector(
                 onTap: () async {
-                  await Utils().imagePickerModel(
-                      selectImage: personalInformationController.imagePath,
-                      image: personalInformationController.image);
+                  await Utils().imagePickerModel(selectImage: personalInformationController.imagePath, image: personalInformationController.image);
                   personalInformationController.isValidateImage.value = true;
                 },
                 child: Container(
@@ -222,9 +208,7 @@ class UserInformationScreen extends StatelessWidget {
             alignment: Alignment.center,
             child: GestureDetector(
               onTap: () async {
-                await Utils().imagePickerModel(
-                    selectImage: personalInformationController.imagePath,
-                    image: personalInformationController.image);
+                await Utils().imagePickerModel(selectImage: personalInformationController.imagePath, image: personalInformationController.image);
                 if (personalInformationController.image.value.isNotEmpty) {
                   personalInformationController.isValidateImage.value = true;
                 } else {
@@ -241,8 +225,7 @@ class UserInformationScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset(IconAsset.uploadIcon)
-                        .paddingOnly(bottom: 6.h),
+                    SvgPicture.asset(IconAsset.uploadIcon).paddingOnly(bottom: 6.h),
                     AppText(
                       text: AppString.tapToAdd,
                       textAlign: TextAlign.center,
@@ -268,6 +251,7 @@ Widget customTextFormField(
     required TextEditingController controller,
     TextInputType keyboardType = TextInputType.text,
     Widget? suffixIcon,
+    final List<TextInputFormatter>? customInputFormat,
     bool? showPassword,
     VoidCallback? onTap}) {
   return Column(
@@ -291,6 +275,7 @@ Widget customTextFormField(
         suffix: suffixIcon,
         isPassword: showPassword ?? false,
         onTap: onTap,
+        customInputFormat: customInputFormat,
       ),
     ],
   );

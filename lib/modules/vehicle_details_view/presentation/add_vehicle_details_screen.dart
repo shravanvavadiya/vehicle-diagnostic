@@ -537,6 +537,7 @@ import 'dart:io';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -560,7 +561,7 @@ import '../../../my_app.dart';
 import '../../../utils/navigation_utils/navigation.dart';
 import '../../../utils/navigation_utils/routes.dart';
 
-class AddVehicleDetailsScreen extends StatelessWidget {
+class AddVehicleDetailsScreen extends StatefulWidget {
   final String screenName;
   final Vehicle? vehicleData;
 
@@ -571,11 +572,17 @@ class AddVehicleDetailsScreen extends StatelessWidget {
   });
 
   @override
+  State<AddVehicleDetailsScreen> createState() => _AddVehicleDetailsScreenState();
+}
+
+class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
+  @override
   Widget build(BuildContext context) {
     return CustomAnnotatedRegions(
       statusBarColor: AppColors.whiteColor,
       child: GetX<VehicleDetailController>(
-        init: VehicleDetailController(name: screenName, fetchData: screenName == AppString.editScreenFlag ? vehicleData! : Vehicle()),
+        init: VehicleDetailController(
+            name: widget.screenName, fetchData: widget.screenName == AppString.editScreenFlag ? widget.vehicleData! : Vehicle()),
         builder: (vehicleDetailController) => Scaffold(
           appBar: AppBar(
             leading: const CustomBackArrowWidget().paddingAll(11.w),
@@ -583,6 +590,7 @@ class AddVehicleDetailsScreen extends StatelessWidget {
             elevation: 0,
           ),
           body: SingleChildScrollView(
+            controller: vehicleDetailController.scrollController,
             child: Form(
               key: vehicleDetailController.formKey,
               child: Column(
@@ -628,7 +636,7 @@ class AddVehicleDetailsScreen extends StatelessWidget {
                             ),
                           ),
                         ).paddingOnly(top: 24.h, bottom: 8.h)
-                      : screenName == AppString.editScreenFlag
+                      : widget.screenName == AppString.editScreenFlag
                           ? Container(
                               height: 195.h,
                               width: double.infinity,
@@ -662,11 +670,9 @@ class AddVehicleDetailsScreen extends StatelessWidget {
                           : GestureDetector(
                               onTap: () async {
                                 await Utils().imagePickerModel(selectImage: vehicleDetailController.imagePath, image: vehicleDetailController.image);
-
                                 if (vehicleDetailController.image.value.isNotEmpty) {
                                   vehicleDetailController.isValidateImage.value = true;
                                 } else {
-                                  // Set validation to false if no image is selected
                                   vehicleDetailController.isValidateImage.value = false;
                                 }
                               },
@@ -697,7 +703,11 @@ class AddVehicleDetailsScreen extends StatelessWidget {
                     controller: vehicleDetailController.vehicleNumber,
                     validator: AppValidation.vehicleNumberValidator,
                     maxLength: 17,
+                    customInputFormat: [LengthLimitingTextInputFormatter(8), CustomInputFormatter()],
                     onChanged: (String) {
+                      vehicleDetailController.vehicleNumber.text.length > 7
+                          ? {vehicleDetailController.vehicleNumberCheck(vehicleNumberText: vehicleDetailController.vehicleNumber.text)}
+                          : {};
                       vehicleDetailController.isValidateVName.value = vehicleDetailController.vehicleNumber.text.isNotEmpty;
                     },
                   ).paddingSymmetric(vertical: 16.h),
@@ -800,7 +810,9 @@ class AddVehicleDetailsScreen extends StatelessWidget {
                     validator: AppValidation.vehicleYearValidator,
                     controller: vehicleDetailController.vehicleYear,
                     onChanged: (String) {
-                      vehicleDetailController.isValidateVYear.value = vehicleDetailController.vehicleYear.text.isNotEmpty;
+                      SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
+                        vehicleDetailController.isValidateVYear.value = vehicleDetailController.vehicleYear.text.isNotEmpty;
+                      });
                     },
                     suffixIcon: Transform.scale(
                       scale: 0.3,
@@ -813,50 +825,91 @@ class AddVehicleDetailsScreen extends StatelessWidget {
                     context,
                     text: AppString.vehicleMake,
                     validator: AppValidation.vehicleMakeValidator,
-                    list: vehicleDetailController.vehicleMake,
+                    list: vehicleDetailController.vehicleMakeList,
                     selectedVal: vehicleDetailController.selectedValueMake,
-                    onChanged: (String) {
-                      vehicleDetailController.isValidateVMake.value = vehicleDetailController.selectedValueMake.isNotEmpty;
+                    onChanged: (newValue) {
+                      vehicleDetailController.selectedValueMake.value = newValue;
+                      vehicleDetailController.isValidateVMake.value = true;
+                      vehicleDetailController.selectedValueModel.value = null;
+                      vehicleDetailController.isValidateVModel.value = false;
+
+                      vehicleDetailController.selectedValueTType.value = null;
+                      vehicleDetailController.isValidateVType.value = false;
+
+                      vehicleDetailController.selectedValueFType.value = null;
+                      vehicleDetailController.isValidateVFuelT.value = false;
+
+                      SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
+                        vehicleDetailController.vehicleModelApi(selectedVehicleMakeString: vehicleDetailController.selectedValueMake.value ?? "");
+                      });
                     },
                   ).paddingSymmetric(vertical: 16.h),
                   selectionTextField(
                     context,
                     validator: AppValidation.vehicleModelValidator,
                     text: AppString.vehicleModel,
-                    list: vehicleDetailController.vehicleModel,
+                    list: vehicleDetailController.vehicleModel.value,
                     selectedVal: vehicleDetailController.selectedValueModel,
-                    onChanged: (String) {
-                      vehicleDetailController.isValidateVModel.value = vehicleDetailController.selectedValueModel.isNotEmpty;
+                    onChanged: (newValue) {
+                      vehicleDetailController.selectedValueModel.value = newValue;
+                      vehicleDetailController.isValidateVModel.value = true;
+
+                      vehicleDetailController.selectedValueFType.value = null;
+
+                      vehicleDetailController.isValidateVFuelT.value = false;
+
+                      vehicleDetailController.selectedValueTType.value = null;
+
+                      vehicleDetailController.isValidateVType.value = false;
+
+                      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+                        vehicleDetailController.vehicleFuelType(
+                          selectedVehicleMakeString: vehicleDetailController.selectedValueMake.value ?? "",
+                          selectedVehicleModelString: vehicleDetailController.selectedValueModel.value ?? "",
+                        );
+                      });
                     },
                   ),
-                  selectionTextField(
-                    context,
-                    validator: AppValidation.transMissionTypeValidator,
-                    text: AppString.transmissionType,
-                    list: vehicleDetailController.transmissionType,
-                    selectedVal: vehicleDetailController.selectedValueTType,
-                    onChanged: (String) {
-                      vehicleDetailController.isValidateVType.value = vehicleDetailController.selectedValueTType.isNotEmpty;
-                    },
-                  ).paddingSymmetric(vertical: 16.h),
                   selectionTextField(
                     context,
                     validator: AppValidation.fuelType,
                     text: AppString.fuelType,
-                    list: vehicleDetailController.fuelType,
+                    list: vehicleDetailController.fuelType.value,
                     selectedVal: vehicleDetailController.selectedValueFType,
-                    onChanged: (String) {
-                      vehicleDetailController.isValidateVFuelT.value = vehicleDetailController.selectedValueFType.isNotEmpty;
+                    onChanged: (newValue) {
+                      vehicleDetailController.selectedValueFType.value = newValue;
+                      vehicleDetailController.isValidateVFuelT.value = true;
+
+                      vehicleDetailController.selectedValueTType.value = null;
+                      vehicleDetailController.isValidateVType.value = false;
+
+                      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+                        vehicleDetailController.vehicleTransmissionType(
+                          selectedVehicleMakeString: vehicleDetailController.selectedValueMake.value!,
+                          selectedVehicleModelString: vehicleDetailController.selectedValueModel.value!,
+                          selectedVehicleFuelString: vehicleDetailController.selectedValueFType.value!,
+                        );
+                      });
                     },
-                  ),
-                  SizedBox(
-                    height: 110.h,
+                  ).paddingSymmetric(vertical: 16.h),
+                  selectionTextField(
+                    context,
+                    validator: AppValidation.transMissionTypeValidator,
+                    text: AppString.transmissionType,
+                    list: vehicleDetailController.transmissionType.value,
+                    selectedVal: vehicleDetailController.selectedValueTType,
+                    onChanged: (String) {
+                      vehicleDetailController.selectedValueTType.value = String;
+                      vehicleDetailController.isValidateVType.value = true;
+
+                      SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {});
+                    },
                   ),
                   Align(
                       alignment: Alignment.bottomRight,
                       child: CustomButton(
                         onTap: () async {
-                          screenName == AppString.editScreenFlag
+                          widget.screenName == AppString.editScreenFlag
                               ? await vehicleDetailController.editVehicleApi()
                               : await vehicleDetailController.addVehicleApi();
                         },
@@ -877,7 +930,7 @@ class AddVehicleDetailsScreen extends StatelessWidget {
                         endSvg: IconAsset.forwardArrow,
                         text: AppString.submit,
                         borderRadius: BorderRadius.circular(46),
-                      )).paddingOnly(bottom: 25.h),
+                      )).paddingOnly(bottom: 25.h, top: 16.h),
                 ],
               ).paddingSymmetric(horizontal: 16.w),
             ),
@@ -892,7 +945,7 @@ class AddVehicleDetailsScreen extends StatelessWidget {
       required String text,
       required Function(String)? onChanged,
       required String? Function(String?)? validator,
-      required RxString selectedVal}) {
+      required RxnString? selectedVal}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -906,10 +959,12 @@ class AddVehicleDetailsScreen extends StatelessWidget {
           customButton: Row(
             children: [
               AppText(
-                text: selectedVal.value.isNotEmpty ? selectedVal.value : 'Select $text',
+                text: selectedVal?.value ?? AppString.select,
                 fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
-                color: AppColors.blackColor,
+                letterSpacing: 0.5,
+                fontWeight: selectedVal?.value == null ? FontWeight.w500 : FontWeight.w600,
+                color: selectedVal?.value == null ? AppColors.blackColor.withOpacity(0.4) : AppColors.primaryColor,
+                // color: AppColors.primaryColor,
               ),
               const Spacer(),
               SvgPicture.asset(
@@ -967,18 +1022,13 @@ class AddVehicleDetailsScreen extends StatelessWidget {
                     ),
                   ))
               .toList(),
+          value: selectedVal?.value,
           // value: vehicleDetailController.selectedValue.value.isEmpty ? AppString.selectGender : AppString.male,
           onChanged: (value) {
-            onChanged!(text);
-            log("val ::${value}");
-            selectedVal.value = value!;
-            log("val ::${selectedVal}");
+            onChanged!(value!);
           },
           validator: validator,
-          onSaved: (value) {
-            // log("val 1::${value}");
-            selectedVal.value = value!;
-          },
+          onSaved: (value) {},
 
           dropdownStyleData: DropdownStyleData(
             maxHeight: 180.h,
@@ -993,6 +1043,6 @@ class AddVehicleDetailsScreen extends StatelessWidget {
           ),
         ),
       ],
-    ).paddingOnly(bottom: 12.h);
+    );
   }
 }

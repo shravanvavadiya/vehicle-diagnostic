@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_template/utils/app_colors.dart';
 
@@ -14,6 +15,7 @@ class CustomTextField extends StatelessWidget {
   final bool isPassword;
   final FocusNode? focusNode;
   final String? hintText;
+  final List<TextInputFormatter>? customInputFormat;
   final TextAlign? textAlign;
   final String? Function(String?)? validator;
   final Widget? prefix;
@@ -54,6 +56,7 @@ class CustomTextField extends StatelessWidget {
     this.prefixWidget,
     this.suffixWidget,
     this.readOnly = false,
+    this.customInputFormat,
   });
 
   final ValueNotifier<bool> _isObscure = ValueNotifier(true);
@@ -67,6 +70,7 @@ class CustomTextField extends StatelessWidget {
             isObscure = false;
           }
           return TextFormField(
+            inputFormatters: customInputFormat,
             readOnly: readOnly,
             style: TextStyle(
               fontWeight: FontWeight.w600,
@@ -83,7 +87,7 @@ class CustomTextField extends StatelessWidget {
             maxLength: maxLength,
             keyboardType: keyboardType,
             validator: validator,
-            textCapitalization: textCapitalization??TextCapitalization.none,
+            textCapitalization: textCapitalization ?? TextCapitalization.none,
             focusNode: focusNode,
             cursorColor: cursorColor,
             textAlign: textAlign ?? TextAlign.start,
@@ -103,9 +107,7 @@ class CustomTextField extends StatelessWidget {
               suffixIcon: suffix == null && isPassword
                   ? IconButton(
                       icon: Icon(
-                        isObscure
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
+                        isObscure ? Icons.visibility_off_outlined : Icons.visibility_outlined,
                         color: Colors.grey,
                       ),
                       onPressed: () {
@@ -131,13 +133,11 @@ class CustomTextField extends StatelessWidget {
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(radius ?? 4.r)),
-                borderSide:
-                    BorderSide(color: enableColor ?? AppColors.backgroundColor),
+                borderSide: BorderSide(color: enableColor ?? AppColors.backgroundColor),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(radius ?? 4.r)),
-                borderSide: BorderSide(
-                    color: focusedColor ?? AppColors.backgroundColor),
+                borderSide: BorderSide(color: focusedColor ?? AppColors.backgroundColor),
               ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(
@@ -149,7 +149,7 @@ class CustomTextField extends StatelessWidget {
                 ),
               ),
               focusedErrorBorder: const OutlineInputBorder(
-                borderSide: BorderSide(width:1.2, color: Colors.red),
+                borderSide: BorderSide(width: 1.2, color: Colors.red),
               ),
             ),
           );

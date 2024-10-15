@@ -28,9 +28,9 @@ class UserInformationController extends GetxController with LoadingMixin, Loadin
   RxBool isValidateLastName = false.obs;
   RxBool isValidateEmail = false.obs;
   RxBool isValidatePostCode = false.obs;
-  XFile? imagePath;
-  RxString? image = "".obs;
-  RxBool isValidateImage = false.obs;
+  // XFile? imagePath;
+  // RxString? image = "".obs;
+  // RxBool isValidateImage = false.obs;
   RxBool isButtonEnabled = false.obs;
 
   void updateButtonState() {

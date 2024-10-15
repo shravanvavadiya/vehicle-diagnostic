@@ -6,6 +6,7 @@ import 'package:flutter_template/modules/profile/presentation/profile_screen.dar
 import 'package:flutter_template/modules/splash/presentation/splash_screen.dart';
 import 'package:flutter_template/modules/subscriptions/presentation/subscriptions_summery_screen.dart';
 import 'package:get/get.dart';
+import '../../demo/pre_load_data.dart';
 import '../../modules/authentication/presentation/create_new_password_screen.dart';
 import '../../modules/authentication/presentation/log_in_with_email_screen.dart';
 import '../../modules/profile/presentation/account_information_screen.dart';
@@ -35,11 +36,11 @@ mixin Routes {
   static const String subscriptionsPlanScreen = '/subscriptionsPlanScreen';
 
   static List<GetPage<dynamic>> pages = [
-    /*GetPage<dynamic>(
+    GetPage<dynamic>(
       name: demo01,
-      page: () => QuestionAnswerScreen(),
+      page: () => DependentDropdownDemo(),
       transition: defaultTransition,
-    ),*/
+    ),
     GetPage<dynamic>(
       name: logInWithEmailId,
       page: () => const LogInWithEmailScreen(),

@@ -16,6 +16,11 @@ class Utils {
     }
   }
 
+  static void keyboardInApp(BuildContext context, FocusNode focusNode) {
+    var currentFocus = FocusScope.of(context);
+    FocusScope.of(context).requestFocus(focusNode);
+  }
+
   static Future<XFile?> imagePicker({required ImageSource source}) async {
     try {
       if (Platform.isIOS) {
@@ -40,22 +45,17 @@ class Utils {
           CupertinoActionSheetAction(
             child: Text(
               'Choose from Gallery',
-              style: TextStyle(
-                  color: AppColors.blackColor,
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w400),
+              style: TextStyle(color: AppColors.blackColor, fontSize: 18.sp, fontWeight: FontWeight.w400),
             ),
             onPressed: () async {
               Get.back();
               log("--> $selectImage");
-              selectImage =
-                  await Utils.imagePicker(source: ImageSource.gallery);
+              selectImage = await Utils.imagePicker(source: ImageSource.gallery);
 
               log("selectImage ::${selectImage?.path}");
               if (selectImage?.path.isNotEmpty ?? false) {
                 image?.value = selectImage?.path ?? "";
               }
-
             },
           ),
           CupertinoActionSheetAction(

@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_template/modules/chat_view/services/services.dart';
 import 'package:flutter_template/utils/app_string.dart';
+import 'package:flutter_template/utils/utils.dart';
 import 'package:flutter_template/widget/app_snackbar.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
@@ -24,8 +25,13 @@ class ChatController extends GetxController with LoadingMixin, LoadingApiMixin {
   Rx<GetChatQuestionModel> chatQuestionList = GetChatQuestionModel().obs;
   Rx<UserAnswerCheckModel> userAnswerCheckList = UserAnswerCheckModel().obs;
   RxBool isCheckText = false.obs;
+  RxBool isEditAnsValue = false.obs;
+  RxBool isAllAnswerAdd = false.obs;
   RxInt fillAnswer = 1.obs;
+  RxInt isEditSelectedIndex = 0.obs;
+  RxInt isEditTimeIndex = (-1).obs;
   RxInt passVehicleId = 0.obs;
+  List<String> splitQuestionList = <String>[];
 
   ChatController({required int vehicleId}) {
     passVehicleId.value = vehicleId;
@@ -42,7 +48,7 @@ class ChatController extends GetxController with LoadingMixin, LoadingApiMixin {
           isResponse.value = true;
           RxString question = data.apiresponse!.data!.toString().obs;
           log("split ans ${question.value.replaceAll("[", "").replaceAll("]", "").split(",")}");
-          List<String> splitQuestionList = question.value.replaceAll("[", "").replaceAll("]", "").split(",").obs;
+          splitQuestionList = question.value.replaceAll("[", "").replaceAll("]", "").split(",").obs;
 
           for (int i = 0; i < splitQuestionList.length; i++) {
             log(splitQuestionList[i].replaceAll("'", ""));
@@ -54,6 +60,7 @@ class ChatController extends GetxController with LoadingMixin, LoadingApiMixin {
   }
 
   Future<void> submitUserAns({required String answer, required String question}) async {
+    handleLoading(true);
     final body = {
       "qaChatgptRequests": [
         {
@@ -77,29 +84,74 @@ class ChatController extends GetxController with LoadingMixin, LoadingApiMixin {
         if (data.apiresponse!.data!.qaChatGptResponses!.isNotEmpty) {
           userAnswerCheckList.value = data;
           log("response after ans check ${data.apiresponse!.data!.qaChatGptResponses.toString()}");
-          questionAndAnswerList[fillAnswer.value - 1].answer = answerController.value.text;
-          answerController.value.text = "";
-          log("questionAndAnswerList.length ${questionAndAnswerList.length}  fillAnswer.value ${fillAnswer.value}");
-          if (questionAndAnswerList.length > fillAnswer.value) fillAnswer.value++;
+          // isEditAnsValue.value == true
+          //     ? {
+          //         questionAndAnswerList[isEditTimeIndex.value].answer = answerController.value.text,
+          //         isEditAnsValue.value = false,
+          //         isEditTimeIndex.value = -1,
+          //         answerController.value.clear(),
+          //       }
+          //     : {
+          //         questionAndAnswerList[fillAnswer.value - 1].answer = answerController.value.text,
+          //         answerController.value.text = "",
+          //         if (questionAndAnswerList.length > fillAnswer.value)
+          //           {fillAnswer.value++}
+          //         else
+          //           {
+          //             isAllAnswerAdd.value = true,
+          //           },
+          //       };
+          handleLoading(false);
         }
       },
     );
+
+    handleLoading(false);
+    isEditAnsValue.value == true
+        ? {
+            questionAndAnswerList[isEditTimeIndex.value].answer = answerController.value.text,
+            isEditAnsValue.value = false,
+            isEditTimeIndex.value = -1,
+            answerController.value.clear(),
+          }
+        : {
+            questionAndAnswerList[fillAnswer.value - 1].answer = answerController.value.text,
+            answerController.value.text = "",
+            if (questionAndAnswerList.length > fillAnswer.value)
+              {fillAnswer.value++}
+            else
+              {
+                isAllAnswerAdd.value = true,
+              },
+          };
   }
 
-  Future<void> downloadUserReport({required int userId}) async {
-    handleLoading(true);
+  Future<void> downloadUserReport({required int vehicle}) async {
+    // handleLoading(true);
     await processApi(
-      () => ChatServices.downloadReport(userId: userId),
+      () => ChatServices.downloadReport(vehicle: passVehicleId.value),
       error: (error, stack) {
-        handleLoading(false);
+        Get.back();
+        // handleLoading(false);
       },
       result: (data) {
-        Get.to(PdfViewScreen(
+        // handleLoading(false);
+        Get.off(PdfViewScreen(
           pdfData: data,
         ));
       },
     );
-    handleLoading(false);
+    // handleLoading(false);
+  }
+
+  FocusNode myFocusNode = FocusNode();
+
+  Future<void> editQuestionAnswerFunction({required int currentIndex}) async {
+    Utils.keyboardInApp(context, myFocusNode);
+    answerController.value.text = questionAndAnswerList[currentIndex].answer ?? "";
+    isEditAnsValue.value = true;
+    isEditTimeIndex.value = currentIndex;
+    isCheckText.value = true;
   }
 
   @override

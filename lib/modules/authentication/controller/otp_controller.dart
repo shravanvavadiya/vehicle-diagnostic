@@ -32,7 +32,7 @@ class OtpController extends GetxController with LoadingMixin, LoadingApiMixin {
     screenNameFlag.value = flag;
   }
 
-  static const maxSeconds = 10; // 1 minute
+  static const maxSeconds = 60; // 1 minute
   RxInt secondsRemaining = maxSeconds.obs;
   Timer? timer;
 

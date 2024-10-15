@@ -14,7 +14,10 @@ import 'download_pop_up.dart';
 class PdfViewScreen extends StatefulWidget {
   final Uint8List pdfData;
 
-  const PdfViewScreen({super.key, required this.pdfData});
+  const PdfViewScreen({
+    super.key,
+    required this.pdfData
+  });
 
   @override
   State<PdfViewScreen> createState() => _PdfViewScreenState();
@@ -58,9 +61,10 @@ class _PdfViewScreenState extends State<PdfViewScreen> {
           ],
         ),
         body: SafeArea(
-            child: SfPdfViewer.memory(
-          widget.pdfData,
-        )),
+          child: SfPdfViewer.memory(
+            widget.pdfData,
+          ),
+        ),
       ),
     );
   }

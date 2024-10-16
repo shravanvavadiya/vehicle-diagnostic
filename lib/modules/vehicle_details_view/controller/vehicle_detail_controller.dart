@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -23,6 +24,16 @@ import '../service/add_vehicle_service.dart';
 class VehicleDetailController extends GetxController with LoadingMixin, LoadingApiMixin {
   RxInt vehicleId = 0.obs;
   RxInt vehicleUserId = 0.obs;
+  Timer? debounce;
+  RxBool isSnackBarStop = true.obs;
+
+  snackBarStopFunction() {
+    isSnackBarStop.value = false;
+    Future.delayed(
+      Duration(seconds: 2),
+      () => isSnackBarStop.value = true,
+    );
+  }
 
   VehicleDetailController({required String name, required Vehicle fetchData}) {
     print(name);
@@ -31,9 +42,10 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
             screenName.value = AppString.editYourVehicleDetails,
             // fetchData.photo = image.value,
             // fetchData.vehicleNumber = vehicleNumber.text,
-            vehicleNumber.text = fetchData.vehicleNumber!,
-            vehicleYear.text = fetchData.vehicleYear!,
+            vehicleNumberController.text = fetchData.vehicleNumber!,
+            vehicleYearController.text = fetchData.vehicleYear!,
             selectedYear.value = int.parse(fetchData.vehicleYear!),
+
             selectedValueMake.value = fetchData.vehicleMake!,
             selectedValueModel.value = fetchData.vehicleModel!,
             selectedValueTType.value = fetchData.transmissionType!,
@@ -49,6 +61,19 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
             isValidateVType.value = true,
             isValidateVFuelT.value = true,
             isValidateImage.value = true,
+
+            SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
+              vehicleModelApi(selectedVehicleMakeString: selectedValueMake.value ?? "");
+              vehicleFuelType(
+                selectedVehicleMakeString: selectedValueMake.value ?? "",
+                selectedVehicleModelString: selectedValueModel.value ?? "",
+              );
+              vehicleTransmissionType(
+                selectedVehicleMakeString: selectedValueMake.value!,
+                selectedVehicleModelString: selectedValueModel.value!,
+                selectedVehicleFuelString: selectedValueFType.value!,
+              );
+            }),
           }
         : {
             screenName.value = AppString.addYourVehicleDetails,
@@ -59,14 +84,18 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
 
   ScrollController scrollController = ScrollController();
 
-  final TextEditingController vehicleNumber = TextEditingController();
-  final TextEditingController vehicleYear = TextEditingController();
+  final TextEditingController vehicleNumberController = TextEditingController();
+  final TextEditingController vehicleYearController = TextEditingController();
+  final TextEditingController vehicleMakeController = TextEditingController();
+  final TextEditingController vehicleModelController = TextEditingController();
+  final TextEditingController vehicleFuelTypeController = TextEditingController();
+  final TextEditingController transmissionTypeController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   Rx<AddVehicleModel> addVehicleModel = AddVehicleModel().obs;
   XFile? imagePath;
   RxString image = "".obs;
   RxString networkImage = "".obs;
-  RxInt selectedYear = 2010.obs;
+  RxInt selectedYear = 2019.obs;
   final RxInt currentYear = DateTime.now().year.obs;
 
   RxBool isValidateVName = false.obs;
@@ -78,26 +107,14 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
   RxBool isValidateImage = false.obs;
 
   clearController() {
-    vehicleNumber.text = "";
-    vehicleYear.text = "";
+    vehicleNumberController.text = "";
+    vehicleYearController.text = "";
     imagePath = XFile("");
     image.value = "";
     selectedValueMake.value = 'Select';
     selectedValueModel.value = 'Select';
     selectedValueTType.value = 'Select';
     selectedValueFType.value = 'Select';
-  }
-
-  Future<void> clearAfterSelectedData() async {
-    vehicleModel.value = [];
-    selectedValueModel.value = "";
-    isValidateVModel.value = false;
-    fuelType.value = [];
-    selectedValueFType.value = "Select";
-    isValidateVType.value = false;
-    transmissionType.value = [];
-    selectedValueTType.value = "Select";
-    isValidateVFuelT.value = false;
   }
 
   final RxList<String> vehicleMakeList = RxList();
@@ -118,9 +135,9 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
     try {
       vehicleResponse = await VehicleService.vehicleNumber(vehicleNumber: vehicleNumberText); // OG63 GGG
       log("vehicleResponse ${vehicleResponse!.toJson()}");
-      vehicleNumber.text = vehicleResponse!.registrationNumber!;
+      vehicleNumberController.text = vehicleResponse!.registrationNumber!;
       isValidateVName.value = true;
-      vehicleYear.text = vehicleResponse!.yearOfManufacture!.toString();
+      vehicleYearController.text = vehicleResponse!.yearOfManufacture!.toString();
       isValidateVYear.value = true;
       String carMake = (vehicleResponse?.make ?? '').toLowerCase();
       log("vehicleResponse carMake::$carMake");
@@ -142,7 +159,7 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
       log("vehicleResponse vehicleMakeList:;$vehicleMakeList");
       log("vehicleResponse selectedValueMake:;$selectedValueMake");
     } catch (e) {
-      AppSnackBar.showErrorSnackBar(message: "Vehicle Details Not Found", title: "error");
+      AppSnackBar.showErrorSnackBar(message: "Vehicle details not found", title: "error");
       log("error e :::::::$e");
       handleLoading(false);
     } finally {
@@ -247,8 +264,8 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
     handleLoading(true);
     final MyVehicleData addVehicleData = MyVehicleData(
       fuelType: selectedValueFType.trim(),
-      vehicleYear: vehicleYear.text.trim(),
-      vehicleNumber: vehicleNumber.text.trim(),
+      vehicleYear: vehicleYearController.text.trim(),
+      vehicleNumber: vehicleNumberController.text.trim(),
       vehicleModel: selectedValueModel.trim(),
       vehicleMake: selectedValueMake.value,
       userId: AppPreference.getInt("UserId"),
@@ -291,8 +308,8 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
     handleLoading(true);
     final MyVehicleData editVehicleData = MyVehicleData(
       fuelType: selectedValueFType.trim(),
-      vehicleYear: vehicleYear.text.trim(),
-      vehicleNumber: vehicleNumber.text.trim(),
+      vehicleYear: vehicleYearController.text.trim(),
+      vehicleNumber: vehicleNumberController.text.trim(),
       vehicleModel: selectedValueModel.trim(),
       vehicleMake: selectedValueMake.value,
       userId: vehicleUserId.value,
@@ -352,6 +369,15 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+  }
+
+  void scrollToBottom() {
+    // Animate to the bottom of the scrollable content
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 }
 

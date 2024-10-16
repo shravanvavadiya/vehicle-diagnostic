@@ -38,7 +38,6 @@ class CustomButton extends StatefulWidget {
       this.buttonBorderColor,
       this.buttonColor,
       this.fontWeight = FontWeight.w600,
-
       this.fontSize = 16,
       this.textColor,
       this.onTap,
@@ -60,9 +59,8 @@ class CustomButton extends StatefulWidget {
 class CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
-    final buttonColor = (widget.isDisabled)
-        ? widget.disableButtonColor ?? AppColors.disableButtonColor
-        : widget.buttonColor ??  AppColors.primaryColor;
+    final buttonColor =
+        (widget.isDisabled) ? widget.disableButtonColor ?? AppColors.disableButtonColor : widget.buttonColor ?? AppColors.primaryColor;
     return GestureDetector(
       onTap: (widget.isLoader || widget.isDisabled) ? null : widget.onTap,
       child: Container(
@@ -71,14 +69,14 @@ class CustomButtonState extends State<CustomButton> {
         padding: widget.padding ?? EdgeInsets.all(12.w),
         decoration: BoxDecoration(
           borderRadius: widget.borderRadius ?? BorderRadius.circular(8.r),
-          color: widget.isDisabled
-              ? AppColors.primaryColor.withOpacity(0.5)
-              : buttonColor,
+          color: widget.isDisabled ? AppColors.primaryColor.withOpacity(0.5) : buttonColor,
           border: Border.all(
-              color: widget.isDisabled?AppColors.transparent:(widget.buttonBorderColor != null)
-                  ? widget.buttonBorderColor!
-                  : buttonColor,
-              width: widget.isDisabled?0:widget.borderWidth ?? 0.3
+              color: widget.isDisabled
+                  ? AppColors.transparent
+                  : (widget.buttonBorderColor != null)
+                      ? widget.buttonBorderColor!
+                      : buttonColor,
+              width: widget.isDisabled ? 0 : widget.borderWidth ?? 0.3
               // color: (widget.needBorderColor) ? buttonColor : Colors.transparent,
               ),
         ),
@@ -102,10 +100,8 @@ class CustomButtonState extends State<CustomButton> {
                       style: TextStyle(
                         fontSize: widget.fontSize,
                         fontWeight: widget.fontWeight,
-                        color: (widget.isDisabled)
-                            ? widget.disableTextColor ??
-                                AppColors.textColor.withOpacity(0.6)
-                            : widget.textColor ?? Colors.white,
+                        color:
+                            (widget.isDisabled) ? widget.disableTextColor ?? AppColors.textColor.withOpacity(0.6) : widget.textColor ?? Colors.white,
                       ),
                     ),
                     if (widget.endSvg != null)

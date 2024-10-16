@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,9 +11,11 @@ import 'package:flutter_template/utils/app_text.dart';
 import 'package:flutter_template/utils/assets.dart';
 import 'package:flutter_template/utils/navigation_utils/navigation.dart';
 import 'package:flutter_template/widget/annotated_region.dart';
+import 'package:flutter_template/widget/app_snackbar.dart';
 import 'package:flutter_template/widget/custom_button.dart';
 import 'package:get/get.dart';
 
+import '../../../api/preferences/shared_preferences_helper.dart';
 import '../../../utils/behaviour_glow.dart';
 import '../../../utils/utils.dart';
 import '../../../utils/validation_utils.dart';
@@ -40,8 +43,13 @@ class AccountInformationScreen extends StatelessWidget {
                 fontSize: 17.sp,
               ),
               leading: GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  /*profileController.firstname.text = SharedPreferencesHelper().getUserInfo()!.profileResponse!.profileData!.firstName!;
+                  profileController.lastname.text = SharedPreferencesHelper().getUserInfo()!.profileResponse!.profileData!.lastName!;
+                  profileController.postCode.text = SharedPreferencesHelper().getUserInfo()!.profileResponse!.profileData!.postCode!;
+                  */
                   Get.back();
+                  // profileController.isModified.value = false;
                 },
                 child: SvgPicture.asset(
                   IconAsset.leftArrow,
@@ -229,34 +237,43 @@ class AccountInformationScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                CustomButton(
-                  onTap: () async {
-                    if (profileController.updateFormKey.currentState?.validate() ?? false) {
-                      profileController.updateUserProfileAPI(
-                        email: profileController.email.text,
-                        firstname: profileController.firstname.text,
-                        lastname: profileController.lastname.text,
-                        postCode: profileController.postCode.text,
-                        imagePath: profileController.image!.value.contains("http") ? null : profileController.image!.value,
-                      );
-                    }
+                GestureDetector(
+                  onTap: () {
+                    /*if (profileController.firstname.value.text.isEmpty) {
+                      AppSnackBar.showErrorSnackBar(message: "Please enter your first name.", title: "error");
+                    } else if (profileController.lastname.value.text.isEmpty) {
+                      AppSnackBar.showErrorSnackBar(message: "Please enter your Last name.", title: "error");
+                    } else if (profileController.postCode.value.text.isEmpty) {
+                      AppSnackBar.showErrorSnackBar(message: "Please enter postcode", title: "error");
+                    }*/
+                    profileController.updateFormKey.currentState?.validate();
                   },
-                  disableTextColor: AppColors.whiteColor,
-                  isDisabled: (profileController.isModified.value &&
-                          profileController.isValidateName.value &&
-                          profileController.isValidateLastName.value &&
-                          profileController.isValidatePostCode.value &&
-                          profileController.image!.isNotEmpty)
-                      ? false
-                      : true,
-                  height: 52.h,
-                  fontSize: 15.h,
-                  //   disableTextColor: AppColors.whiteColor,
-                  text: AppString.updateProfile,
-                  borderRadius: BorderRadius.circular(8.r),
-                ).paddingSymmetric(
-                  horizontal: 16.w,
-                  vertical: 25.h,
+                  child: CustomButton(
+                    onTap: () async {
+                      if (profileController.updateFormKey.currentState?.validate() ?? false) {
+                        profileController.updateUserProfileAPI(
+                            email: profileController.email.text,
+                            firstname: profileController.firstname.text,
+                            lastname: profileController.lastname.text,
+                            postCode: profileController.postCode.text);
+                      }
+                    },
+                    disableTextColor: AppColors.whiteColor,
+                    isDisabled: (profileController.isModified.value &&
+                            profileController.isValidateName.value &&
+                            profileController.isValidateLastName.value &&
+                            profileController.isValidatePostCode.value)
+                        ? false
+                        : true,
+                    height: 52.h,
+                    fontSize: 15.h,
+                    //   disableTextColor: AppColors.whiteColor,
+                    text: AppString.updateProfile,
+                    borderRadius: BorderRadius.circular(8.r),
+                  ).paddingSymmetric(
+                    horizontal: 16.w,
+                    vertical: 25.h,
+                  ),
                 ),
               ],
             ),

@@ -101,9 +101,7 @@ class VehicleService {
 
   static Future<VehicleMakeModel> vehicleFuel({required String selectedVehicleMake, required String selectedVehicleModel}) async {
     try {
-      var response = await Api().get(
-        "${ApiConstants.vehicleFuel}/$selectedVehicleMake/$selectedVehicleModel",
-      );
+      var response = await Api().get(ApiConstants.vehicleFuel, queryData: {"make": selectedVehicleMake, "model": selectedVehicleModel});
       log("response ----------- >> $response");
       return VehicleMakeModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } catch (e, st) {
@@ -115,9 +113,8 @@ class VehicleService {
   static Future<VehicleMakeModel> vehicleTransmission(
       {required String selectedVehicleMake, required String selectedVehicleModel, required String selectedVehicleFuel}) async {
     try {
-      var response = await Api().get(
-        "${ApiConstants.vehicleTransmission}/$selectedVehicleMake/$selectedVehicleModel/$selectedVehicleFuel",
-      );
+      var response = await Api().get(ApiConstants.vehicleTransmission,
+          queryData: {"fuelType": selectedVehicleFuel, "make": selectedVehicleMake, "model": selectedVehicleModel});
       log("response ----------- >> $response");
       return VehicleMakeModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } catch (e, st) {

@@ -531,9 +531,11 @@ class AddVehicleDetailsScreen extends StatelessWidget {
 }
 */
 
+import 'dart:async';
 import 'dart:developer';
 import 'dart:ffi';
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -552,6 +554,7 @@ import 'package:flutter_template/utils/assets.dart';
 import 'package:flutter_template/utils/utils.dart';
 import 'package:flutter_template/utils/validation_utils.dart';
 import 'package:flutter_template/widget/annotated_region.dart';
+import 'package:flutter_template/widget/app_snackbar.dart';
 import 'package:flutter_template/widget/custom_backarrow_widget.dart';
 import 'package:flutter_template/widget/custom_button.dart';
 import 'package:flutter_template/widget/info_text_widget.dart';
@@ -637,7 +640,7 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                           ),
                         ).paddingOnly(top: 24.h, bottom: 8.h)
                       : widget.screenName == AppString.editScreenFlag
-                          ? Container(
+                          ? /* Container(
                               height: 195.h,
                               width: double.infinity,
                               decoration: BoxDecoration(
@@ -666,7 +669,54 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                                   child: SvgPicture.asset(IconAsset.editIcon).paddingAll(85.h),
                                 ),
                               ),
-                            ).paddingOnly(top: 24.h, bottom: 8.h)
+                            )*/
+                          GestureDetector(
+                              onTap: () async {
+                                await Utils().imagePickerModel(selectImage: vehicleDetailController.imagePath, image: vehicleDetailController.image);
+
+                                vehicleDetailController.isValidateImage.value = true;
+                              },
+                              child: SizedBox(
+                                height: 195.h,
+                                child: Stack(
+                                  children: [
+                                    CachedNetworkImage(
+                                      maxHeightDiskCache: 1500,
+                                      maxWidthDiskCache: 1500,
+                                      color: Colors.transparent,
+                                      imageUrl: vehicleDetailController.networkImage.value,
+                                      fit: BoxFit.cover,
+                                      imageBuilder: (context, imageProvider) => Center(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.transparent,
+                                            borderRadius: BorderRadius.circular(9.r),
+                                            image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      placeholder: (context, url) => Center(
+                                        child: CircularProgressIndicator(
+                                          color: AppColors.dividerColor,
+                                        ),
+                                      ),
+                                    ).paddingOnly(top: 24.h, bottom: 8.h),
+                                    Container(
+                                      height: 195.h,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.blackColor.withOpacity(0.4),
+                                        borderRadius: BorderRadius.circular(9.r),
+                                      ),
+                                      child: SvgPicture.asset(IconAsset.editIcon).paddingAll(85.h),
+                                    ).paddingOnly(top: 24.h, bottom: 8.h),
+                                  ],
+                                ),
+                              ),
+                            )
                           : GestureDetector(
                               onTap: () async {
                                 await Utils().imagePickerModel(selectImage: vehicleDetailController.imagePath, image: vehicleDetailController.image);
@@ -700,15 +750,35 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                   customTextFormField(
                     text: AppString.vehicleNumber,
                     hintText: AppString.vehicleNumber,
-                    controller: vehicleDetailController.vehicleNumber,
+                    controller: vehicleDetailController.vehicleNumberController,
                     validator: AppValidation.vehicleNumberValidator,
                     maxLength: 17,
-                    customInputFormat: [LengthLimitingTextInputFormatter(8), CustomInputFormatter()],
                     onChanged: (String) {
-                      vehicleDetailController.vehicleNumber.text.length > 7
-                          ? {vehicleDetailController.vehicleNumberCheck(vehicleNumberText: vehicleDetailController.vehicleNumber.text)}
-                          : {};
-                      vehicleDetailController.isValidateVName.value = vehicleDetailController.vehicleNumber.text.isNotEmpty;
+                      if (vehicleDetailController.vehicleNumberController.text.length > 3) {
+                        if (vehicleDetailController.debounce?.isActive ?? false) vehicleDetailController.debounce?.cancel();
+                        vehicleDetailController.debounce = Timer(const Duration(seconds: 2), () {
+                          vehicleDetailController.vehicleNumberCheck(vehicleNumberText: vehicleDetailController.vehicleNumberController.text);
+                        });
+                      }
+
+                      vehicleDetailController.isValidateVName.value = vehicleDetailController.vehicleNumberController.text.isNotEmpty;
+                    },
+                    onTap: () {
+                      vehicleDetailController.selectedValueMake.value = null;
+                      vehicleDetailController.isValidateVMake.value = false;
+                      // vehicleDetailController.vehicleMakeList.value = [];
+
+                      vehicleDetailController.selectedValueModel.value = null;
+                      vehicleDetailController.isValidateVModel.value = false;
+                      vehicleDetailController.vehicleModel.value = [];
+
+                      vehicleDetailController.selectedValueTType.value = null;
+                      vehicleDetailController.isValidateVType.value = false;
+                      vehicleDetailController.fuelType.value = [];
+
+                      vehicleDetailController.selectedValueFType.value = null;
+                      vehicleDetailController.isValidateVFuelT.value = false;
+                      vehicleDetailController.transmissionType.value = [];
                     },
                   ).paddingSymmetric(vertical: 16.h),
                   customTextFormField(
@@ -769,13 +839,14 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: CupertinoPicker(
-                                        scrollController: FixedExtentScrollController(initialItem: 10),
+                                        scrollController: FixedExtentScrollController(initialItem: 5),
                                         diameterRatio: 1,
                                         magnification: 1.1,
                                         onSelectedItemChanged: (value) {
                                           vehicleDetailController.selectedYear.value = vehicleDetailController.currentYear.value - value;
-                                          vehicleDetailController.vehicleYear.text = vehicleDetailController.selectedYear.value.toString();
-                                          vehicleDetailController.isValidateVYear.value = vehicleDetailController.vehicleYear.text.isNotEmpty;
+                                          vehicleDetailController.vehicleYearController.text = vehicleDetailController.selectedYear.value.toString();
+                                          vehicleDetailController.isValidateVYear.value =
+                                              vehicleDetailController.vehicleYearController.text.isNotEmpty;
                                         },
                                         itemExtent: 32.0,
                                         children: List<Widget>.generate(
@@ -795,9 +866,8 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                                     height: 50.h,
                                     buttonColor: AppColors.primaryColor,
                                     onTap: () {
-                                      vehicleDetailController.vehicleYear.text = vehicleDetailController.selectedYear.value.toString();
+                                      vehicleDetailController.vehicleYearController.text = vehicleDetailController.selectedYear.value.toString();
                                       vehicleDetailController.isValidateVYear.value = true;
-
                                       Get.back();
                                     },
                                     text: AppString.save,
@@ -808,10 +878,10 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                           ));
                     },
                     validator: AppValidation.vehicleYearValidator,
-                    controller: vehicleDetailController.vehicleYear,
+                    controller: vehicleDetailController.vehicleYearController,
                     onChanged: (String) {
                       SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
-                        vehicleDetailController.isValidateVYear.value = vehicleDetailController.vehicleYear.text.isNotEmpty;
+                        vehicleDetailController.isValidateVYear.value = vehicleDetailController.vehicleYearController.text.isNotEmpty;
                       });
                     },
                     suffixIcon: Transform.scale(
@@ -821,115 +891,202 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                       ),
                     ),
                   ),
-                  selectionTextField(
-                    context,
+
+                  customTextFormField(
                     text: AppString.vehicleMake,
+                    hintText: AppString.vehicleMake,
+                    controller: vehicleDetailController.vehicleMakeController,
                     validator: AppValidation.vehicleMakeValidator,
-                    list: vehicleDetailController.vehicleMakeList,
-                    selectedVal: vehicleDetailController.selectedValueMake,
-                    onChanged: (newValue) {
-                      vehicleDetailController.selectedValueMake.value = newValue;
-                      vehicleDetailController.isValidateVMake.value = true;
-                      vehicleDetailController.selectedValueModel.value = null;
-                      vehicleDetailController.isValidateVModel.value = false;
-
-                      vehicleDetailController.selectedValueTType.value = null;
-                      vehicleDetailController.isValidateVType.value = false;
-
-                      vehicleDetailController.selectedValueFType.value = null;
-                      vehicleDetailController.isValidateVFuelT.value = false;
-
-                      SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
-                        vehicleDetailController.vehicleModelApi(selectedVehicleMakeString: vehicleDetailController.selectedValueMake.value ?? "");
-                      });
-                    },
-                  ).paddingSymmetric(vertical: 16.h),
-                  selectionTextField(
-                    context,
-                    validator: AppValidation.vehicleModelValidator,
-                    text: AppString.vehicleModel,
-                    list: vehicleDetailController.vehicleModel.value,
-                    selectedVal: vehicleDetailController.selectedValueModel,
-                    onChanged: (newValue) {
-                      vehicleDetailController.selectedValueModel.value = newValue;
-                      vehicleDetailController.isValidateVModel.value = true;
-
-                      vehicleDetailController.selectedValueFType.value = null;
-
-                      vehicleDetailController.isValidateVFuelT.value = false;
-
-                      vehicleDetailController.selectedValueTType.value = null;
-
-                      vehicleDetailController.isValidateVType.value = false;
-
-                      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-                        vehicleDetailController.vehicleFuelType(
-                          selectedVehicleMakeString: vehicleDetailController.selectedValueMake.value ?? "",
-                          selectedVehicleModelString: vehicleDetailController.selectedValueModel.value ?? "",
-                        );
-                      });
-                    },
-                  ),
-                  selectionTextField(
-                    context,
-                    validator: AppValidation.fuelType,
-                    text: AppString.fuelType,
-                    list: vehicleDetailController.fuelType.value,
-                    selectedVal: vehicleDetailController.selectedValueFType,
-                    onChanged: (newValue) {
-                      vehicleDetailController.selectedValueFType.value = newValue;
-                      vehicleDetailController.isValidateVFuelT.value = true;
-
-                      vehicleDetailController.selectedValueTType.value = null;
-                      vehicleDetailController.isValidateVType.value = false;
-
-                      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-                        vehicleDetailController.vehicleTransmissionType(
-                          selectedVehicleMakeString: vehicleDetailController.selectedValueMake.value!,
-                          selectedVehicleModelString: vehicleDetailController.selectedValueModel.value!,
-                          selectedVehicleFuelString: vehicleDetailController.selectedValueFType.value!,
-                        );
-                      });
-                    },
-                  ).paddingSymmetric(vertical: 16.h),
-                  selectionTextField(
-                    context,
-                    validator: AppValidation.transMissionTypeValidator,
-                    text: AppString.transmissionType,
-                    list: vehicleDetailController.transmissionType.value,
-                    selectedVal: vehicleDetailController.selectedValueTType,
+                    maxLength: 17,
                     onChanged: (String) {
-                      vehicleDetailController.selectedValueTType.value = String;
-                      vehicleDetailController.isValidateVType.value = true;
-
-                      SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {});
+                      vehicleDetailController.isValidateVName.value = vehicleDetailController.vehicleMakeController.text.isNotEmpty;
                     },
-                  ),
+                    onTap: () {},
+                  ).paddingSymmetric(vertical: 16.h),
+
+                  // selectionTextField(
+                  //   onMenuStateChange: (p0) {
+                  //     log("messagemessagemessagemessage");
+                  //     vehicleDetailController.scrollToBottom();
+                  //   },
+                  //   vehicleDetailController: vehicleDetailController,
+                  //   context,
+                  //   text: AppString.vehicleMake,
+                  //   validator: AppValidation.vehicleMakeValidator,
+                  //   list: vehicleDetailController.vehicleMakeList,
+                  //   selectedVal: vehicleDetailController.selectedValueMake,
+                  //   onChanged: (newValue) {
+                  //     vehicleDetailController.selectedValueMake.value = newValue;
+                  //     vehicleDetailController.isValidateVMake.value = true;
+                  //     vehicleDetailController.selectedValueModel.value = null;
+                  //     vehicleDetailController.isValidateVModel.value = false;
+                  //     vehicleDetailController.vehicleModel.value = [];
+                  //
+                  //     vehicleDetailController.selectedValueTType.value = null;
+                  //     vehicleDetailController.isValidateVType.value = false;
+                  //     vehicleDetailController.transmissionType.value = [];
+                  //
+                  //     vehicleDetailController.selectedValueFType.value = null;
+                  //     vehicleDetailController.isValidateVFuelT.value = false;
+                  //     vehicleDetailController.fuelType.value = [];
+                  //
+                  //     SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
+                  //       vehicleDetailController.vehicleModelApi(selectedVehicleMakeString: vehicleDetailController.selectedValueMake.value ?? "");
+                  //     });
+                  //   },
+                  // ).paddingSymmetric(vertical: 16.h),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     log("log(messagemessagemessagemessage);");
+                  //     if (vehicleDetailController.selectedValueMake.value?.isEmpty ?? true) {
+                  //       AppSnackBar.showErrorSnackBar(message: "Please select vehicle make", title: "error");
+                  //     }
+                  //   },
+                  //   child: selectionTextField(
+                  //     onMenuStateChange: (p0) {
+                  //       vehicleDetailController.scrollToBottom();
+                  //     },
+                  //     vehicleDetailController: vehicleDetailController,
+                  //     context,
+                  //     validator: AppValidation.vehicleModelValidator,
+                  //     text: AppString.vehicleModel,
+                  //     list: vehicleDetailController.vehicleModel.value,
+                  //     selectedVal: vehicleDetailController.selectedValueModel,
+                  //     onChanged: (newValue) {
+                  //       vehicleDetailController.selectedValueModel.value = newValue;
+                  //       vehicleDetailController.isValidateVModel.value = true;
+                  //
+                  //       vehicleDetailController.selectedValueFType.value = null;
+                  //
+                  //       vehicleDetailController.isValidateVFuelT.value = false;
+                  //
+                  //       vehicleDetailController.selectedValueTType.value = null;
+                  //
+                  //       vehicleDetailController.isValidateVType.value = false;
+                  //
+                  //       SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+                  //         vehicleDetailController.vehicleFuelType(
+                  //           selectedVehicleMakeString: vehicleDetailController.selectedValueMake.value ?? "",
+                  //           selectedVehicleModelString: vehicleDetailController.selectedValueModel.value ?? "",
+                  //         );
+                  //       });
+                  //     },
+                  //   ),
+                  // ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     log("log(messagemessagemessagemessage);");
+                  //     if (vehicleDetailController.selectedValueModel.value?.isEmpty ?? true) {
+                  //       AppSnackBar.showErrorSnackBar(message: "Please select vehicle model", title: "error");
+                  //     }
+                  //   },
+                  //   child: selectionTextField(
+                  //     onMenuStateChange: (p0) {
+                  //       vehicleDetailController.scrollToBottom();
+                  //     },
+                  //     vehicleDetailController: vehicleDetailController,
+                  //     context,
+                  //     validator: AppValidation.fuelType,
+                  //     text: AppString.fuelType,
+                  //     list: vehicleDetailController.fuelType.value,
+                  //     selectedVal: vehicleDetailController.selectedValueFType,
+                  //     onChanged: (newValue) {
+                  //       vehicleDetailController.selectedValueFType.value = newValue;
+                  //       vehicleDetailController.isValidateVFuelT.value = true;
+                  //
+                  //       vehicleDetailController.selectedValueTType.value = null;
+                  //       vehicleDetailController.isValidateVType.value = false;
+                  //
+                  //       SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+                  //         vehicleDetailController.vehicleTransmissionType(
+                  //           selectedVehicleMakeString: vehicleDetailController.selectedValueMake.value!,
+                  //           selectedVehicleModelString: vehicleDetailController.selectedValueModel.value!,
+                  //           selectedVehicleFuelString: vehicleDetailController.selectedValueFType.value!,
+                  //         );
+                  //       });
+                  //     },
+                  //   ).paddingSymmetric(vertical: 16.h),
+                  // ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     log("log(messagemessagemessagemessage);");
+                  //     if (vehicleDetailController.selectedValueFType.value?.isEmpty ?? true) {
+                  //       AppSnackBar.showErrorSnackBar(message: "Please select vehicle fuel type", title: "error");
+                  //     }
+                  //   },
+                  //   child: selectionTextField(
+                  //     onMenuStateChange: (p0) {
+                  //       vehicleDetailController.scrollToBottom();
+                  //     },
+                  //     vehicleDetailController: vehicleDetailController,
+                  //     context,
+                  //     validator: AppValidation.transMissionTypeValidator,
+                  //     text: AppString.transmissionType,
+                  //     list: vehicleDetailController.transmissionType.value,
+                  //     selectedVal: vehicleDetailController.selectedValueTType,
+                  //     onChanged: (String) {
+                  //       vehicleDetailController.selectedValueTType.value = String;
+                  //       vehicleDetailController.isValidateVType.value = true;
+                  //
+                  //       SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {});
+                  //     },
+                  //   ),
+                  // ),
                   Align(
                       alignment: Alignment.bottomRight,
-                      child: CustomButton(
-                        onTap: () async {
-                          widget.screenName == AppString.editScreenFlag
-                              ? await vehicleDetailController.editVehicleApi()
-                              : await vehicleDetailController.addVehicleApi();
+                      child: GestureDetector(
+                        onTap: () {
+                          // vehicleDetailController.formKey.currentState?.validate() ?? false;
+                          log(vehicleDetailController.isValidateVName.value.toString());
+                          if (vehicleDetailController.isSnackBarStop.value) {
+                            if ((vehicleDetailController.image.value.isNotEmpty || vehicleDetailController.networkImage.value.isNotEmpty) == false) {
+                              AppSnackBar.showErrorSnackBar(message: "Please select vehicle image.", title: "error");
+                              vehicleDetailController.snackBarStopFunction();
+                            } else if (vehicleDetailController.isValidateVName.value == false) {
+                              vehicleDetailController.snackBarStopFunction();
+                              AppSnackBar.showErrorSnackBar(message: "Please select vehicle number.", title: "error");
+                            } else if (vehicleDetailController.isValidateVYear.value == false) {
+                              vehicleDetailController.snackBarStopFunction();
+                              AppSnackBar.showErrorSnackBar(message: "Please select vehicle year.", title: "error");
+                            } else if (vehicleDetailController.isValidateVMake.value == false) {
+                              vehicleDetailController.snackBarStopFunction();
+                              AppSnackBar.showErrorSnackBar(message: "Please select vehicle make.", title: "error");
+                            } else if (vehicleDetailController.isValidateVModel.value == false) {
+                              vehicleDetailController.snackBarStopFunction();
+                              AppSnackBar.showErrorSnackBar(message: "Please select vehicle model.", title: "error");
+                            } else if (vehicleDetailController.isValidateVFuelT.value == false) {
+                              vehicleDetailController.snackBarStopFunction();
+                              AppSnackBar.showErrorSnackBar(message: "Please select vehicle fuel type.", title: "error");
+                            } else if (vehicleDetailController.isValidateVType.value == false) {
+                              AppSnackBar.showErrorSnackBar(message: "Please select vehicle transmission type.", title: "error");
+                              vehicleDetailController.snackBarStopFunction();
+                            }
+                          }
                         },
-                        isDisabled: (vehicleDetailController.isValidateVName.value &&
-                                vehicleDetailController.isValidateVYear.value &&
-                                vehicleDetailController.isValidateVMake.value &&
-                                vehicleDetailController.isValidateVModel.value &&
-                                vehicleDetailController.isValidateVType.value &&
-                                vehicleDetailController.isValidateVType.value &&
-                                vehicleDetailController.isValidateVFuelT.value &&
-                                (vehicleDetailController.image.value.isNotEmpty || vehicleDetailController.networkImage.value.isNotEmpty))
-                            ? false
-                            : true,
-                        height: 52.h,
-                        width: 131.w,
-                        disableTextColor: AppColors.whiteColor,
-                        endSvgHeight: 16.h,
-                        endSvg: IconAsset.forwardArrow,
-                        text: AppString.submit,
-                        borderRadius: BorderRadius.circular(46),
+                        child: CustomButton(
+                          onTap: () async {
+                            log("message");
+                            widget.screenName == AppString.editScreenFlag
+                                ? await vehicleDetailController.editVehicleApi()
+                                : await vehicleDetailController.addVehicleApi();
+                          },
+                          isDisabled: (vehicleDetailController.isValidateVName.value &&
+                                  vehicleDetailController.isValidateVYear.value &&
+                                  vehicleDetailController.isValidateVMake.value &&
+                                  vehicleDetailController.isValidateVModel.value &&
+                                  vehicleDetailController.isValidateVType.value &&
+                                  vehicleDetailController.isValidateVFuelT.value &&
+                                  (vehicleDetailController.image.value.isNotEmpty || vehicleDetailController.networkImage.value.isNotEmpty))
+                              ? false
+                              : true,
+                          height: 52.h,
+                          width: 131.w,
+                          disableTextColor: AppColors.whiteColor,
+                          endSvgHeight: 16.h,
+                          endSvg: IconAsset.forwardArrow,
+                          text: AppString.submit,
+                          borderRadius: BorderRadius.circular(46),
+                        ),
                       )).paddingOnly(bottom: 25.h, top: 16.h),
                 ],
               ).paddingSymmetric(horizontal: 16.w),
@@ -944,7 +1101,9 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
       {required List list,
       required String text,
       required Function(String)? onChanged,
+      required Function(bool)? onMenuStateChange,
       required String? Function(String?)? validator,
+      required VehicleDetailController vehicleDetailController,
       required RxnString? selectedVal}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -956,6 +1115,7 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
         ).paddingOnly(bottom: 8.h),
         DropdownButtonFormField2<String>(
           isExpanded: true,
+
           customButton: Row(
             children: [
               AppText(
@@ -1029,7 +1189,9 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
           },
           validator: validator,
           onSaved: (value) {},
-
+          onMenuStateChange: (isOpen) {
+            onMenuStateChange!(isOpen);
+          },
           dropdownStyleData: DropdownStyleData(
             maxHeight: 180.h,
             offset: const Offset(0, 10),

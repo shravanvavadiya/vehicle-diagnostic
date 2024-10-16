@@ -67,7 +67,7 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
 
   Future<void> getAllVehicles({required int currentPage}) async {
     isLoading.value = true;
-    handleLoading(true);
+    // handleLoading(true);
     await processApi(
       () => HomeService.getAllVehicle(currentPage: currentPage),
       error: (error, stack) => handleLoading(false),
@@ -82,14 +82,14 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
       },
     );
     isLoading.value = false;
-    handleLoading(false);
+    // handleLoading(false);
   }
 
   Future<void> getMoreAllVehicles({required int currentPage}) async {
     try {
       isLoading.value = true;
       paginationLoading.value = false;
-      handleLoading(true);
+      // handleLoading(true);
       await processApi(
         () => HomeService.getAllVehicle(currentPage: currentPage),
         error: (error, stack) => handleLoading(false),
@@ -111,7 +111,7 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
         },
       );
       isLoading.value = false;
-      handleLoading(false);
+      // handleLoading(false);
     } catch (e) {
       print("e $e");
     } finally {
@@ -137,19 +137,17 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
     handleLoading(false);
   }
 
-  Rx<GetUserProfileModel> getUserProfileModel = GetUserProfileModel().obs;
+  Rx<ProfileData> getProfileData = ProfileData().obs;
 
   Future<void> getUserProfileAPI() async {
     await processApi(
         () => ProfileService.getUserAPI(
               userId: AppPreference.getInt("UserId"),
-            ),
-        loading: handleLoading, result: (data) {
-      if (data != null) {
-        getUserProfileModel.value = data;
-        log("profile image ::${data.profileResponse?.profileData?.photo}");
-        log("${getUserProfileModel.value.profileResponse!.profileData!.firstName} ${getUserProfileModel.value.profileResponse!.profileData!.lastName}");
-        SharedPreferencesHelper().setUserInfo(getUserProfileModel.value);
+            ), result: (data) {
+      if (data.profileResponse?.profileData != null) {
+        getProfileData.value = data.profileResponse!.profileData!;
+        log("profile image ::${getProfileData.value.photo}");
+        SharedPreferencesHelper().setUserInfo(data);
 
         log("user dave data ${SharedPreferencesHelper().getUserInfo()?.profileResponse?.profileData?.toJson()}");
       }

@@ -105,7 +105,7 @@ class CreateNewPasswordScreen extends StatelessWidget {
       validator: (p0) {
         if (controller.confirmPasswordController.text.isEmpty) {
           return AppString.pleaseEnterPassword;
-        } else if (controller.confirmPasswordController.text.length <= 6) {
+        } else if (controller.confirmPasswordController.text.length < 6) {
           return AppString.passwordCodeMustBeDigits;
         } else if (controller.confirmPasswordController.text !=
             controller.passwordController.text) {

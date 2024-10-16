@@ -136,4 +136,28 @@ class OtpController extends GetxController with LoadingMixin, LoadingApiMixin {
     timer?.cancel();
     super.dispose();
   }
+
+  Future<CreateNewAccountModel?> createNewAccountFunction(
+      {required String email, required String createPassword, required String confirmPassword}) async {
+    handleLoading(true);
+    Map<String, dynamic> mapData = {
+      "confirmPassword": confirmPassword,
+      "createPassword": createPassword,
+      "email": email,
+    };
+    await processApi(
+      () => AuthService.createNewAccountByEmail(mapData),
+      error: (error, stack) {
+        log("create Account error ---> $error --- $stack");
+        handleLoading(false);
+      },
+      result: (result) async {
+        print("result $result");
+        AppSnackBar.showErrorSnackBar(message: result.apiresponse!.data!.message ?? "", title: 'success');
+      },
+    );
+
+    handleLoading(false);
+    return null;
+  }
 }

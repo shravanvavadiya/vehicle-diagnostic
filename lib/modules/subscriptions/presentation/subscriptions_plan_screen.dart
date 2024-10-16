@@ -16,12 +16,30 @@ class SubscriptionsPlanScreen extends StatefulWidget {
   const SubscriptionsPlanScreen({super.key});
 
   @override
-  State<SubscriptionsPlanScreen> createState() =>
-      _SubscriptionsPlanScreenState();
+  State<SubscriptionsPlanScreen> createState() => _SubscriptionsPlanScreenState();
 }
 
 class _SubscriptionsPlanScreenState extends State<SubscriptionsPlanScreen> {
   int selectedIndex = 0;
+
+  List<Map<String, dynamic>> subscriptionPlan = [
+    {
+      "Plan Name": AppString.freePlan,
+      "Plan subText": "Basic Diagnostics",
+      "Plan Price": 00.00,
+      "Plan Credit": "3 credits per month (1 credit = 1 search)",
+      "Plan Feature1": "3 Free Diagnostics Searches per Month",
+      "Plan Feature2": "Basic Report",
+    },
+    {
+      "Plan Name": "Premium Plan",
+      "Plan subText": "Unlimited Diagnostics",
+      "Plan Price": 04.99,
+      "Plan Credit": "Unlimited credits for diagnostics",
+      "Plan Feature1": "Unlimited Diagnostics",
+      "Plan Feature2": "Detailed Reports",
+    }
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -81,9 +99,9 @@ class _SubscriptionsPlanScreenState extends State<SubscriptionsPlanScreen> {
                   itemCount: 2,
                   itemBuilder: (context, index) {
                     return SubscriptionsPlanComponent(
+                      subscriptionPlan: subscriptionPlan,
                       index: index,
                       isSelected: selectedIndex == index,
-                      // Check if this plan is selected
                       onSelected: () {
                         setState(() {
                           selectedIndex = index; // Update the selected plan

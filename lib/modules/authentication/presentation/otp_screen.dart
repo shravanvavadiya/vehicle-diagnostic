@@ -45,7 +45,7 @@ class OtpScreen extends StatelessWidget {
                   children: <Widget>[
                     _buildInfoText(controller),
                     _buildPinField(controller),
-                    _buildResendCodeRow(controller),
+                    _buildResendCodeRow(controller, AppString.createNewAccountFlag, userEmailId, password, confirmPassword),
                     _buildVerifyBtn(controller),
                   ],
                 ),
@@ -75,7 +75,7 @@ class OtpScreen extends StatelessWidget {
     ).paddingOnly(top: 8.h);
   }
 
-  Widget _buildResendCodeRow(OtpController controller) {
+  Widget _buildResendCodeRow(OtpController controller, String screenFlag, String email, String createPassword, String confirmPassword) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,9 +91,11 @@ class OtpScreen extends StatelessWidget {
         controller.formatTime(controller.secondsRemaining.value).value == "00:00"
             ? GestureDetector(
                 onTap: () {
-                  controller.resendOtp(
-                    email: userEmailId,
-                  );
+                  screenFlag == AppString.createNewAccountFlag
+                      ? {controller.createNewAccountFunction(email: email, createPassword: createPassword, confirmPassword: confirmPassword)}
+                      : controller.resendOtp(
+                          email: userEmailId,
+                        );
                 },
                 child: AppText(
                   text: AppString.resendOtp,

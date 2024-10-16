@@ -135,4 +135,11 @@ class LogInWithEmailIdController extends GetxController with LoadingMixin, Loadi
       },
     );
   }
+
+  @override
+  void dispose() {
+    emailController.clear();
+    passwordController.clear(); // TODO: implement dispose
+    super.dispose();
+  }
 }

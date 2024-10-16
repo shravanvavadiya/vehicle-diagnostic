@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_template/utils/app_colors.dart';
 import 'package:flutter_template/utils/behaviour_glow.dart';
 import 'package:flutter_template/widget/annotated_region.dart';
+import 'package:flutter_template/widget/app_snackbar.dart';
 import 'package:get/get.dart';
 import '../../../utils/app_string.dart';
 import '../../../utils/app_text.dart';
@@ -40,7 +41,7 @@ class LogInWithEmailScreen extends StatelessWidget {
                       _buildInfoText(controller),
                       _buildEmailTextFormField(controller),
                       _buildPasswordTextFormField(controller, context),
-                      _buildForgotPassword(),
+                      _buildForgotPassword(controller),
                       _buildLoginButton(controller),
                       _buildDivider(),
                       _buildGoogleAppleBtn(controller),
@@ -115,35 +116,38 @@ class LogInWithEmailScreen extends StatelessWidget {
     return SizedBox(
       height: 68.h,
       child: Center(
-        child: CustomButton(
-          height: 50.h,
-          isDisabled: (controller.isValidateEmail.value &&
-                  controller.isValidPassword.value)
-              ? false
-              : true,
-          disableTextColor: AppColors.whiteColor,
+        child: GestureDetector(
           onTap: () {
-            controller.formKey.currentState!.validate()
-                ? {
-                    controller.logInUserFunction(
-                        email: controller.emailController.text,
-                        password: controller.passwordController.text),
-                  }
-                : {};
+            controller.formKey.currentState!.validate();
+            //     ? AppSnackBar.showErrorSnackBar(message: "message", title: "success")
+            //     : AppSnackBar.showErrorSnackBar(message: "message", title: "Error");
           },
-          text: AppString.login,
+          child: CustomButton(
+            height: 50.h,
+            isDisabled: (controller.isValidateEmail.value && controller.isValidPassword.value) ? false : true,
+            disableTextColor: AppColors.whiteColor,
+            onTap: () {
+              controller.formKey.currentState!.validate()
+                  ? {
+                      controller.logInUserFunction(email: controller.emailController.text, password: controller.passwordController.text),
+                    }
+                  : {AppSnackBar.showErrorSnackBar(message: "message", title: "Error")};
+            },
+            text: AppString.login,
+          ),
         ),
       ),
     ).paddingOnly(bottom: 42.h);
   }
 
-  Widget _buildForgotPassword() {
+  Widget _buildForgotPassword(controller) {
     return Align(
       alignment: Alignment.centerRight,
       child: GestureDetector(
         onTap: () {
-          Get.to(const ForgotPasswordScreen(),
-              transition: Transition.rightToLeft);
+          Get.to(const ForgotPasswordScreen(), transition: Transition.rightToLeft);
+          controller.emailController.clear();
+          controller.passwordController.clear();
         },
         child: AppText(
           text: AppString.forgotPassword,
@@ -171,12 +175,10 @@ class LogInWithEmailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPasswordTextFormField(
-      LogInWithEmailIdController controller, BuildContext context) {
+  Widget _buildPasswordTextFormField(LogInWithEmailIdController controller, BuildContext context) {
     return customTextFormField(
       onChanged: (p0) {
-        controller.isValidPassword.value =
-            controller.passwordController.text.isNotEmpty;
+        controller.isValidPassword.value = controller.passwordController.text.isNotEmpty;
       },
       text: AppString.password,
       hintText: AppString.enterPassword,
@@ -190,9 +192,7 @@ class LogInWithEmailScreen extends StatelessWidget {
           controller.showPassword.value = !controller.showPassword.value;
           Utils.hideKeyboardInApp(context);
         },
-        icon: SvgPicture.asset(!controller.showPassword.value
-            ? IconAsset.openEyes
-            : IconAsset.closeEyes),
+        icon: SvgPicture.asset(!controller.showPassword.value ? IconAsset.openEyes : IconAsset.closeEyes),
       ),
     );
   }
@@ -200,8 +200,7 @@ class LogInWithEmailScreen extends StatelessWidget {
   Widget _buildEmailTextFormField(LogInWithEmailIdController controller) {
     return customTextFormField(
             onChanged: (p0) {
-              controller.isValidateEmail.value =
-                  controller.emailController.text.isNotEmpty;
+              controller.isValidateEmail.value = controller.emailController.text.isNotEmpty;
             },
             text: AppString.email,
             hintText: AppString.emailEx,

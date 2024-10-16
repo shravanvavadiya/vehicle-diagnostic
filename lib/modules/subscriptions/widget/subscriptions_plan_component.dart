@@ -12,12 +12,9 @@ class SubscriptionsPlanComponent extends StatelessWidget {
   final int index;
   final bool isSelected;
   final VoidCallback onSelected;
+  final List subscriptionPlan;
 
-  SubscriptionsPlanComponent(
-      {super.key,
-      required this.index,
-      required this.isSelected,
-      required this.onSelected});
+  SubscriptionsPlanComponent({super.key, required this.index, required this.isSelected, required this.onSelected, required this.subscriptionPlan});
 
   int selectedIndex = 0;
 
@@ -30,13 +27,8 @@ class SubscriptionsPlanComponent extends StatelessWidget {
         padding: EdgeInsets.all(12.h),
         margin: EdgeInsets.symmetric(vertical: 8.h),
         decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.primaryColor.withOpacity(0.04)
-              : AppColors.transparent,
-          border: Border.all(
-              color:
-                  isSelected ? AppColors.primaryColor : AppColors.borderColor,
-              width: isSelected ? 2 : 1),
+          color: isSelected ? AppColors.primaryColor.withOpacity(0.04) : AppColors.transparent,
+          border: Border.all(color: isSelected ? AppColors.primaryColor : AppColors.borderColor, width: isSelected ? 2 : 1),
           borderRadius: BorderRadius.circular(4.r),
         ),
         child: Column(
@@ -60,13 +52,13 @@ class SubscriptionsPlanComponent extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AppText(
-                        text: AppString.freePlan,
+                        text: subscriptionPlan[index]["Plan Name"],
                         fontWeight: FontWeight.w600,
                         color: AppColors.primaryColor,
                         fontSize: 16.sp,
                       ),
                       AppText(
-                        text: AppString.basicDiagnostics,
+                        text: subscriptionPlan[index]["Plan subText"],
                         fontWeight: FontWeight.w500,
                         color: AppColors.grey60,
                         fontSize: 12.sp,
@@ -77,7 +69,7 @@ class SubscriptionsPlanComponent extends StatelessWidget {
                 Row(
                   children: [
                     AppText(
-                      text: "£00.00",
+                      text: "£${subscriptionPlan[index]["Plan Price"]}",
                       fontWeight: FontWeight.w600,
                       color: AppColors.highlightedColor,
                       fontSize: 22.sp,
@@ -96,7 +88,10 @@ class SubscriptionsPlanComponent extends StatelessWidget {
               height: 15.h,
               thickness: 0.5.h,
               color: AppColors.borderColor,
-            ).paddingOnly(top: 20.h, bottom: 10.h,),
+            ).paddingOnly(
+              top: 20.h,
+              bottom: 10.h,
+            ),
             SizedBox(
               width: Get.width,
               child: Column(
@@ -110,7 +105,7 @@ class SubscriptionsPlanComponent extends StatelessWidget {
                     fontSize: 15.sp,
                   ),
                   AppText(
-                    text: "\u2022  3 credits per month (1 credit = 1 search)",
+                    text: "\u2022  ${subscriptionPlan[index]["Plan Credit"]}",
                     fontWeight: FontWeight.w500,
                     color: AppColors.blackColor,
                     fontSize: 15.sp,
@@ -137,13 +132,13 @@ class SubscriptionsPlanComponent extends StatelessWidget {
                     ],
                   ),
                   AppText(
-                    text: "\u2022  Unlimited Diagnostics",
+                    text: "\u2022  ${subscriptionPlan[index]["Plan Feature1"]}",
                     fontWeight: FontWeight.w500,
                     color: AppColors.blackColor,
                     fontSize: 15.sp,
                   ).paddingOnly(top: 8.h),
                   AppText(
-                    text: "\u2022  Detailed Reports",
+                    text: "\u2022  ${subscriptionPlan[index]["Plan Feature2"]}",
                     fontWeight: FontWeight.w500,
                     color: AppColors.blackColor,
                     fontSize: 15.sp,

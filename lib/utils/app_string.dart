@@ -125,7 +125,7 @@ class AppString {
   static const String pleaseEnterEmail = "Please enter email";
   static const String pleaseEnterOtp = "Please enter otp";
   static const String pleaseEnterPassword = "Please enter password";
-  static const String bothPasswordNotMatch = "Both password is not match";
+  static const String bothPasswordNotMatch = "Passwords do not match.";
   static const String emailAddressIsInvalid = "Email address is invalid";
   static const String pleaseEnterPostCode = "Please enter post code";
   static const String postCodeMustBeDigits = "Post code must be 3 digits";

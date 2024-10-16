@@ -15,12 +15,10 @@ class SubscriptionsSummeryScreen extends StatefulWidget {
   const SubscriptionsSummeryScreen({super.key});
 
   @override
-  State<SubscriptionsSummeryScreen> createState() =>
-      _SubscriptionsPlanSSummeryScreen();
+  State<SubscriptionsSummeryScreen> createState() => _SubscriptionsPlanSSummeryScreen();
 }
 
-class _SubscriptionsPlanSSummeryScreen
-    extends State<SubscriptionsSummeryScreen> {
+class _SubscriptionsPlanSSummeryScreen extends State<SubscriptionsSummeryScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomAnnotatedRegions(
@@ -53,9 +51,7 @@ class _SubscriptionsPlanSSummeryScreen
                 width: Get.width,
                 padding: EdgeInsets.all(16.h),
                 margin: EdgeInsets.all(16.h),
-                decoration: BoxDecoration(
-                    color: AppColors.backgroundColor,
-                    borderRadius: BorderRadius.circular(4.r)),
+                decoration: BoxDecoration(color: AppColors.backgroundColor, borderRadius: BorderRadius.circular(4.r)),
                 child: Column(
                   children: [
                     Row(
@@ -140,7 +136,9 @@ class _SubscriptionsPlanSSummeryScreen
                 height: 54.h,
                 width: Get.width,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.back();
+                  },
                   child: AppText(
                     text: AppString.cancelSubscription,
                     fontWeight: FontWeight.w600,

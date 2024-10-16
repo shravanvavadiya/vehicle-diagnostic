@@ -13,6 +13,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../utils/app_preferences.dart';
 import '../../authentication/presentation/google_login_screen.dart';
+import '../../dashboad/home/controller/home_controller.dart';
 import '../../personal_information_view/model/personal_information_model.dart';
 
 class ProfileController extends GetxController with LoadingMixin, LoadingApiMixin {
@@ -87,7 +88,7 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
     required String firstname,
     required String lastname,
     required String postCode,
-    required String? imagePath,
+    String? imagePath,
   }) async {
     print("imagePath :: ===$imagePath");
     await processApi(
@@ -100,12 +101,37 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
           imagePath: imagePath ?? null),
       loading: handleLoading,
       result: (data) async {
-        log("Controller Data :: ${data?.apiresponse?.data?.photo}");
+        final HomeController homeController = Get.find();
+
+        // log("Controller Data :: ${data?.apiresponse?.data?.photo}");
         updateUserProfileModel.value = data!;
-        await SharedPreferencesHelper().setUserInfo(getUserProfileModel.value);
-        Get.offAll(HomeScreen());
+        if (data.apiresponse?.data != null) {
+          homeController.getProfileData.value = data.apiresponse!.data!;
+          homeController.getProfileData.refresh();
+          await SharedPreferencesHelper().setUserInfo(getUserProfileModel.value);
+        }
+        Get.back();
+        Get.back();
+        isModified.value = false;
       },
     );
+  }
+
+  Future<void> getUserProfileAPI() async {
+    await processApi(
+        () => ProfileService.getUserAPI(
+              userId: AppPreference.getInt("UserId"),
+            ),
+        loading: handleLoading, result: (data) {
+      if (data != null) {
+        getUserProfileModel.value = data;
+        log("profile image ::${data.profileResponse?.profileData?.photo}");
+        log("${getUserProfileModel.value.profileResponse!.profileData!.firstName} ${getUserProfileModel.value.profileResponse!.profileData!.lastName}");
+        SharedPreferencesHelper().setUserInfo(getUserProfileModel.value);
+
+        log("user dave data ${SharedPreferencesHelper().getUserInfo()?.profileResponse?.profileData?.toJson()}");
+      }
+    });
   }
 
   Future<void> deleteAccount({required int userId}) async {
@@ -125,5 +151,15 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
       },
     );
     handleLoading(false);
+  }
+
+  @override
+  void dispose() {
+    firstname.dispose();
+    lastname.dispose();
+    email.dispose();
+    postCode.dispose();
+    // TODO: implement dispose
+    super.dispose();
   }
 }

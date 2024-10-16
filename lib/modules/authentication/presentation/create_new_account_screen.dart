@@ -39,10 +39,8 @@ class CreateNewAccountScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           _buildEmailTextFormField(controller),
-                          _buildCreatePasswordTextFormField(
-                              controller, context),
-                          _buildConfirmPasswordTextFormField(
-                              controller, context),
+                          _buildCreatePasswordTextFormField(controller, context),
+                          _buildConfirmPasswordTextFormField(controller, context),
                         ],
                       ),
                     ),
@@ -57,40 +55,40 @@ class CreateNewAccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCreateAccountBtn(
-      CreateNewAccountController controller, BuildContext context) {
+  Widget _buildCreateAccountBtn(CreateNewAccountController controller, BuildContext context) {
     return Center(
-      child: CustomButton(
-        height: 52.h,
-        disableTextColor: AppColors.whiteColor,
-        isDisabled: (controller.isValidateEmail.value &&
-                controller.isValidateCreatePassword.value &&
-                controller.isValidateConfirmPassword.value)
-            ? false
-            : true,
+      child: GestureDetector(
         onTap: () {
-          controller.formKey.currentState!.validate()
-              ? {
-                  controller.createNewAccountFunction(
-                    email: controller.emailController.text,
-                    confirmPassword: controller.confirmPasswordController.text,
-                    createPassword: controller.createPasswordController.text,
-                  ),
-                }
-              : {};
-          Utils.hideKeyboardInApp(context);
+          controller.formKey.currentState!.validate();
         },
-        text: AppString.createAccount,
+        child: CustomButton(
+          height: 52.h,
+          disableTextColor: AppColors.whiteColor,
+          isDisabled: (controller.isValidateEmail.value && controller.isValidateCreatePassword.value && controller.isValidateConfirmPassword.value)
+              ? false
+              : true,
+          onTap: () {
+            controller.formKey.currentState!.validate()
+                ? {
+                    controller.createNewAccountFunction(
+                      email: controller.emailController.text,
+                      confirmPassword: controller.confirmPasswordController.text,
+                      createPassword: controller.createPasswordController.text,
+                    ),
+                  }
+                : {};
+            Utils.hideKeyboardInApp(context);
+          },
+          text: AppString.createAccount,
+        ),
       ),
     ).paddingOnly(top: 32.h);
   }
 
-  Widget _buildConfirmPasswordTextFormField(
-      CreateNewAccountController controller, BuildContext context) {
+  Widget _buildConfirmPasswordTextFormField(CreateNewAccountController controller, BuildContext context) {
     return customTextFormField(
       onChanged: (p0) {
-        controller.isValidateConfirmPassword.value =
-            controller.confirmPasswordController.text.isNotEmpty;
+        controller.isValidateConfirmPassword.value = controller.confirmPasswordController.text.isNotEmpty;
       },
       text: AppString.confirmPassword,
       hintText: AppString.confirmPassword,
@@ -99,10 +97,9 @@ class CreateNewAccountScreen extends StatelessWidget {
       validator: (p0) {
         if (controller.confirmPasswordController.text.isEmpty) {
           return AppString.pleaseEnterPassword;
-        } else if (controller.confirmPasswordController.text.length <= 6) {
+        } else if (controller.confirmPasswordController.text.length < 6) {
           return AppString.passwordCodeMustBeDigits;
-        } else if (controller.confirmPasswordController.text !=
-            controller.createPasswordController.text) {
+        } else if (controller.confirmPasswordController.text != controller.createPasswordController.text) {
           return AppString.bothPasswordNotMatch;
         }
       },
@@ -113,9 +110,7 @@ class CreateNewAccountScreen extends StatelessWidget {
           controller.confirmPassword.value = !controller.confirmPassword.value;
           Utils.hideKeyboardInApp(context);
         },
-        icon: SvgPicture.asset(!controller.confirmPassword.value
-            ? IconAsset.openEyes
-            : IconAsset.closeEyes),
+        icon: SvgPicture.asset(!controller.confirmPassword.value ? IconAsset.openEyes : IconAsset.closeEyes),
       ),
     );
   }
@@ -132,12 +127,10 @@ class CreateNewAccountScreen extends StatelessWidget {
     ).paddingOnly(bottom: 32.h);
   }
 
-  Widget _buildCreatePasswordTextFormField(
-      CreateNewAccountController controller, BuildContext context) {
+  Widget _buildCreatePasswordTextFormField(CreateNewAccountController controller, BuildContext context) {
     return customTextFormField(
       onChanged: (p0) {
-        controller.isValidateCreatePassword.value =
-            controller.createPasswordController.text.isNotEmpty;
+        controller.isValidateCreatePassword.value = controller.createPasswordController.text.isNotEmpty;
       },
       text: AppString.createPassword,
       hintText: AppString.createPassword,
@@ -151,9 +144,7 @@ class CreateNewAccountScreen extends StatelessWidget {
           controller.createPassword.value = !controller.createPassword.value;
           Utils.hideKeyboardInApp(context);
         },
-        icon: SvgPicture.asset(!controller.createPassword.value
-            ? IconAsset.openEyes
-            : IconAsset.closeEyes),
+        icon: SvgPicture.asset(!controller.createPassword.value ? IconAsset.openEyes : IconAsset.closeEyes),
       ),
     ).paddingOnly(
       top: 16.h,
@@ -164,7 +155,7 @@ class CreateNewAccountScreen extends StatelessWidget {
   Widget _buildEmailTextFormField(CreateNewAccountController controller) {
     return customTextFormField(
       onChanged: (p0) {
-        controller.isValidateEmail.value= controller.emailController.text.isNotEmpty;
+        controller.isValidateEmail.value = controller.emailController.text.isNotEmpty;
       },
       text: AppString.email,
       hintText: AppString.emailEx,

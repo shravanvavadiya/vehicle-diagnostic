@@ -56,14 +56,19 @@ class ForgotPasswordScreen extends StatelessWidget {
 
   Widget _buildVerifyBtn(ForgotPasswordController controller) {
     return Center(
-      child: CustomButton(
-        height: 52.h,
-        disableTextColor: AppColors.whiteColor,
-        isDisabled: (controller.isValidateEmail.value) ? false : true,
+      child: GestureDetector(
         onTap: () {
-          controller.formKey.currentState!.validate() ? {controller.forgotPasswordOtpFunction(email: controller.emailController.text)} : {};
+          controller.formKey.currentState!.validate();
         },
-        text: controller.buttonName.value,
+        child: CustomButton(
+          height: 52.h,
+          disableTextColor: AppColors.whiteColor,
+          isDisabled: (controller.isValidateEmail.value) ? false : true,
+          onTap: () {
+            controller.formKey.currentState!.validate() ? {controller.forgotPasswordOtpFunction(email: controller.emailController.text)} : {};
+          },
+          text: controller.buttonName.value,
+        ),
       ),
     ).paddingOnly(top: 16.h);
   }

@@ -32,6 +32,7 @@ class ChatController extends GetxController with LoadingMixin, LoadingApiMixin {
   RxInt isEditTimeIndex = (-1).obs;
   RxInt passVehicleId = 0.obs;
   List<String> splitQuestionList = <String>[];
+  List demoList = [];
 
   ChatController({required int vehicleId}) {
     passVehicleId.value = vehicleId;
@@ -46,12 +47,13 @@ class ChatController extends GetxController with LoadingMixin, LoadingApiMixin {
         if (data.apiresponse!.data?.isEmpty != true) {
           chatQuestionList.value = data;
           isResponse.value = true;
+          print("data ${data.apiresponse!.data!.length}");
+          demoList.assignAll(data.apiresponse!.data!.toList());
+          log("demoList ${demoList.toString()}");
           RxString question = data.apiresponse!.data!.toString().obs;
-          log("split ans ${question.value.replaceAll("[", "").replaceAll("]", "").split(",")}");
-          splitQuestionList = question.value.replaceAll("[", "").replaceAll("]", "").split(",").obs;
-
+          // splitQuestionList = question.value.replaceAll("[", "").replaceAll("]", "").split(",").obs;
+          splitQuestionList.assignAll(data.apiresponse!.data!);
           for (int i = 0; i < splitQuestionList.length; i++) {
-            log(splitQuestionList[i].replaceAll("'", ""));
             questionAndAnswerList.add(QuestionAndAnswerModel(index: i, question: splitQuestionList[i].replaceAll("'", ""), answer: ""));
           }
         } else {}
@@ -84,46 +86,30 @@ class ChatController extends GetxController with LoadingMixin, LoadingApiMixin {
         if (data.apiresponse!.data!.qaChatGptResponses!.isNotEmpty) {
           userAnswerCheckList.value = data;
           log("response after ans check ${data.apiresponse!.data!.qaChatGptResponses.toString()}");
-          // isEditAnsValue.value == true
-          //     ? {
-          //         questionAndAnswerList[isEditTimeIndex.value].answer = answerController.value.text,
-          //         isEditAnsValue.value = false,
-          //         isEditTimeIndex.value = -1,
-          //         answerController.value.clear(),
-          //       }
-          //     : {
-          //         questionAndAnswerList[fillAnswer.value - 1].answer = answerController.value.text,
-          //         answerController.value.text = "",
-          //         if (questionAndAnswerList.length > fillAnswer.value)
-          //           {fillAnswer.value++}
-          //         else
-          //           {
-          //             isAllAnswerAdd.value = true,
-          //           },
-          //       };
+          isEditAnsValue.value == true
+              ? {
+                  questionAndAnswerList[isEditTimeIndex.value].answer = answerController.value.text,
+                  isEditAnsValue.value = false,
+                  isEditTimeIndex.value = -1,
+                  answerController.value.clear(),
+                  if (questionAndAnswerList.length > fillAnswer.value) {} else {isAllAnswerAdd.value = true},
+                }
+              : {
+                  questionAndAnswerList[fillAnswer.value - 1].answer = answerController.value.text,
+                  answerController.value.text = "",
+                  if (questionAndAnswerList.length > fillAnswer.value)
+                    {fillAnswer.value++}
+                  else
+                    {
+                      isAllAnswerAdd.value = true,
+                    },
+                };
           handleLoading(false);
         }
       },
     );
 
     handleLoading(false);
-    isEditAnsValue.value == true
-        ? {
-            questionAndAnswerList[isEditTimeIndex.value].answer = answerController.value.text,
-            isEditAnsValue.value = false,
-            isEditTimeIndex.value = -1,
-            answerController.value.clear(),
-          }
-        : {
-            questionAndAnswerList[fillAnswer.value - 1].answer = answerController.value.text,
-            answerController.value.text = "",
-            if (questionAndAnswerList.length > fillAnswer.value)
-              {fillAnswer.value++}
-            else
-              {
-                isAllAnswerAdd.value = true,
-              },
-          };
   }
 
   Future<void> downloadUserReport({required int vehicle}) async {
@@ -152,6 +138,9 @@ class ChatController extends GetxController with LoadingMixin, LoadingApiMixin {
     isEditAnsValue.value = true;
     isEditTimeIndex.value = currentIndex;
     isCheckText.value = true;
+    if (questionAndAnswerList.length > fillAnswer.value) {
+      isAllAnswerAdd.value = false;
+    } else {}
   }
 
   @override

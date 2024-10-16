@@ -29,10 +29,13 @@ class AppValidation {
   }
 
   static String? password(String? value) {
+    RegExp regex = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{6,}$');
     if (value!.isEmpty) {
       return AppString.pleaseEnterPassword;
-    } else if (value.length <= 6) {
+    } else if (value.length < 6) {
       return AppString.passwordCodeMustBeDigits;
+    } else if (!regex.hasMatch(value)) {
+      return "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters";
     }
     return null;
   }
@@ -40,7 +43,7 @@ class AppValidation {
   static String? confirmPassword(String? confirmPassword) {
     if (confirmPassword!.isEmpty) {
       return AppString.pleaseEnterPassword;
-    } else if (confirmPassword.length <= 6) {
+    } else if (confirmPassword.length < 6) {
       return AppString.passwordCodeMustBeDigits;
     } else if (confirmPassword != password.toString()) {
       return AppString.bothPasswordNotMatch;
@@ -63,7 +66,7 @@ class AppValidation {
   static String? postCode(String? value) {
     if (value == null || value.isEmpty) {
       return AppString.pleaseEnterPostCode;
-    } else if (value.length <= 3) {
+    } else if (value.length < 3) {
       return AppString.postCodeMustBeDigits;
     } else if (RegExp(r'^[A-Za-z]{1,2}\d[A-Za-z\d]?\s?\d[A-Za-z]{2}$').hasMatch(value)) {
       return AppString.postCodeMustContainOnlyDigits;

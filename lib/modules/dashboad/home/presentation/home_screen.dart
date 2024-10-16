@@ -29,7 +29,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final HomeController homeController = Get.put(HomeController());
-  final UserInformationController userInformationController = Get.put(UserInformationController());
+
+  // final UserInformationController userInformationController = Get.put(UserInformationController());
 
   @override
   Widget build(BuildContext context) {
@@ -76,19 +77,23 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontWeight: FontWeight.w500,
                               fontSize: 14.sp,
                             ),
-                            SizedBox(
-                              width: Get.width / 1.8.w,
-                              child: AppText(
-                                // text: "${SharedPreferencesHelper.instance.getUserInfo()?.apiresponse?.data?.firstName ?? "demo"}"
-                                //     " ${SharedPreferencesHelper.instance.getUserInfo()?.apiresponse?.data?.lastName ?? "demo"}",
-                                text: "${homeController.getUserProfileModel.value.profileResponse?.profileData?.firstName ?? ""} "
-                                    "${homeController.getUserProfileModel.value.profileResponse?.profileData?.lastName ?? ""}",
-                                color: AppColors.blackColor,
-                                fontWeight: FontWeight.w600,
-                                maxLines: 2,
-                                fontSize: 17.sp,
-                              ).paddingOnly(
-                                top: 2.sp,
+                            Obx(
+                                  () =>
+                               SizedBox(
+                                width: Get.width / 1.8.w,
+                                child: AppText(
+                                  text:
+                                  // "${SharedPreferencesHelper.instance.getUserInfo()?.profileResponse?.profileData?.firstName ?? "demo"}"
+                                  //     " ${SharedPreferencesHelper.instance.getUserInfo()?.profileResponse?.profileData?.lastName ?? "demo"}",
+                                 "${homeController.getProfileData.value.firstName ?? ""} "
+                                      "${homeController.getProfileData.value.lastName ?? ""}",
+                                  color: AppColors.blackColor,
+                                  fontWeight: FontWeight.w600,
+                                  maxLines: 2,
+                                  fontSize: 17.sp,
+                                ).paddingOnly(
+                                  top: 2.sp,
+                                ),
                               ),
                             ),
                           ],
@@ -98,16 +103,23 @@ class _HomeScreenState extends State<HomeScreen> {
                             Get.to(ProfileScreen());
                           },
                           child: Container(
-                              height: 45.h,
-                              width: 45.h,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(60.r),
-                                border: Border.all(
-                                  color: AppColors.whiteColor,
-                                  width: 2.5.w,
-                                ),
+                            height: 45.h,
+                            width: 45.h,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(60.r),
+                              border: Border.all(
+                                color: AppColors.whiteColor,
+                                width: 2.5.w,
                               ),
-                              child: ClipRRect(
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(65.r),
+                              child: Image.asset(
+                                ImagesAsset.user,
+                                height: 20,
+                              ),
+                            ),
+                            /* child: ClipRRect(
                                 borderRadius: BorderRadius.circular(65.r),
                                 child: CachedNetworkImage(
                                   maxHeightDiskCache: 150,
@@ -142,7 +154,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                 ),
-                              )),
+                              ),*/
+                          ),
                         )
                       ],
                     ).paddingSymmetric(horizontal: 16.h),

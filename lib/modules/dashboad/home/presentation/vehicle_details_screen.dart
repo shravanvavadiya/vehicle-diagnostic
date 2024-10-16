@@ -38,562 +38,569 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
     return SafeArea(
       child: CustomAnnotatedRegions(
         statusBarColor: AppColors.backgroundColor,
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: AppColors.backgroundColor,
-            leadingWidth: 30,
-            elevation: 0,
-            title: AppText(
-              text: "${_args.userId}",
-              color: AppColors.blackColor,
-              fontWeight: FontWeight.w600,
-              fontSize: 17.sp,
-            ),
-            leading: GestureDetector(
-              onTap: () {
-                homeController.idDisplayErrorBox.value = false;
-                Navigation.pop();
-              },
-              child: SvgPicture.asset(
-                IconAsset.leftArrow,
+        child: PopScope(
+          canPop: true,
+          onPopInvoked: (didPop) {
+            homeController.idDisplayErrorBox.value = false;
+            log(didPop.toString());
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: AppColors.backgroundColor,
+              leadingWidth: 30,
+              elevation: 0,
+              title: AppText(
+                text: "${_args.vehicleNumber}",
+                color: AppColors.blackColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 17.sp,
               ),
-            ).paddingOnly(left: 16.w),
-            actions: [
-              PopupMenuButton<int>(
-                position: PopupMenuPosition.under,
-                elevation: 1,
-                icon: SvgPicture.asset(
-                  IconAsset.moreIcon,
-                  color: AppColors.blackColor,
-                ),
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    onTap: () {
-                      log("Edit");
-                      Get.to(AddVehicleDetailsScreen(
-                        screenName: AppString.editScreenFlag,
-                        vehicleData: _args,
-                      ));
-                    },
-                    height: 40.h,
-                    padding: EdgeInsets.symmetric(horizontal: 10.w),
-                    value: 1,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SvgPicture.asset(
-                          IconAsset.edit,
-                          color: AppColors.primaryColor,
-                          height: 23.h,
-                        ),
-                        AppText(
-                          text: AppString.edit,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.primaryColor,
-                          fontSize: 14.sp,
-                        ).paddingOnly(left: 12.w),
-                      ],
-                    ).paddingOnly(left: 3.w),
-                  ),
-                  PopupMenuItem(
-                    height: 40.h,
-                    padding: EdgeInsets.symmetric(horizontal: 5.w),
-                    value: 2,
-                    onTap: () {
-                      _args.moreAboutVehicle?.isEmpty == true
-                          ? showDialog(
-                              context: Get.context!,
-                              builder: (context) {
-                                return Dialog(
-                                  backgroundColor: AppColors.whiteColor,
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                  ),
-                                  insetPadding: EdgeInsets.symmetric(horizontal: 55.w),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      AppText(
-                                        text: AppString.generateReport,
-                                        fontWeight: FontWeight.w500,
-                                        color: AppColors.blackColor,
-                                        fontSize: 18.sp,
-                                        textAlign: TextAlign.center,
-                                      ).paddingOnly(left: 14.w, right: 14.w, top: 5.h),
-                                      AppText(
-                                        text: "If you want to generate a report for the vehicle then you need to fill the vehicle diagnostic form.",
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 12.5.sp,
-                                        color: AppColors.grey60,
-                                        letterSpacing: 0.3,
-                                        height: 1.4.h,
-                                        textAlign: TextAlign.center,
-                                      ).paddingOnly(
-                                        top: 20.h,
-                                        bottom: 20.h,
-                                        left: 16.w,
-                                        right: 16.w,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.back();
-                                        },
-                                        child: Container(
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                            color: AppColors.whiteColor,
-                                            border: Border(
-                                              top: BorderSide(color: AppColors.borderColor.withOpacity(0.6), width: 0.5),
-                                            ),
-                                            borderRadius: BorderRadius.only(
-                                              bottomRight: Radius.circular(10),
-                                              bottomLeft: Radius.circular(10),
-                                            ),
-                                          ),
-                                          child: AppText(
-                                            textAlign: TextAlign.center,
-                                            text: AppString.ok,
-                                            color: AppColors.logoutColor,
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.w600,
-                                          ).paddingSymmetric(vertical: 12.h),
-                                        ),
-                                      ),
-                                    ],
-                                  ).paddingOnly(top: 20.h),
-                                );
-                              })
-                          : Get.to(ChatScreen(
-                              vehicleId: _args.id!,
-                              userId: _args.userId!,
-                              screenFlag: AppString.generateReportFlag,
-                            ));
-                    },
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SvgPicture.asset(
-                          IconAsset.download,
-                          color: AppColors.primaryColor,
-                          height: 24.h,
-                        ),
-                        AppText(
-                          text: AppString.generateReport,
-                          color: AppColors.primaryColor,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14.sp,
-                        ).paddingOnly(left: 12.w),
-                      ],
-                    ).paddingOnly(left: 6.w),
-                  ),
-                  PopupMenuItem(
-                    height: 40.h,
-                    padding: EdgeInsets.symmetric(horizontal: 5.w),
-                    value: 3,
-                    onTap: () {
-                      showDialog(
-                          context: Get.context!,
-                          builder: (context) {
-                            return Dialog(
-                              backgroundColor: AppColors.whiteColor,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                              insetPadding: EdgeInsets.symmetric(horizontal: 55.w),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  AppText(
-                                    text: "Delete Vehicle",
-                                    fontWeight: FontWeight.w500,
-                                    color: AppColors.blackColor,
-                                    fontSize: 18.sp,
-                                    textAlign: TextAlign.center,
-                                  ).paddingOnly(left: 14.w, right: 14.w, top: 5.h),
-                                  AppText(
-                                    text: "Are you sure you want to delete this vehicle? This action cannot be undone.",
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12.5.sp,
-                                    color: AppColors.grey60,
-                                    letterSpacing: 0.3,
-                                    height: 1.4.h,
-                                    textAlign: TextAlign.center,
-                                  ).paddingOnly(
-                                    top: 20.h,
-                                    bottom: 20.h,
-                                    left: 16.w,
-                                    right: 16.w,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      homeController.deleteVehicle(vehicleId: _args.id!);
-                                    },
-                                    child: Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: AppColors.whiteColor,
-                                        border: Border(
-                                          top: BorderSide(color: AppColors.borderColor.withOpacity(0.6), width: 0.5),
-                                          bottom: BorderSide(color: AppColors.borderColor.withOpacity(0.6), width: 0.5),
-                                        ),
-                                      ),
-                                      child: AppText(
-                                        textAlign: TextAlign.center,
-                                        text: "Yes",
-                                        color: AppColors.logoutColor,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w600,
-                                      ).paddingSymmetric(vertical: 12.h),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: AppColors.whiteColor,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: AppText(
-                                        textAlign: TextAlign.center,
-                                        text: "Cancel",
-                                        color: AppColors.blackColor,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w600,
-                                      ).paddingSymmetric(vertical: 12.h),
-                                    ),
-                                  ),
-                                ],
-                              ).paddingOnly(top: 20.h),
-                            );
-                          });
-                    },
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SvgPicture.asset(
-                          IconAsset.delete,
-                          color: AppColors.logoutColor,
-                          height: 25.h,
-                        ),
-                        AppText(
-                          text: AppString.delete,
-                          color: AppColors.logoutColor,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14.sp,
-                        ).paddingOnly(left: 12.w),
-                      ],
-                    ).paddingOnly(left: 6.w),
-                  ),
-                ],
-                onSelected: (value) {
-                  if (value == 1) {
-                    // _homeController.productsModel.sort((a, b) => a.title.toString().toLowerCase().compareTo(b.title.toString().toLowerCase()));
-                  } else if (value == 2) {
-                    //  _homeController.productsModel.sort((a, b) => b.title.toString().toLowerCase().compareTo(a.title.toString().toLowerCase()));
-                  } else if (value == 3) {
-                    // _homeController.productsModel.sort((a, b) => int.parse(b.price.toString()).compareTo(int.parse(a.price.toString())));
-                  }
+              leading: GestureDetector(
+                onTap: () {
+                  homeController.idDisplayErrorBox.value = false;
+                  Navigation.pop();
                 },
-              ),
-            ],
-          ),
-          body: SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: 16.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Stack(
-                  children: [
-                    Container(
-                      height: 210.h,
-                      child: CachedNetworkImage(
-                        maxHeightDiskCache: 1500,
-                        maxWidthDiskCache: 1500,
-                        color: Colors.transparent,
-                        imageUrl: _args.photo ?? "",
-                        fit: BoxFit.cover,
-                        imageBuilder: (context, imageProvider) => Center(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.circular(9.r),
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
+                child: SvgPicture.asset(
+                  IconAsset.leftArrow,
+                ),
+              ).paddingOnly(left: 16.w),
+              actions: [
+                PopupMenuButton<int>(
+                  position: PopupMenuPosition.under,
+                  elevation: 1,
+                  icon: SvgPicture.asset(
+                    IconAsset.moreIcon,
+                    color: AppColors.blackColor,
+                  ),
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      onTap: () {
+                        log("Edit");
+                        Get.to(AddVehicleDetailsScreen(
+                          screenName: AppString.editScreenFlag,
+                          vehicleData: _args,
+                        ));
+                      },
+                      height: 40.h,
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      value: 1,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SvgPicture.asset(
+                            IconAsset.edit,
+                            color: AppColors.primaryColor,
+                            height: 23.h,
+                          ),
+                          AppText(
+                            text: AppString.edit,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.primaryColor,
+                            fontSize: 14.sp,
+                          ).paddingOnly(left: 12.w),
+                        ],
+                      ).paddingOnly(left: 3.w),
+                    ),
+                    PopupMenuItem(
+                      height: 40.h,
+                      padding: EdgeInsets.symmetric(horizontal: 5.w),
+                      value: 2,
+                      onTap: () {
+                        _args.moreAboutVehicle?.isEmpty == true
+                            ? showDialog(
+                                context: Get.context!,
+                                builder: (context) {
+                                  return Dialog(
+                                    backgroundColor: AppColors.whiteColor,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                    ),
+                                    insetPadding: EdgeInsets.symmetric(horizontal: 55.w),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        AppText(
+                                          text: AppString.generateReport,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.blackColor,
+                                          fontSize: 18.sp,
+                                          textAlign: TextAlign.center,
+                                        ).paddingOnly(left: 14.w, right: 14.w, top: 5.h),
+                                        AppText(
+                                          text: "If you want to generate a report for the vehicle then you need to fill the vehicle diagnostic form.",
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 12.5.sp,
+                                          color: AppColors.grey60,
+                                          letterSpacing: 0.3,
+                                          height: 1.4.h,
+                                          textAlign: TextAlign.center,
+                                        ).paddingOnly(
+                                          top: 20.h,
+                                          bottom: 20.h,
+                                          left: 16.w,
+                                          right: 16.w,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.back();
+                                          },
+                                          child: Container(
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                              color: AppColors.whiteColor,
+                                              border: Border(
+                                                top: BorderSide(color: AppColors.borderColor.withOpacity(0.6), width: 0.5),
+                                              ),
+                                              borderRadius: BorderRadius.only(
+                                                bottomRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10),
+                                              ),
+                                            ),
+                                            child: AppText(
+                                              textAlign: TextAlign.center,
+                                              text: AppString.ok,
+                                              color: AppColors.logoutColor,
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ).paddingSymmetric(vertical: 12.h),
+                                          ),
+                                        ),
+                                      ],
+                                    ).paddingOnly(top: 20.h),
+                                  );
+                                })
+                            : Get.to(ChatScreen(
+                                vehicleId: _args.id!,
+                                userId: _args.userId!,
+                                screenFlag: AppString.generateReportFlag,
+                              ));
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SvgPicture.asset(
+                            IconAsset.download,
+                            color: AppColors.primaryColor,
+                            height: 24.h,
+                          ),
+                          AppText(
+                            text: AppString.generateReport,
+                            color: AppColors.primaryColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14.sp,
+                          ).paddingOnly(left: 12.w),
+                        ],
+                      ).paddingOnly(left: 6.w),
+                    ),
+                    PopupMenuItem(
+                      height: 40.h,
+                      padding: EdgeInsets.symmetric(horizontal: 5.w),
+                      value: 3,
+                      onTap: () {
+                        showDialog(
+                            context: Get.context!,
+                            builder: (context) {
+                              return Dialog(
+                                backgroundColor: AppColors.whiteColor,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                insetPadding: EdgeInsets.symmetric(horizontal: 55.w),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    AppText(
+                                      text: "Delete Vehicle",
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.blackColor,
+                                      fontSize: 18.sp,
+                                      textAlign: TextAlign.center,
+                                    ).paddingOnly(left: 14.w, right: 14.w, top: 5.h),
+                                    AppText(
+                                      text: "Are you sure you want to delete this vehicle? This action cannot be undone.",
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12.5.sp,
+                                      color: AppColors.grey60,
+                                      letterSpacing: 0.3,
+                                      height: 1.4.h,
+                                      textAlign: TextAlign.center,
+                                    ).paddingOnly(
+                                      top: 20.h,
+                                      bottom: 20.h,
+                                      left: 16.w,
+                                      right: 16.w,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        homeController.deleteVehicle(vehicleId: _args.id!);
+                                      },
+                                      child: Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: AppColors.whiteColor,
+                                          border: Border(
+                                            top: BorderSide(color: AppColors.borderColor.withOpacity(0.6), width: 0.5),
+                                            bottom: BorderSide(color: AppColors.borderColor.withOpacity(0.6), width: 0.5),
+                                          ),
+                                        ),
+                                        child: AppText(
+                                          textAlign: TextAlign.center,
+                                          text: "Yes",
+                                          color: AppColors.logoutColor,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w600,
+                                        ).paddingSymmetric(vertical: 12.h),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: AppColors.whiteColor,
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: AppText(
+                                          textAlign: TextAlign.center,
+                                          text: "Cancel",
+                                          color: AppColors.blackColor,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w600,
+                                        ).paddingSymmetric(vertical: 12.h),
+                                      ),
+                                    ),
+                                  ],
+                                ).paddingOnly(top: 20.h),
+                              );
+                            });
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SvgPicture.asset(
+                            IconAsset.delete,
+                            color: AppColors.logoutColor,
+                            height: 25.h,
+                          ),
+                          AppText(
+                            text: AppString.delete,
+                            color: AppColors.logoutColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14.sp,
+                          ).paddingOnly(left: 12.w),
+                        ],
+                      ).paddingOnly(left: 6.w),
+                    ),
+                  ],
+                  onSelected: (value) {
+                    if (value == 1) {
+                      // _homeController.productsModel.sort((a, b) => a.title.toString().toLowerCase().compareTo(b.title.toString().toLowerCase()));
+                    } else if (value == 2) {
+                      //  _homeController.productsModel.sort((a, b) => b.title.toString().toLowerCase().compareTo(a.title.toString().toLowerCase()));
+                    } else if (value == 3) {
+                      // _homeController.productsModel.sort((a, b) => int.parse(b.price.toString()).compareTo(int.parse(a.price.toString())));
+                    }
+                  },
+                ),
+              ],
+            ),
+            body: SingleChildScrollView(
+              padding: EdgeInsets.only(bottom: 16.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        height: 210.h,
+                        child: CachedNetworkImage(
+                          maxHeightDiskCache: 1500,
+                          maxWidthDiskCache: 1500,
+                          color: Colors.transparent,
+                          imageUrl: _args.photo ?? "",
+                          fit: BoxFit.cover,
+                          imageBuilder: (context, imageProvider) => Center(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(9.r),
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        placeholder: (context, url) => Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.dividerColor,
+                          placeholder: (context, url) => Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.dividerColor,
+                            ),
                           ),
-                        ),
-                        errorWidget: (context, url, error) => ClipRRect(
-                          borderRadius: BorderRadius.circular(65.r),
-                          child: Image.asset(
-                            ImagesAsset.user,
-                            height: 20,
+                          errorWidget: (context, url, error) => ClipRRect(
+                            borderRadius: BorderRadius.circular(65.r),
+                            child: Image.asset(
+                              ImagesAsset.user,
+                              height: 20,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      height: 210.h,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            AppColors.blackColor,
-                            AppColors.blackColor.withOpacity(0.6),
-                            Colors.transparent,
-                          ],
-                          stops: const [0, 0.15, 0.3],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
+                      Container(
+                        height: 210.h,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              AppColors.blackColor,
+                              AppColors.blackColor.withOpacity(0.6),
+                              Colors.transparent,
+                            ],
+                            stops: const [0, 0.15, 0.3],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                          ),
                         ),
                       ),
-                    ),
-                    Positioned(
-                      left: 15.w,
-                      bottom: 15.h,
-                      child: AppText(
-                        text: "${_args.vehicleNumber}",
-                        fontSize: 19.sp,
-                        letterSpacing: 0.25,
+                      Positioned(
+                        left: 15.w,
+                        bottom: 15.h,
+                        child: AppText(
+                          text: "${_args.vehicleNumber}",
+                          fontSize: 19.sp,
+                          letterSpacing: 0.25,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppText(
+                        text: AppString.vehicleInformation,
+                        color: AppColors.secondaryColor.withOpacity(0.7),
                         fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                        fontSize: 16.sp,
+                      ).paddingOnly(
+                        top: 16.h,
+                        left: 16.w,
+                        bottom: 10.h,
                       ),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AppText(
-                      text: AppString.vehicleInformation,
-                      color: AppColors.secondaryColor.withOpacity(0.7),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16.sp,
-                    ).paddingOnly(
-                      top: 16.h,
-                      left: 16.w,
-                      bottom: 10.h,
-                    ),
-                    Column(
-                      children: [
-                        CustomListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: 4.h),
-                          title: AppString.vehicleNumber,
-                          trailingText: "${_args.vehicleNumber}",
-                        ),
-                        Container(
-                          height: 2.h,
-                          color: AppColors.backgroundColor,
-                        ),
-                        CustomListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: 4.h),
-                          title: AppString.vehicleYear,
-                          trailingText: "${_args.vehicleYear}",
-                        ),
-                        Container(
-                          height: 2.h,
-                          color: AppColors.backgroundColor,
-                        ),
-                        CustomListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: 4.h),
-                          title: AppString.vehicleMake,
-                          trailingText: "${_args.vehicleMake}",
-                        ),
-                        Container(
-                          height: 2.h,
-                          color: AppColors.backgroundColor,
-                        ),
-                        CustomListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: 4.h),
-                          title: AppString.vehicleModel,
-                          trailingText: "${_args.vehicleModel}",
-                        ),
-                        Container(
-                          height: 2.h,
-                          color: AppColors.backgroundColor,
-                        ),
-                        CustomListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: 4.h),
-                          title: AppString.transmissionType,
-                          trailingText: "${_args.transmissionType}",
-                        ),
-                        Container(
-                          height: 2.h,
-                          color: AppColors.backgroundColor,
-                        ),
-                        CustomListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: 4.h),
-                          title: AppString.fuelType,
-                          trailingText: "${_args.fuelType}",
-                        ),
-                      ],
-                    ).paddingSymmetric(horizontal: 16.w),
-                    _args.moreAboutVehicle?.isEmpty == true
-                        ? homeController.idDisplayErrorBox.value == true
-                            // ? homeController.idDisplayErrorBox.value == true
-                            ? SizedBox()
-                            : Container(
-                                    height: 58.h,
-                                    width: Get.width,
-                                    decoration: BoxDecoration(
-                                        color: AppColors.logoutColor,
-                                        borderRadius: BorderRadius.circular(5.r),
-                                        border: Border.all(color: AppColors.borderColor),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            offset: Offset(0.w, 0.5.h),
-                                            color: AppColors.blackColor.withOpacity(0.4),
-                                            blurRadius: 80,
-                                          )
-                                        ]),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        AppText(
-                                          text: "Is there a problem with your \nvehicle?",
-                                          color: AppColors.whiteColor,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14.sp,
-                                          height: 1.3.h,
-                                          letterSpacing: 0.4,
-                                        ),
-                                        Row(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  homeController.idDisplayErrorBox.value = true;
-                                                });
-                                              },
-                                              child: Container(
-                                                height: 30.h,
-                                                width: 55.w,
-                                                decoration: BoxDecoration(
-                                                    color: AppColors.whiteColor.withOpacity(0.2),
-                                                    borderRadius: BorderRadius.circular(20.r),
-                                                    border: Border.all(color: AppColors.whiteColor, width: 1)),
-                                                child: Center(
-                                                  child: AppText(
-                                                    text: "No",
-                                                    color: AppColors.whiteColor,
-                                                    fontWeight: FontWeight.w600,
-                                                    letterSpacing: 0.3,
+                      Column(
+                        children: [
+                          CustomListTile(
+                            contentPadding: EdgeInsets.symmetric(vertical: 4.h),
+                            title: AppString.vehicleNumber,
+                            trailingText: "${_args.vehicleNumber}",
+                          ),
+                          Container(
+                            height: 2.h,
+                            color: AppColors.backgroundColor,
+                          ),
+                          CustomListTile(
+                            contentPadding: EdgeInsets.symmetric(vertical: 4.h),
+                            title: AppString.vehicleYear,
+                            trailingText: "${_args.vehicleYear}",
+                          ),
+                          Container(
+                            height: 2.h,
+                            color: AppColors.backgroundColor,
+                          ),
+                          CustomListTile(
+                            contentPadding: EdgeInsets.symmetric(vertical: 4.h),
+                            title: AppString.vehicleMake,
+                            trailingText: "${_args.vehicleMake}",
+                          ),
+                          Container(
+                            height: 2.h,
+                            color: AppColors.backgroundColor,
+                          ),
+                          CustomListTile(
+                            contentPadding: EdgeInsets.symmetric(vertical: 4.h),
+                            title: AppString.vehicleModel,
+                            trailingText: "${_args.vehicleModel}",
+                          ),
+                          Container(
+                            height: 2.h,
+                            color: AppColors.backgroundColor,
+                          ),
+                          CustomListTile(
+                            contentPadding: EdgeInsets.symmetric(vertical: 4.h),
+                            title: AppString.transmissionType,
+                            trailingText: "${_args.transmissionType}",
+                          ),
+                          Container(
+                            height: 2.h,
+                            color: AppColors.backgroundColor,
+                          ),
+                          CustomListTile(
+                            contentPadding: EdgeInsets.symmetric(vertical: 4.h),
+                            title: AppString.fuelType,
+                            trailingText: "${_args.fuelType}",
+                          ),
+                        ],
+                      ).paddingSymmetric(horizontal: 16.w),
+                      _args.moreAboutVehicle?.isEmpty == true
+                          ? homeController.idDisplayErrorBox.value == true
+                              // ? homeController.idDisplayErrorBox.value == true
+                              ? SizedBox()
+                              : Container(
+                                      height: 58.h,
+                                      width: Get.width,
+                                      decoration: BoxDecoration(
+                                          color: AppColors.logoutColor,
+                                          borderRadius: BorderRadius.circular(5.r),
+                                          border: Border.all(color: AppColors.borderColor),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              offset: Offset(0.w, 0.5.h),
+                                              color: AppColors.blackColor.withOpacity(0.4),
+                                              blurRadius: 80,
+                                            )
+                                          ]),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          AppText(
+                                            text: AppString.isThereAProblemWithVehicle,
+                                            color: AppColors.whiteColor,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14.sp,
+                                            height: 1.3.h,
+                                            letterSpacing: 0.4,
+                                          ),
+                                          Row(
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    homeController.idDisplayErrorBox.value = true;
+                                                  });
+                                                },
+                                                child: Container(
+                                                  height: 30.h,
+                                                  width: 55.w,
+                                                  decoration: BoxDecoration(
+                                                      color: AppColors.whiteColor.withOpacity(0.2),
+                                                      borderRadius: BorderRadius.circular(20.r),
+                                                      border: Border.all(color: AppColors.whiteColor, width: 1)),
+                                                  child: Center(
+                                                    child: AppText(
+                                                      text: "No",
+                                                      color: AppColors.whiteColor,
+                                                      fontWeight: FontWeight.w600,
+                                                      letterSpacing: 0.3,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Get.to(VehicleDiagnosisScreen(
-                                                  screenName: AppString.editScreenFlag,
-                                                  vehicleId: _args.id!,
-                                                ));
-                                              },
-                                              child: Container(
-                                                height: 30.h,
-                                                width: 55.w,
-                                                decoration: BoxDecoration(
-                                                    color: AppColors.whiteColor,
-                                                    borderRadius: BorderRadius.circular(20.r),
-                                                    border: Border.all(color: AppColors.whiteColor, width: 1)),
-                                                child: Center(
-                                                  child: AppText(
-                                                    text: "Yes",
-                                                    color: AppColors.blackColor,
-                                                    fontWeight: FontWeight.w600,
-                                                    letterSpacing: 0.3,
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Get.to(VehicleDiagnosisScreen(
+                                                    screenName: AppString.editScreenFlag,
+                                                    vehicleId: _args.id!,
+                                                  ));
+                                                },
+                                                child: Container(
+                                                  height: 30.h,
+                                                  width: 55.w,
+                                                  decoration: BoxDecoration(
+                                                      color: AppColors.whiteColor,
+                                                      borderRadius: BorderRadius.circular(20.r),
+                                                      border: Border.all(color: AppColors.whiteColor, width: 1)),
+                                                  child: Center(
+                                                    child: AppText(
+                                                      text: "Yes",
+                                                      color: AppColors.blackColor,
+                                                      fontWeight: FontWeight.w600,
+                                                      letterSpacing: 0.3,
+                                                    ),
                                                   ),
-                                                ),
-                                              ).paddingOnly(left: 10.w),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ).paddingSymmetric(horizontal: 10.w))
-                                .paddingSymmetric(horizontal: 16.w, vertical: 16)
-                        : Container(
-                            height: 7.h,
+                                                ).paddingOnly(left: 10.w),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ).paddingSymmetric(horizontal: 10.w))
+                                  .paddingSymmetric(horizontal: 16.w, vertical: 16)
+                          : Container(
+                              height: 7.h,
+                              color: AppColors.backgroundColor,
+                            ).paddingOnly(top: 4.h, bottom: 20.h),
+                      _args.moreAboutVehicle?.isEmpty == true
+                          ? Container()
+                          : AppText(
+                              text: "More about your vehicle",
+                              color: AppColors.secondaryColor.withOpacity(0.7),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16.sp,
+                            ).paddingOnly(left: 16.w),
+                      ListView.separated(
+                        itemCount: _args.moreAboutVehicle?.length ?? 0,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return CustomListTile(
+                            contentPadding: EdgeInsets.symmetric(vertical: 8.h),
+                            title: "${_args.moreAboutVehicle![index].question}",
+                            trailingText: "${_args.moreAboutVehicle![index].answer}",
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return Container(
+                            height: 2.h,
                             color: AppColors.backgroundColor,
-                          ).paddingOnly(top: 4.h, bottom: 20.h),
-                    _args.moreAboutVehicle?.isEmpty == true
-                        ? Container()
-                        : AppText(
-                            text: "More about your vehicle",
-                            color: AppColors.secondaryColor.withOpacity(0.7),
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.sp,
-                          ).paddingOnly(left: 16.w),
-                    ListView.separated(
-                      itemCount: _args.moreAboutVehicle?.length ?? 0,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return CustomListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: 8.h),
-                          title: "${_args.moreAboutVehicle![index].question}",
-                          trailingText: "${_args.moreAboutVehicle![index].answer}",
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return Container(
-                          height: 2.h,
-                          color: AppColors.backgroundColor,
-                        );
-                      },
-                    ).paddingOnly(
-                      top: 4.h,
-                      left: 16.w,
-                      right: 16.w,
-                    ),
-                  ],
-                )
-              ],
+                          );
+                        },
+                      ).paddingOnly(
+                        top: 4.h,
+                        left: 16.w,
+                        right: 16.w,
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+
+            /* floatingActionButton: FloatingActionButton.extended(
+
+              backgroundColor: AppColors.logoutColor,
+              onPressed: () {},
+              label: Row(
+                children: [
+                  AppText(
+                    text: "Is there a problem with your \nvehicle?",
+                    color: AppColors.whiteColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13.sp,
+                    height: 1.3.h,
+                    letterSpacing: 0.4,
+                  ),
+                  CustomButton(
+                    onTap: () {
+                    },
+                    height: 30.h,
+                    width: 60.w,
+                    endSvgHeight: 16.h,
+                    endSvg: IconAsset.forwardArrow,
+                    text: "No",
+                    borderRadius: BorderRadius.circular(46.r),
+                  )
+                ],
+              ),
+            ),*/
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-
-          /* floatingActionButton: FloatingActionButton.extended(
-
-            backgroundColor: AppColors.logoutColor,
-            onPressed: () {},
-            label: Row(
-              children: [
-                AppText(
-                  text: "Is there a problem with your \nvehicle?",
-                  color: AppColors.whiteColor,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 13.sp,
-                  height: 1.3.h,
-                  letterSpacing: 0.4,
-                ),
-                CustomButton(
-                  onTap: () {
-                  },
-                  height: 30.h,
-                  width: 60.w,
-                  endSvgHeight: 16.h,
-                  endSvg: IconAsset.forwardArrow,
-                  text: "No",
-                  borderRadius: BorderRadius.circular(46.r),
-                )
-              ],
-            ),
-          ),*/
         ),
       ),
     );

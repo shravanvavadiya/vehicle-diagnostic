@@ -51,6 +51,7 @@ class ProfileData {
   String? photo;
   bool? profileCompleted;
   bool? subscriptionPlan;
+  bool? verified;
 
   ProfileData(
       {this.creationDate,

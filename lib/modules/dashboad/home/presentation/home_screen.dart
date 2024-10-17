@@ -78,14 +78,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontSize: 14.sp,
                             ),
                             Obx(
-                                  () =>
-                               SizedBox(
+                              () => SizedBox(
                                 width: Get.width / 1.8.w,
                                 child: AppText(
                                   text:
-                                  // "${SharedPreferencesHelper.instance.getUserInfo()?.profileResponse?.profileData?.firstName ?? "demo"}"
-                                  //     " ${SharedPreferencesHelper.instance.getUserInfo()?.profileResponse?.profileData?.lastName ?? "demo"}",
-                                 "${homeController.getProfileData.value.firstName ?? ""} "
+                                      // "${SharedPreferencesHelper.instance.getUserInfo()?.profileResponse?.profileData?.firstName ?? "demo"}"
+                                      //     " ${SharedPreferencesHelper.instance.getUserInfo()?.profileResponse?.profileData?.lastName ?? "demo"}",
+                                      "${homeController.getProfileData.value.firstName ?? ""} "
                                       "${homeController.getProfileData.value.lastName ?? ""}",
                                   color: AppColors.blackColor,
                                   fontWeight: FontWeight.w600,

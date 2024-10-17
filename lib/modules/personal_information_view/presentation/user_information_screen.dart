@@ -61,34 +61,39 @@ class UserInformationScreen extends StatelessWidget {
   }
 
   Widget _buildNextButton(UserInformationController personalInformationController) {
-    return CustomButton(
-      onTap: () async {
-        if (personalInformationController.formKey.currentState?.validate() ?? false) {
-          await personalInformationController.personalInformationAPI(
-            email: personalInformationController.email.text,
-            firstname: personalInformationController.firstname.text,
-            lastname: personalInformationController.lastname.text,
-            postCode: personalInformationController.postCode.text, /*imagePath: personalInformationController.image?.value*/
-          );
-        }
+    return GestureDetector(
+      onTap: () {
+        personalInformationController.formKey.currentState!.validate();
       },
-      isLoader: personalInformationController.isPersonalInformation.value,
-      isDisabled: (personalInformationController.isValidateName.value &&
-              personalInformationController.isValidateLastName.value &&
-              personalInformationController.isValidatePostCode.value
-          //personalInformationController.image.value.isNotEmpty
-          )
-          ? false
-          : true,
-      disableTextColor: AppColors.whiteColor,
-      height: 52.h,
-      width: 113.w,
-      endSvgHeight: 16.h,
-      fontSize: 15.h,
-      endSvg: IconAsset.forwardArrow,
-      text: AppString.next,
-      borderRadius: BorderRadius.circular(46),
-    ).paddingOnly(bottom: 25.h);
+      child: CustomButton(
+        onTap: () async {
+          if (personalInformationController.formKey.currentState?.validate() ?? false) {
+            await personalInformationController.personalInformationAPI(
+              email: personalInformationController.email.text,
+              firstname: personalInformationController.firstname.text,
+              lastname: personalInformationController.lastname.text,
+              postCode: personalInformationController.postCode.text, /*imagePath: personalInformationController.image?.value*/
+            );
+          }
+        },
+        isLoader: personalInformationController.isPersonalInformation.value,
+        isDisabled: (personalInformationController.isValidateName.value &&
+                personalInformationController.isValidateLastName.value &&
+                personalInformationController.isValidatePostCode.value
+            //personalInformationController.image.value.isNotEmpty
+            )
+            ? false
+            : true,
+        disableTextColor: AppColors.whiteColor,
+        height: 52.h,
+        width: 113.w,
+        endSvgHeight: 16.h,
+        fontSize: 15.h,
+        endSvg: IconAsset.forwardArrow,
+        text: AppString.next,
+        borderRadius: BorderRadius.circular(46),
+      ).paddingOnly(bottom: 25.h),
+    );
   }
 
   Widget buildPostCodeField(UserInformationController personalInformationController) {
@@ -166,78 +171,78 @@ class UserInformationScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildUserImage(personalInformationController) {
-    return (personalInformationController.image.value.isNotEmpty)
-        ? Align(
-            alignment: Alignment.center,
-            child: Container(
-              height: 150.h,
-              width: 150.h,
-              decoration: BoxDecoration(
-                color: AppColors.backgroundColor,
-                borderRadius: BorderRadius.circular(150.r),
-                image: DecorationImage(
-                    image: FileImage(
-                      File(
-                        personalInformationController.image.value,
-                      ),
-                    ),
-                    fit: BoxFit.cover),
-              ),
-              child: GestureDetector(
-                onTap: () async {
-                  await Utils().imagePickerModel(selectImage: personalInformationController.imagePath, image: personalInformationController.image);
-                  personalInformationController.isValidateImage.value = true;
-                },
-                child: Container(
-                  height: 150.h,
-                  width: 150.h,
-                  decoration: BoxDecoration(
-                    color: AppColors.blackColor.withOpacity(0.4),
-                    borderRadius: BorderRadius.circular(150.r),
-                  ),
-                  child: SvgPicture.asset(IconAsset.editIcon).paddingAll(85.h),
-                ),
-              ),
-            ).paddingOnly(
-              top: 24.h,
-              bottom: 8.h,
-            ),
-          )
-        : Align(
-            alignment: Alignment.center,
-            child: GestureDetector(
-              onTap: () async {
-                await Utils().imagePickerModel(selectImage: personalInformationController.imagePath, image: personalInformationController.image);
-                if (personalInformationController.image.value.isNotEmpty) {
-                  personalInformationController.isValidateImage.value = true;
-                } else {
-                  personalInformationController.isValidateImage.value = false;
-                }
-              },
-              child: Container(
-                height: 150.h,
-                width: 150.h,
-                decoration: BoxDecoration(
-                  color: AppColors.backgroundColor,
-                  borderRadius: BorderRadius.circular(150.r),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(IconAsset.uploadIcon).paddingOnly(bottom: 6.h),
-                    AppText(
-                      text: AppString.tapToAdd,
-                      textAlign: TextAlign.center,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                    ).paddingOnly(top: 5.h)
-                  ],
-                ),
-              ).paddingOnly(top: 24.h, bottom: 8.h),
-            ),
-          );
-  }
+// Widget _buildUserImage(personalInformationController) {
+//   return (personalInformationController.image.value.isNotEmpty)
+//       ? Align(
+//           alignment: Alignment.center,
+//           child: Container(
+//             height: 150.h,
+//             width: 150.h,
+//             decoration: BoxDecoration(
+//               color: AppColors.backgroundColor,
+//               borderRadius: BorderRadius.circular(150.r),
+//               image: DecorationImage(
+//                   image: FileImage(
+//                     File(
+//                       personalInformationController.image.value,
+//                     ),
+//                   ),
+//                   fit: BoxFit.cover),
+//             ),
+//             child: GestureDetector(
+//               onTap: () async {
+//                 await Utils().imagePickerModel(selectImage: personalInformationController.imagePath, image: personalInformationController.image,context:  context);
+//                 personalInformationController.isValidateImage.value = true;
+//               },
+//               child: Container(
+//                 height: 150.h,
+//                 width: 150.h,
+//                 decoration: BoxDecoration(
+//                   color: AppColors.blackColor.withOpacity(0.4),
+//                   borderRadius: BorderRadius.circular(150.r),
+//                 ),
+//                 child: SvgPicture.asset(IconAsset.editIcon).paddingAll(85.h),
+//               ),
+//             ),
+//           ).paddingOnly(
+//             top: 24.h,
+//             bottom: 8.h,
+//           ),
+//         )
+//       : Align(
+//           alignment: Alignment.center,
+//           child: GestureDetector(
+//             onTap: () async {
+//               await Utils().imagePickerModel(selectImage: personalInformationController.imagePath, image: personalInformationController.image);
+//               if (personalInformationController.image.value.isNotEmpty) {
+//                 personalInformationController.isValidateImage.value = true;
+//               } else {
+//                 personalInformationController.isValidateImage.value = false;
+//               }
+//             },
+//             child: Container(
+//               height: 150.h,
+//               width: 150.h,
+//               decoration: BoxDecoration(
+//                 color: AppColors.backgroundColor,
+//                 borderRadius: BorderRadius.circular(150.r),
+//               ),
+//               child: Column(
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 children: [
+//                   SvgPicture.asset(IconAsset.uploadIcon).paddingOnly(bottom: 6.h),
+//                   AppText(
+//                     text: AppString.tapToAdd,
+//                     textAlign: TextAlign.center,
+//                     fontSize: 12.sp,
+//                     fontWeight: FontWeight.w400,
+//                   ).paddingOnly(top: 5.h)
+//                 ],
+//               ),
+//             ).paddingOnly(top: 24.h, bottom: 8.h),
+//           ),
+//         );
+// }
 }
 
 Widget customTextFormField(

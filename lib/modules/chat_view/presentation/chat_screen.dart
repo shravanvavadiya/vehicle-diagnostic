@@ -167,17 +167,17 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                         )
                                       ],
                                     ).paddingOnly(bottom: 8.h),
-                                    GestureDetector(
-                                      onTap: () async {
-                                        print("object ${controller.questionAndAnswerList[index].question}");
-                                        await Clipboard.setData(ClipboardData(text: "${controller.questionAndAnswerList[index].question}"));
-                                        // controller.answerController.value.text = controller.questionAndAnswerList[index].question ?? "";
-                                        controller.isCheckText.value = true;
-                                      },
-                                      child: SvgPicture.asset(IconAsset.copyIcon).paddingOnly(
-                                        left: 38.w,
-                                      ),
-                                    )
+                                    // GestureDetector(
+                                    //   onTap: () async {
+                                    //     print("object ${controller.questionAndAnswerList[index].question}");
+                                    //     await Clipboard.setData(ClipboardData(text: "${controller.questionAndAnswerList[index].question}"));
+                                    //     // controller.answerController.value.text = controller.questionAndAnswerList[index].question ?? "";
+                                    //     controller.isCheckText.value = true;
+                                    //   },
+                                    //   child: SvgPicture.asset(IconAsset.copyIcon).paddingOnly(
+                                    //     left: 38.w,
+                                    //   ),
+                                    // )
                                   ],
                                 ).paddingOnly(
                                   left: 16.w,
@@ -187,10 +187,22 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                 controller.questionAndAnswerList[index].answer!.isNotEmpty
                                     ? Align(
                                         alignment: Alignment.bottomRight,
-                                        child: Column(
+                                        child: Row(
                                           mainAxisAlignment: MainAxisAlignment.end,
-                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                controller.isEditSelectedIndex.value = index;
+                                                controller.editQuestionAnswerFunction(currentIndex: index);
+
+                                                controller.isAllAnswerAdd.value = false;
+                                              },
+                                              child: SvgPicture.asset(
+                                                IconAsset.icEditIcon,
+                                                color: AppColors.editIconColor,
+                                              ),
+                                            ).paddingOnly(right: 5),
                                             Container(
                                               // height: 44.h,
                                               // width: Get.width / 1.5,
@@ -206,18 +218,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                                 textAlign: TextAlign.end,
                                               ).paddingAll(10),
                                             ).paddingOnly(bottom: 8.h),
-                                            GestureDetector(
-                                              onTap: () {
-                                                controller.isEditSelectedIndex.value = index;
-                                                controller.editQuestionAnswerFunction(currentIndex: index);
-
-                                                controller.isAllAnswerAdd.value = false;
-                                              },
-                                              child: SvgPicture.asset(
-                                                IconAsset.icEditIcon,
-                                                color: AppColors.editIconColor,
-                                              ),
-                                            ),
                                           ],
                                         ).paddingOnly(left: 16.w, right: 16.w, top: 16.h),
                                       )

@@ -38,7 +38,7 @@ mixin Routes {
   static List<GetPage<dynamic>> pages = [
     GetPage<dynamic>(
       name: demo01,
-      page: () => DependentDropdownDemo(),
+      page: () => DemoHtml(),
       transition: defaultTransition,
     ),
     GetPage<dynamic>(

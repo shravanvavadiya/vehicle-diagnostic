@@ -102,7 +102,7 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                         ],
                       ).paddingOnly(left: 3.w),
                     ),
-                    PopupMenuItem(
+                    /*PopupMenuItem(
                       height: 40.h,
                       padding: EdgeInsets.symmetric(horizontal: 5.w),
                       value: 2,
@@ -195,7 +195,7 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                           ).paddingOnly(left: 12.w),
                         ],
                       ).paddingOnly(left: 6.w),
-                    ),
+                    ),*/
                     PopupMenuItem(
                       height: 40.h,
                       padding: EdgeInsets.symmetric(horizontal: 5.w),

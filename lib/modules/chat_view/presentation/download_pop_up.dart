@@ -41,7 +41,7 @@ void showDownloadDialog(PdfViewController pdfViewController, pdfData) async {
               //   fontSize: 12.sp,
               //   textAlign: TextAlign.center,
               // ).paddingOnly(left: 16.w, right: 16.w, bottom: 20, top: 15),
-              GestureDetector(
+              /*  GestureDetector(
                 onTap: () {
                   showDialog(
                     context: context,
@@ -82,7 +82,7 @@ void showDownloadDialog(PdfViewController pdfViewController, pdfData) async {
                     fontWeight: FontWeight.w600,
                   ).paddingSymmetric(vertical: 12.h),
                 ),
-              ),
+              ),*/
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context);

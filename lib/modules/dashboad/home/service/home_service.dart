@@ -11,7 +11,7 @@ class HomeService {
     try {
       var result = await Api().get("${ApiConstants.getAllVehicleByUserId}/${AppPreference.getInt("UserId")}", queryData: {
         "page": currentPage,
-        "size": 3,
+        "size": 6,
       });
       print("home api ${result.request}");
       await ResponseHandler.checkResponseError(result);

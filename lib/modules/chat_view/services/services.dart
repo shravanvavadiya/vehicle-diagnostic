@@ -12,10 +12,10 @@ import '../model/chat_question_model.dart';
 import '../model/user_ans_check_model.dart';
 
 class ChatServices {
-  static Future<GetChatQuestionModel> chatGptQuestionServices() async {
+  static Future<GetChatQuestionModel> chatGptQuestionServices({required String vehicleId}) async {
     try {
       var result = await Api().post(
-        url: ApiConstants.chatGptQuestion,
+        url: "${ApiConstants.chatGptQuestion}/$vehicleId",
       );
       log(result.toString());
       await ResponseHandler.checkResponseError(result);
@@ -47,14 +47,14 @@ class ChatServices {
     }
   }
 
-  static Future<Uint8List> downloadReport({required int vehicle}) async {
+  static Future<String> downloadReport({required int vehicle}) async {
     try {
       var result = await Api().get(
         "${ApiConstants.downloadReport}/$vehicle/download",
       );
       log(result.body);
       await ResponseHandler.checkResponseError(result);
-      return Uint8List.fromList(result.bodyBytes);
+      return result.body;
     } catch (e, st) {
       log("error : E $e,$st");
       rethrow;

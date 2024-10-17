@@ -58,10 +58,8 @@ class VehicleService {
   // }
 
   static Future vehicleNumber({required String vehicleNumber}) async {
-    var headers = {'x-api-key': 'Ia7AmkDmUI5UKQZjVaYiJ4Ipga9TpoBt7ANB4NCJ', 'Content-Type': 'application/json'};
-    final body = json.encode({"registrationNumber": vehicleNumber});
-    final forComplainDepartment =
-        await http.post(Uri.parse("https://driver-vehicle-licensing.api.gov.uk/vehicle-enquiry/v1/vehicles"), body: body, headers: headers);
+    final forComplainDepartment = await http.get(Uri.parse(
+        "https://uk1.ukvehicledata.co.uk/api/datapackage/VehicleData?v=2&api_nullitems=1&auth_apikey=efc7f9ad-a37c-405e-8a6d-1e528c255358&user_tag=&key_VRM=$vehicleNumber")); // BG17 AMK
     log("status code ${forComplainDepartment.statusCode}");
     var response = jsonDecode(forComplainDepartment.body);
     if (forComplainDepartment.statusCode == 200) {
@@ -69,7 +67,6 @@ class VehicleService {
       return complainDepartmentModel;
     } else {
       throw "null";
-      return null;
     }
   }
 

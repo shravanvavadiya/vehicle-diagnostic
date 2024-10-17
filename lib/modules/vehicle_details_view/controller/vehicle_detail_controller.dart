@@ -24,14 +24,16 @@ import '../service/add_vehicle_service.dart';
 class VehicleDetailController extends GetxController with LoadingMixin, LoadingApiMixin {
   RxInt vehicleId = 0.obs;
   RxInt vehicleUserId = 0.obs;
+  RxInt initYearIndex = 0.obs;
   Timer? debounce;
   RxBool isSnackBarStop = true.obs;
+  RxBool isCheckAnsFormTextField = false.obs;
 
   snackBarStopFunction() {
     isSnackBarStop.value = false;
     Future.delayed(
       Duration(seconds: 2),
-      () => isSnackBarStop.value = true,
+          () => isSnackBarStop.value = true,
     );
   }
 
@@ -39,85 +41,60 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
     print(name);
     name == AppString.editScreenFlag
         ? {
-            screenName.value = AppString.editYourVehicleDetails,
-            // fetchData.photo = image.value,
-            // fetchData.vehicleNumber = vehicleNumber.text,
-            vehicleNumberController.text = fetchData.vehicleNumber!,
-            vehicleYearController.text = fetchData.vehicleYear!,
-            selectedYear.value = int.parse(fetchData.vehicleYear!),
+      screenName.value = AppString.editYourVehicleDetails,
+      // fetchData.photo = image.value,
+      // fetchData.vehicleNumber = vehicleNumber.text,
+      vehicleNumberController.value.text = fetchData.vehicleNumber!,
+      vehicleYearController.value.text = fetchData.vehicleYear!,
 
-            selectedValueMake.value = fetchData.vehicleMake!,
-            selectedValueModel.value = fetchData.vehicleModel!,
-            selectedValueTType.value = fetchData.transmissionType!,
-            selectedValueFType.value = fetchData.fuelType!,
-            networkImage.value = fetchData.photo!,
-            vehicleId.value = fetchData.id!,
-            vehicleUserId.value = fetchData.userId!,
+      vehicleMakeController.value.text = fetchData.vehicleMake!,
+      vehicleModelController.value.text = fetchData.vehicleModel!,
+      vehicleTransmissionTypeController.value.text = fetchData.transmissionType!,
+      vehicleFuelTypeController.value.text = fetchData.fuelType!,
+      networkImage.value = fetchData.photo!,
+      vehicleId.value = fetchData.id!,
+      vehicleUserId.value = fetchData.userId!,
 
-            isValidateVName.value = true,
-            isValidateVYear.value = true,
-            isValidateVMake.value = true,
-            isValidateVModel.value = true,
-            isValidateVType.value = true,
-            isValidateVFuelT.value = true,
-            isValidateImage.value = true,
-
-            SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
-              vehicleModelApi(selectedVehicleMakeString: selectedValueMake.value ?? "");
-              vehicleFuelType(
-                selectedVehicleMakeString: selectedValueMake.value ?? "",
-                selectedVehicleModelString: selectedValueModel.value ?? "",
-              );
-              vehicleTransmissionType(
-                selectedVehicleMakeString: selectedValueMake.value!,
-                selectedVehicleModelString: selectedValueModel.value!,
-                selectedVehicleFuelString: selectedValueFType.value!,
-              );
-            }),
-          }
+      // SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
+      //   vehicleModelApi(selectedVehicleMakeString: selectedValueMake.value ?? "");
+      //   vehicleFuelType(
+      //     selectedVehicleMakeString: selectedValueMake.value ?? "",
+      //     selectedVehicleModelString: selectedValueModel.value ?? "",
+      //   );
+      //   vehicleTransmissionType(
+      //     selectedVehicleMakeString: selectedValueMake.value!,
+      //     selectedVehicleModelString: selectedValueModel.value!,
+      //     selectedVehicleFuelString: selectedValueFType.value!,
+      //   );
+      // }),
+    }
         : {
-            screenName.value = AppString.addYourVehicleDetails,
-          };
+      screenName.value = AppString.addYourVehicleDetails,
+    };
   }
 
   RxString screenName = "".obs;
 
   ScrollController scrollController = ScrollController();
 
-  final TextEditingController vehicleNumberController = TextEditingController();
-  final TextEditingController vehicleYearController = TextEditingController();
-  final TextEditingController vehicleMakeController = TextEditingController();
-  final TextEditingController vehicleModelController = TextEditingController();
-  final TextEditingController vehicleFuelTypeController = TextEditingController();
-  final TextEditingController transmissionTypeController = TextEditingController();
+  final Rx<TextEditingController> vehicleNumberController = TextEditingController().obs;
+  final Rx<TextEditingController> vehicleYearController = TextEditingController().obs;
+  final Rx<TextEditingController> vehicleMakeController = TextEditingController().obs;
+  final Rx<TextEditingController> vehicleModelController = TextEditingController().obs;
+  final Rx<TextEditingController> vehicleFuelTypeController = TextEditingController().obs;
+  final Rx<TextEditingController> vehicleTransmissionTypeController = TextEditingController().obs;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   Rx<AddVehicleModel> addVehicleModel = AddVehicleModel().obs;
   XFile? imagePath;
   RxString image = "".obs;
   RxString networkImage = "".obs;
   RxInt selectedYear = 2019.obs;
-  final RxInt currentYear = DateTime.now().year.obs;
+  final RxInt currentYear = DateTime
+      .now()
+      .year
+      .obs;
 
-  RxBool isValidateVName = false.obs;
-  RxBool isValidateVYear = false.obs;
-  RxBool isValidateVMake = false.obs;
-  RxBool isValidateVModel = false.obs;
-  RxBool isValidateVType = false.obs;
-  RxBool isValidateVFuelT = false.obs;
-  RxBool isValidateImage = false.obs;
-
-  clearController() {
-    vehicleNumberController.text = "";
-    vehicleYearController.text = "";
-    imagePath = XFile("");
-    image.value = "";
-    selectedValueMake.value = 'Select';
-    selectedValueModel.value = 'Select';
-    selectedValueTType.value = 'Select';
-    selectedValueFType.value = 'Select';
-  }
-
-  final RxList<String> vehicleMakeList = RxList();
+  /* final RxList<String> vehicleMakeList = RxList();
   final RxList<String> vehicleModel = RxList();
   final RxList<String> fuelType = RxList();
   final RxList<String> transmissionType = RxList();
@@ -125,7 +102,7 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
   final RxnString selectedValueMake = RxnString();
   final RxnString selectedValueModel = RxnString();
   final RxnString selectedValueTType = RxnString();
-  final RxnString selectedValueFType = RxnString();
+  final RxnString selectedValueFType = RxnString();*/
   VehicleNumberModel? vehicleResponse;
   RxBool isCheckVehicleNUmber = false.obs;
 
@@ -133,9 +110,41 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
     handleLoading(true);
 
     try {
-      vehicleResponse = await VehicleService.vehicleNumber(vehicleNumber: vehicleNumberText); // OG63 GGG
+      vehicleResponse = await VehicleService.vehicleNumber(vehicleNumber: vehicleNumberText);
       log("vehicleResponse ${vehicleResponse!.toJson()}");
-      vehicleNumberController.text = vehicleResponse!.registrationNumber!;
+
+      vehicleResponse?.response?.statusCode == "KeyInvalid"
+          ? {
+        AppSnackBar.showErrorSnackBar(
+            message: "We couldn't find the vehicle number in our database. Please enter the details manually to proceed.", title: "success"),
+        snackBarStopFunction(),
+        isCheckAnsFormTextField.value = false,
+        vehicleYearController.value.text = "",
+        vehicleMakeController.value.text = "",
+        vehicleModelController.value.text = "",
+        vehicleFuelTypeController.value.text = "",
+        vehicleTransmissionTypeController.value.text = "",
+        vehicleYearController.refresh(),
+        vehicleMakeController.refresh(),
+        vehicleModelController.refresh(),
+        vehicleFuelTypeController.refresh(),
+        vehicleTransmissionTypeController.refresh(),
+      }
+          : {
+        vehicleYearController.value.text = vehicleResponse?.response?.dataItems?.vehicleRegistration?.yearOfManufacture ?? "",
+        vehicleMakeController.value.text = vehicleResponse?.response?.dataItems?.vehicleRegistration?.make ?? "",
+        vehicleModelController.value.text = vehicleResponse?.response?.dataItems?.vehicleRegistration?.model ?? "",
+        vehicleFuelTypeController.value.text = vehicleResponse?.response?.dataItems?.vehicleRegistration?.fuelType ?? "",
+        vehicleTransmissionTypeController.value.text = vehicleResponse?.response?.dataItems?.vehicleRegistration?.transmissionType ?? "",
+        isCheckAnsFormTextField.value = true,
+        vehicleYearController.refresh(),
+        vehicleMakeController.refresh(),
+        vehicleModelController.refresh(),
+        vehicleFuelTypeController.refresh(),
+        vehicleTransmissionTypeController.refresh(),
+      };
+
+      /*vehicleNumberController.text = vehicleResponse!.registrationNumber!;
       isValidateVName.value = true;
       vehicleYearController.text = vehicleResponse!.yearOfManufacture!.toString();
       isValidateVYear.value = true;
@@ -151,132 +160,149 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
       isValidateVFuelT.value = true;
       SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
         vehicleModelApi(selectedVehicleMakeString: selectedValueMake.value ?? "");
-      });
-
-      update();
-
-      log("vehicleResponse makeTemp:;$carMake");
-      log("vehicleResponse vehicleMakeList:;$vehicleMakeList");
-      log("vehicleResponse selectedValueMake:;$selectedValueMake");
-    } catch (e) {
-      AppSnackBar.showErrorSnackBar(message: "Vehicle details not found", title: "error");
-      log("error e :::::::$e");
+      });*/
+    } catch (e, st) {
+      AppSnackBar.showErrorSnackBar(
+          message: "We couldn't find the vehicle number in our database. Please enter the details manually to proceed.", title: "error");
+      log("error e :::::::$e ::::::::::: $st");
       handleLoading(false);
     } finally {
       handleLoading(false);
     }
   }
 
-  Future<void> vehicleMakeApi() async {
-    handleLoading(true);
-    await processApi(
-      () => VehicleService.vehicleMake(),
-      error: (error, stack) {
-        log("UpdateUserProfile error ---> $error --- $stack");
-        handleLoading(false);
-      },
-      result: (result) async {
-        if (result.apiresponse?.data != null || result.apiresponse!.data!.isNotEmpty) {
-          vehicleMakeList.assignAll(result.apiresponse!.data!);
-          vehicleMakeList.refresh();
-          update();
-          handleLoading(false);
-        }
-      },
-    );
-    handleLoading(false);
+  int findYearIndex(int startYear, int count, int selectedYear) {
+    // Generate the list of years in reverse order
+    List<int> yearList = List.generate(count, (index) => startYear + count - 1 - index);
+
+    return yearList.indexOf(selectedYear);
   }
 
-  Future<void> vehicleModelApi({required String selectedVehicleMakeString}) async {
-    handleLoading(true);
-    log("vehicleModel.value 03 ${vehicleModel.value}");
-    log("vehicleModel.value string  03 ${selectedValueMake.value}");
+  getSelectedYear() {
+    int yearCount = currentYear.value - 1970 + 1;
+    log("yearCount ${yearCount}");
 
-    await processApi(
-      () => VehicleService.vehicleModel(selectedVehicleMake: selectedVehicleMakeString),
-      error: (error, stack) {
-        log("UpdateUserProfile error ---> $error --- $stack");
-        handleLoading(false);
-      },
-      result: (result) async {
-        log("vehicle model ${result.apiresponse!.data!}");
-        vehicleModel.value.assignAll(result.apiresponse!.data!);
-        vehicleModel.refresh();
-        update();
+    int yearIndex = findYearIndex(1970, yearCount, int.parse(vehicleYearController.value.text));
 
-        handleLoading(false);
-        log("vehicleModel.value 04 ${vehicleModel.value}");
-        log("vehicleModel.value string  04 ${selectedValueMake.value}");
-      },
-    );
-    handleLoading(false);
+    if (yearIndex != -1) {
+      initYearIndex.value = yearIndex;
+      log('Selected year $selectedYear found at index: $yearIndex');
+    } else {
+      log('Selected year $selectedYear not found in the list.');
+    }
   }
 
-  Future<void> vehicleFuelType({required String selectedVehicleMakeString, required String selectedVehicleModelString}) async {
-    handleLoading(true);
-
-    await processApi(
-      () => VehicleService.vehicleFuel(selectedVehicleMake: selectedVehicleMakeString, selectedVehicleModel: selectedVehicleModelString),
-      error: (error, stack) {
-        log("UpdateUserProfile error ---> $error --- $stack");
-        handleLoading(false);
-      },
-      result: (result) async {
-        if (result.apiresponse?.data != null || result.apiresponse!.data!.isNotEmpty) {
-          log("vehicle model ${result.apiresponse!.data!}");
-          fuelType.value.assignAll(result.apiresponse!.data!);
-          fuelType.refresh();
-          update();
-          handleLoading(false);
-        }
-      },
-    );
-    handleLoading(false);
-  }
-
-  Future<void> vehicleTransmissionType(
-      {required String selectedVehicleMakeString, required String selectedVehicleModelString, required String selectedVehicleFuelString}) async {
-    handleLoading(true);
-
-    await processApi(
-      () => VehicleService.vehicleTransmission(
-        selectedVehicleMake: selectedVehicleMakeString,
-        selectedVehicleModel: selectedVehicleModelString,
-        selectedVehicleFuel: selectedVehicleFuelString,
-      ),
-      error: (error, stack) {
-        log("UpdateUserProfile error ---> $error --- $stack");
-        handleLoading(false);
-      },
-      result: (result) async {
-        if (result.apiresponse?.data != null || result.apiresponse!.data!.isNotEmpty) {
-          log("vehicle model ${result.apiresponse!.data!}");
-          transmissionType.value.assignAll(result.apiresponse!.data!);
-          transmissionType.refresh();
-          handleLoading(false);
-        }
-      },
-    );
-    handleLoading(false);
-  }
+  // Future<void> vehicleMakeApi() async {
+  //   handleLoading(true);
+  //   await processApi(
+  //     () => VehicleService.vehicleMake(),
+  //     error: (error, stack) {
+  //       log("UpdateUserProfile error ---> $error --- $stack");
+  //       handleLoading(false);
+  //     },
+  //     result: (result) async {
+  //       if (result.apiresponse?.data != null || result.apiresponse!.data!.isNotEmpty) {
+  //         vehicleMakeList.assignAll(result.apiresponse!.data!);
+  //         vehicleMakeList.refresh();
+  //         update();
+  //         handleLoading(false);
+  //       }
+  //     },
+  //   );
+  //   handleLoading(false);
+  // }
+  //
+  // Future<void> vehicleModelApi({required String selectedVehicleMakeString}) async {
+  //   handleLoading(true);
+  //   log("vehicleModel.value 03 ${vehicleModel.value}");
+  //   log("vehicleModel.value string  03 ${selectedValueMake.value}");
+  //
+  //   await processApi(
+  //     () => VehicleService.vehicleModel(selectedVehicleMake: selectedVehicleMakeString),
+  //     error: (error, stack) {
+  //       log("UpdateUserProfile error ---> $error --- $stack");
+  //       handleLoading(false);
+  //     },
+  //     result: (result) async {
+  //       log("vehicle model ${result.apiresponse!.data!}");
+  //       vehicleModel.value.assignAll(result.apiresponse!.data!);
+  //       vehicleModel.refresh();
+  //       update();
+  //
+  //       handleLoading(false);
+  //       log("vehicleModel.value 04 ${vehicleModel.value}");
+  //       log("vehicleModel.value string  04 ${selectedValueMake.value}");
+  //     },
+  //   );
+  //   handleLoading(false);
+  // }
+  //
+  // Future<void> vehicleFuelType({required String selectedVehicleMakeString, required String selectedVehicleModelString}) async {
+  //   handleLoading(true);
+  //
+  //   await processApi(
+  //     () => VehicleService.vehicleFuel(selectedVehicleMake: selectedVehicleMakeString, selectedVehicleModel: selectedVehicleModelString),
+  //     error: (error, stack) {
+  //       log("UpdateUserProfile error ---> $error --- $stack");
+  //       handleLoading(false);
+  //     },
+  //     result: (result) async {
+  //       if (result.apiresponse?.data != null || result.apiresponse!.data!.isNotEmpty) {
+  //         log("vehicle model ${result.apiresponse!.data!}");
+  //         fuelType.value.assignAll(result.apiresponse!.data!);
+  //         fuelType.refresh();
+  //         update();
+  //         handleLoading(false);
+  //       }
+  //     },
+  //   );
+  //   handleLoading(false);
+  // }
+  //
+  // Future<void> vehicleTransmissionType(
+  //     {required String selectedVehicleMakeString, required String selectedVehicleModelString, required String selectedVehicleFuelString}) async {
+  //   handleLoading(true);
+  //
+  //   await processApi(
+  //     () => VehicleService.vehicleTransmission(
+  //       selectedVehicleMake: selectedVehicleMakeString,
+  //       selectedVehicleModel: selectedVehicleModelString,
+  //       selectedVehicleFuel: selectedVehicleFuelString,
+  //     ),
+  //     error: (error, stack) {
+  //       log("UpdateUserProfile error ---> $error --- $stack");
+  //       handleLoading(false);
+  //     },
+  //     result: (result) async {
+  //       if (result.apiresponse?.data != null || result.apiresponse!.data!.isNotEmpty) {
+  //         log("vehicle model ${result.apiresponse!.data!}");
+  //         transmissionType.value.assignAll(result.apiresponse!.data!);
+  //         transmissionType.refresh();
+  //         handleLoading(false);
+  //       }
+  //     },
+  //   );
+  //   handleLoading(false);
+  // }
 
   Future<void> addVehicleApi() async {
     handleLoading(true);
     final MyVehicleData addVehicleData = MyVehicleData(
-      fuelType: selectedValueFType.trim(),
-      vehicleYear: vehicleYearController.text.trim(),
-      vehicleNumber: vehicleNumberController.text.trim(),
-      vehicleModel: selectedValueModel.trim(),
-      vehicleMake: selectedValueMake.value,
+      fuelType: vehicleFuelTypeController.value.text.trim(),
+      vehicleYear: vehicleYearController.value.text.trim(),
+      vehicleNumber: vehicleNumberController.value.text.trim(),
+      vehicleModel: vehicleModelController.value.text.trim(),
+      vehicleMake: vehicleMakeController.value.text.trim(),
       userId: AppPreference.getInt("UserId"),
-      transmissionType: selectedValueTType.value,
+      transmissionType: vehicleTransmissionTypeController.value.text.trim(),
       id: vehicleId.value,
     );
     await processApi(
-      () => VehicleService.createVehicle(
-        setUpProfileFormData: addVehicleData,
-        imagePath: image.value,
-      ),
+          () =>
+          VehicleService.createVehicle(
+            setUpProfileFormData: addVehicleData,
+            imagePath: image.value,
+          ),
       error: (error, stack) {
         log("UpdateUserProfile error ---> $error --- $stack");
         handleLoading(false);
@@ -307,21 +333,22 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
   Future<void> editVehicleApi() async {
     handleLoading(true);
     final MyVehicleData editVehicleData = MyVehicleData(
-      fuelType: selectedValueFType.trim(),
-      vehicleYear: vehicleYearController.text.trim(),
-      vehicleNumber: vehicleNumberController.text.trim(),
-      vehicleModel: selectedValueModel.trim(),
-      vehicleMake: selectedValueMake.value,
-      userId: vehicleUserId.value,
-      transmissionType: selectedValueTType.value,
+      fuelType: vehicleFuelTypeController.value.text.trim(),
+      vehicleYear: vehicleYearController.value.text.trim(),
+      vehicleNumber: vehicleNumberController.value.text.trim(),
+      vehicleModel: vehicleModelController.value.text.trim(),
+      vehicleMake: vehicleMakeController.value.text.trim(),
+      userId: AppPreference.getInt("UserId"),
+      transmissionType: vehicleTransmissionTypeController.value.text.trim(),
       id: vehicleId.value,
     );
 
     await processApi(
-      () => VehicleService.editVehicle(
-        setUpProfileFormData: editVehicleData,
-        imagePath: image.value,
-      ),
+          () =>
+          VehicleService.editVehicle(
+            setUpProfileFormData: editVehicleData,
+            imagePath: image.value,
+          ),
       error: (error, stack) {
         log("UpdateUserProfile error ---> $error --- $stack");
         handleLoading(false);
@@ -345,52 +372,27 @@ class VehicleDetailController extends GetxController with LoadingMixin, LoadingA
     handleLoading(false);
   }
 
-  dynamic selectedIndex = 0.0.obs;
-
-  @override
-  void onInit() {
-    SchedulerBinding.instance.addPostFrameCallback(
-      (timeStamp) {
-        if (vehicleModel.isNotEmpty) {
-          vehicleModel.clear();
-        }
-        vehicleMakeApi();
-        scrollController.addListener(() {
-          selectedIndex = scrollController.offset;
-          log("offset $selectedIndex");
-        });
-      },
-    );
-    // TODO: implement onInit
-    super.onInit();
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-
-  void scrollToBottom() {
-    // Animate to the bottom of the scrollable content
-    scrollController.animateTo(
-      scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    );
-  }
+// dynamic selectedIndex = 0.0.obs;
+//
+// void scrollToBottom() {
+//   scrollController.animateTo(
+//     scrollController.position.maxScrollExtent,
+//     duration: const Duration(milliseconds: 300),
+//     curve: Curves.easeOut,
+//   );
+// }
 }
 
-class CustomInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    String newText = newValue.text.toUpperCase().replaceAll(' ', '');
-    if (newText.length > 4) {
-      newText = newText.substring(0, 4) + ' ' + newText.substring(4);
-    }
-    return newValue.copyWith(
-      text: newText,
-      selection: TextSelection.collapsed(offset: newText.length),
-    );
-  }
-}
+// class CustomInputFormatter extends TextInputFormatter {
+//   @override
+//   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+//     String newText = newValue.text.toUpperCase().replaceAll(' ', '');
+//     if (newText.length > 4) {
+//       newText = newText.substring(0, 4) + ' ' + newText.substring(4);
+//     }
+//     return newValue.copyWith(
+//       text: newText,
+//       selection: TextSelection.collapsed(offset: newText.length),
+//     );
+//   }
+// }

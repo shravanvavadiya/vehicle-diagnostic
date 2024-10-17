@@ -109,6 +109,7 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
           homeController.getProfileData.value = data.apiresponse!.data!;
           homeController.getProfileData.refresh();
           await SharedPreferencesHelper().setUserInfo(getUserProfileModel.value);
+
         }
         Get.back();
         Get.back();
@@ -117,22 +118,6 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
     );
   }
 
-  Future<void> getUserProfileAPI() async {
-    await processApi(
-        () => ProfileService.getUserAPI(
-              userId: AppPreference.getInt("UserId"),
-            ),
-        loading: handleLoading, result: (data) {
-      if (data != null) {
-        getUserProfileModel.value = data;
-        log("profile image ::${data.profileResponse?.profileData?.photo}");
-        log("${getUserProfileModel.value.profileResponse!.profileData!.firstName} ${getUserProfileModel.value.profileResponse!.profileData!.lastName}");
-        SharedPreferencesHelper().setUserInfo(getUserProfileModel.value);
-
-        log("user dave data ${SharedPreferencesHelper().getUserInfo()?.profileResponse?.profileData?.toJson()}");
-      }
-    });
-  }
 
   Future<void> deleteAccount({required int userId}) async {
     log("user Id ::$userId");

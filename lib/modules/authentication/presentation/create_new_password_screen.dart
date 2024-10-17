@@ -67,37 +67,35 @@ class CreateNewPasswordScreen extends StatelessWidget {
     return SizedBox(
       height: 68.h,
       child: Center(
+          child: GestureDetector(
+        onTap: () {
+          controller.formKey.currentState!.validate();
+        },
         child: CustomButton(
           height: 52.h,
           onTap: () {
             controller.formKey.currentState!.validate()
                 ? {
                     controller.newPasswordFunction(
-                      confirmPassword:
-                          controller.confirmPasswordController.text,
+                      confirmPassword: controller.confirmPasswordController.text,
                       email: userEmail,
                       newPassword: controller.passwordController.text,
                     )
                   }
                 : {};
           },
-          isDisabled: (controller.isValidateNewPassword.value &&
-              controller.isValidConfirmPassword.value)
-              ? false
-              : true,
+          isDisabled: (controller.isValidateNewPassword.value && controller.isValidConfirmPassword.value) ? false : true,
           disableTextColor: AppColors.whiteColor,
           text: AppString.save,
         ),
-      ),
+      )),
     ).paddingOnly(top: 25.h);
   }
 
-  Widget _buildConfirmPasswordField(
-      CreateNewPasswordController controller, BuildContext context) {
+  Widget _buildConfirmPasswordField(CreateNewPasswordController controller, BuildContext context) {
     return customTextFormField(
       onChanged: (p0) {
-        controller.isValidConfirmPassword.value =
-            controller.confirmPasswordController.text.isNotEmpty;
+        controller.isValidConfirmPassword.value = controller.confirmPasswordController.text.isNotEmpty;
       },
       text: AppString.confirmPassword,
       hintText: AppString.password,
@@ -107,8 +105,7 @@ class CreateNewPasswordScreen extends StatelessWidget {
           return AppString.pleaseEnterPassword;
         } else if (controller.confirmPasswordController.text.length < 6) {
           return AppString.passwordCodeMustBeDigits;
-        } else if (controller.confirmPasswordController.text !=
-            controller.passwordController.text) {
+        } else if (controller.confirmPasswordController.text != controller.passwordController.text) {
           return AppString.bothPasswordNotMatch;
         }
       },
@@ -120,19 +117,15 @@ class CreateNewPasswordScreen extends StatelessWidget {
           controller.confirmPassword.value = !controller.confirmPassword.value;
           Utils.hideKeyboardInApp(context);
         },
-        icon: SvgPicture.asset(!controller.confirmPassword.value
-            ? IconAsset.openEyes
-            : IconAsset.closeEyes),
+        icon: SvgPicture.asset(!controller.confirmPassword.value ? IconAsset.openEyes : IconAsset.closeEyes),
       ),
     );
   }
 
-  Widget _buildNewPasswordField(
-      CreateNewPasswordController controller, BuildContext context) {
+  Widget _buildNewPasswordField(CreateNewPasswordController controller, BuildContext context) {
     return customTextFormField(
       onChanged: (p0) {
-        controller.isValidateNewPassword.value =
-            controller.passwordController.text.isNotEmpty;
+        controller.isValidateNewPassword.value = controller.passwordController.text.isNotEmpty;
       },
       text: AppString.newPassword,
       hintText: AppString.password,
@@ -146,9 +139,7 @@ class CreateNewPasswordScreen extends StatelessWidget {
           controller.password.value = !controller.password.value;
           Utils.hideKeyboardInApp(context);
         },
-        icon: SvgPicture.asset(!controller.password.value
-            ? IconAsset.openEyes
-            : IconAsset.closeEyes),
+        icon: SvgPicture.asset(!controller.password.value ? IconAsset.openEyes : IconAsset.closeEyes),
       ),
     ).paddingOnly(top: 24.h, bottom: 16.h);
   }

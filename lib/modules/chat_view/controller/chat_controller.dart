@@ -41,7 +41,7 @@ class ChatController extends GetxController with LoadingMixin, LoadingApiMixin {
 
   Future<void> getAllChatQuestion() async {
     await processApi(
-      () => ChatServices.chatGptQuestionServices(),
+      () => ChatServices.chatGptQuestionServices(vehicleId: passVehicleId.value.toString()),
       error: (error, stack) => handleLoading(false),
       result: (data) {
         if (data.apiresponse!.data?.isEmpty != true) {
@@ -52,9 +52,9 @@ class ChatController extends GetxController with LoadingMixin, LoadingApiMixin {
           log("demoList ${demoList.toString()}");
           RxString question = data.apiresponse!.data!.toString().obs;
           // splitQuestionList = question.value.replaceAll("[", "").replaceAll("]", "").split(",").obs;
-          splitQuestionList.assignAll(data.apiresponse!.data!);
+          splitQuestionList.assignAll(data.apiresponse!.data!.toList());
           for (int i = 0; i < splitQuestionList.length; i++) {
-            questionAndAnswerList.add(QuestionAndAnswerModel(index: i, question: splitQuestionList[i].replaceAll("'", ""), answer: ""));
+            questionAndAnswerList.add(QuestionAndAnswerModel(index: i, question: splitQuestionList[i], answer: ""));
           }
         } else {}
       },
@@ -65,12 +65,7 @@ class ChatController extends GetxController with LoadingMixin, LoadingApiMixin {
     handleLoading(true);
     final body = {
       "qaChatgptRequests": [
-        {
-          "answer": answer,
-          "question": question
-          // "answer": "Yes, the engine makes strange noises, especially during ignition or while accelerating.",
-          // "question": "Does the engine make strange noises, specially during ignition or while accelerating?"
-        }
+        {"answer": answer, "question": question}
       ],
       "vehicleId": passVehicleId.value
     };

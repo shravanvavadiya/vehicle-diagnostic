@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_template/modules/dashboad/home/models/get_vehicle_data_model.dart';
@@ -25,6 +26,7 @@ import 'package:flutter_template/widget/app_snackbar.dart';
 import 'package:flutter_template/widget/custom_backarrow_widget.dart';
 import 'package:flutter_template/widget/custom_button.dart';
 import 'package:flutter_template/widget/info_text_widget.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 
 import '../../../my_app.dart';
@@ -180,17 +182,27 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                   customTextFormField(
                     text: AppString.vehicleNumber,
                     hintText: AppString.vehicleNumber,
+                    focusNode: vehicleDetailController.vehicleNumberNode,
                     controller: vehicleDetailController.vehicleNumberController.value,
                     // validator: AppValidation.vehicleNumberValidator,
                     maxLength: 17,
-                    onChanged: (String) {
-                      if (vehicleDetailController.vehicleNumberController.value.text.length > 3) {
-                        if (vehicleDetailController.debounce?.isActive ?? false) vehicleDetailController.debounce?.cancel();
-                        vehicleDetailController.debounce = Timer(const Duration(seconds: 1), () {
-                          vehicleDetailController.vehicleNumberCheck(vehicleNumberText: vehicleDetailController.vehicleNumberController.value.text);
-                        });
+                    // onFieldSubmitted: (p0) {
+                    //   log("onSave Tap Function");
+                    //   if (vehicleDetailController.vehicleNumberController.value.text.length > 4) {
+                    //     vehicleDetailController.vehicleNumberCheck(vehicleNumberText: vehicleDetailController.vehicleNumberController.value.text);
+                    //   }
+                    //   vehicleDetailController.snackBarStopFunction();
+                    // },
+                    tapOutSide: (p0) {
+                      FocusManager.instance.primaryFocus?.unfocus();
+
+                      if (vehicleDetailController.vehicleNumberController.value.text.length > 4) {
+                        vehicleDetailController.vehicleNumberCheck(vehicleNumberText: vehicleDetailController.vehicleNumberController.value.text);
                       }
+
+                      vehicleDetailController.snackBarStopFunction();
                     },
+                    onChanged: (String) {},
                   ).paddingSymmetric(vertical: 16.h),
                   customTextFormField(
                     text: AppString.vehicleYear,
@@ -200,99 +212,97 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                     readOnly: true,
                     onTap: () {
                       widget.screenName == AppString.editScreenFlag ? vehicleDetailController.getSelectedYear() : {};
-                      vehicleDetailController.isCheckAnsFormTextField.value
-                          ? const SizedBox()
-                          : Get.bottomSheet(
-                              isDismissible: false,
-                              isScrollControlled: false,
-                              backgroundColor: AppColors.transparent,
-                              ClipRRect(
-                                borderRadius: BorderRadius.only(topLeft: Radius.circular(18.r), topRight: Radius.circular(18.r)),
-                                child: Container(
-                                  color: AppColors.backgroundColor,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
+
+                      Get.bottomSheet(
+                          isDismissible: false,
+                          isScrollControlled: false,
+                          backgroundColor: AppColors.transparent,
+                          ClipRRect(
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(18.r), topRight: Radius.circular(18.r)),
+                            child: Container(
+                              color: AppColors.backgroundColor,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Row(
                                     crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          AppText(
-                                            text: AppString.vehicleYear,
-                                            color: AppColors.blackColor,
-                                            fontSize: 22.sp,
-                                            fontWeight: FontWeight.w600,
-                                            textAlign: TextAlign.start,
+                                      AppText(
+                                        text: AppString.vehicleYear,
+                                        color: AppColors.blackColor,
+                                        fontSize: 22.sp,
+                                        fontWeight: FontWeight.w600,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.back();
+                                        },
+                                        child: Container(
+                                          height: 40.h,
+                                          width: 40.h,
+                                          decoration: BoxDecoration(
+                                            color: AppColors.backgroundColor,
+                                            borderRadius: BorderRadius.circular(150.r),
                                           ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Get.back();
-                                            },
-                                            child: Container(
-                                              height: 40.h,
-                                              width: 40.h,
-                                              decoration: BoxDecoration(
-                                                color: AppColors.backgroundColor,
-                                                borderRadius: BorderRadius.circular(150.r),
-                                              ),
-                                              child: Center(
-                                                child: Icon(
-                                                  Icons.clear,
-                                                  color: AppColors.blackColor,
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ).paddingOnly(left: 16.w, right: 16.w, top: 16.h),
-                                      Container(
-                                        height: 250.h,
-                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.r)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: CupertinoPicker(
-                                            scrollController: FixedExtentScrollController(
-                                                initialItem:
-                                                    widget.screenName == AppString.editScreenFlag ? vehicleDetailController.initYearIndex.value : 5),
-                                            diameterRatio: 1,
-                                            magnification: 1.1,
-                                            onSelectedItemChanged: (value) {
-                                              vehicleDetailController.selectedYear.value = vehicleDetailController.currentYear.value - value;
-                                              vehicleDetailController.vehicleYearController.value.text =
-                                                  vehicleDetailController.selectedYear.value.toString();
-                                            },
-                                            itemExtent: 32.0,
-                                            children: List<Widget>.generate(
-                                              vehicleDetailController.currentYear.value - 1970 + 1,
-                                              (index) {
-                                                return Center(
-                                                  child: AppText(
-                                                    text: '${vehicleDetailController.currentYear.value - index}',
-                                                  ),
-                                                ).paddingOnly(top: 5.h, bottom: 5.w);
-                                              },
+                                          child: Center(
+                                            child: Icon(
+                                              Icons.clear,
+                                              color: AppColors.blackColor,
                                             ),
                                           ),
                                         ),
-                                      ).paddingOnly(left: 16.w, right: 16.w),
-                                      CustomButton(
-                                        height: 50.h,
-                                        buttonColor: AppColors.primaryColor,
-                                        onTap: () {
+                                      )
+                                    ],
+                                  ).paddingOnly(left: 16.w, right: 16.w, top: 16.h),
+                                  Container(
+                                    height: 250.h,
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.r)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: CupertinoPicker(
+                                        scrollController: FixedExtentScrollController(
+                                            initialItem:
+                                                widget.screenName == AppString.editScreenFlag ? vehicleDetailController.initYearIndex.value : 5),
+                                        diameterRatio: 1,
+                                        magnification: 1.1,
+                                        onSelectedItemChanged: (value) {
+                                          vehicleDetailController.selectedYear.value = vehicleDetailController.currentYear.value - value;
                                           vehicleDetailController.vehicleYearController.value.text =
                                               vehicleDetailController.selectedYear.value.toString();
-                                          Get.back();
                                         },
-                                        text: AppString.save,
-                                      ).paddingOnly(left: 16.w, right: 15.w, bottom: 16.h)
-                                    ],
-                                  ),
-                                ),
-                              ));
+                                        itemExtent: 32.0,
+                                        children: List<Widget>.generate(
+                                          vehicleDetailController.currentYear.value - 1970 + 1,
+                                          (index) {
+                                            return Center(
+                                              child: AppText(
+                                                text: '${vehicleDetailController.currentYear.value - index}',
+                                              ),
+                                            ).paddingOnly(top: 5.h, bottom: 5.w);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ).paddingOnly(left: 16.w, right: 16.w),
+                                  CustomButton(
+                                    height: 50.h,
+                                    buttonColor: AppColors.primaryColor,
+                                    onTap: () {
+                                      vehicleDetailController.vehicleYearController.value.text =
+                                          vehicleDetailController.selectedYear.value.toString();
+                                      Get.back();
+                                    },
+                                    text: AppString.save,
+                                  ).paddingOnly(left: 16.w, right: 15.w, bottom: 16.h)
+                                ],
+                              ),
+                            ),
+                          ));
                     },
-                    // validator: AppValidation.vehicleYearValidator,
                     controller: vehicleDetailController.vehicleYearController.value,
                     onChanged: (String) {},
                     suffixIcon: Transform.scale(
@@ -303,7 +313,7 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                     ),
                   ),
                   customTextFormField(
-                    readOnly: vehicleDetailController.isCheckAnsFormTextField.value,
+                    // readOnly: vehicleDetailController.isCheckAnsFormTextField.value,
                     text: AppString.vehicleMake,
                     hintText: AppString.vehicleMake,
                     controller: vehicleDetailController.vehicleMakeController.value,
@@ -317,7 +327,7 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                     onTap: () {},
                   ).paddingSymmetric(vertical: 16.h),
                   customTextFormField(
-                    readOnly: vehicleDetailController.isCheckAnsFormTextField.value,
+                    // readOnly: vehicleDetailController.isCheckAnsFormTextField.value,
                     text: AppString.vehicleModel,
                     hintText: AppString.vehicleModel,
                     controller: vehicleDetailController.vehicleModelController.value,
@@ -329,9 +339,9 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                       // vehicleDetailController.isCheckAnsFormTextField.value = vehicleDetailController.vehicleModelController.value.text.isNotEmpty;
                     },
                     onTap: () {},
-                  ).paddingSymmetric(vertical: 16.h),
+                  ).paddingOnly(bottom: 16.h),
                   customTextFormField(
-                    readOnly: vehicleDetailController.isCheckAnsFormTextField.value,
+                    // readOnly: vehicleDetailController.isCheckAnsFormTextField.value,
                     text: AppString.fuelType,
                     hintText: AppString.fuelType,
                     controller: vehicleDetailController.vehicleFuelTypeController.value,
@@ -343,9 +353,9 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                       // vehicleDetailController.isCheckAnsFormTextField.value = vehicleDetailController.vehicleFuelTypeController.value.text.isNotEmpty;
                     },
                     onTap: () {},
-                  ).paddingSymmetric(vertical: 16.h),
+                  ).paddingOnly(bottom: 16.h),
                   customTextFormField(
-                    readOnly: vehicleDetailController.isCheckAnsFormTextField.value,
+                    // readOnly: vehicleDetailController.isCheckAnsFormTextField.value,
                     text: AppString.transmissionType,
                     hintText: AppString.transmissionType,
                     controller: vehicleDetailController.vehicleTransmissionTypeController.value,
@@ -358,7 +368,7 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                       //     vehicleDetailController.vehicleTransmissionTypeController.value.text.isNotEmpty;
                     },
                     onTap: () {},
-                  ).paddingSymmetric(vertical: 16.h),
+                  ),
                   /*  selectionTextField(
                     onMenuStateChange: (p0) {
                       log("messagemessagemessagemessage");
@@ -506,25 +516,25 @@ class _AddVehicleDetailsScreenState extends State<AddVehicleDetailsScreen> {
                               if (vehicleDetailController.isSnackBarStop.value) {
                                 if ((vehicleDetailController.image.value.isNotEmpty || vehicleDetailController.networkImage.value.isNotEmpty) ==
                                     false) {
-                                  AppSnackBar.showErrorSnackBar(message: "Please select vehicle image.", title: "error");
+                                  AppSnackBar.showErrorSnackBar(message: "Please enter a vehicle image.", title: "error");
                                   vehicleDetailController.snackBarStopFunction();
                                 } else if (vehicleDetailController.vehicleNumberController.value.text.isEmpty) {
                                   vehicleDetailController.snackBarStopFunction();
-                                  AppSnackBar.showErrorSnackBar(message: "Please select vehicle number.", title: "error");
+                                  AppSnackBar.showErrorSnackBar(message: "Please enter a vehicle number.", title: "error");
                                 } else if (vehicleDetailController.vehicleYearController.value.text.isEmpty) {
                                   vehicleDetailController.snackBarStopFunction();
-                                  AppSnackBar.showErrorSnackBar(message: "Please select vehicle year.", title: "error");
+                                  AppSnackBar.showErrorSnackBar(message: "Please enter a vehicle year.", title: "error");
                                 } else if (vehicleDetailController.vehicleMakeController.value.text.isEmpty) {
                                   vehicleDetailController.snackBarStopFunction();
-                                  AppSnackBar.showErrorSnackBar(message: "Please select vehicle make.", title: "error");
+                                  AppSnackBar.showErrorSnackBar(message: "Please enter a vehicle make.", title: "error");
                                 } else if (vehicleDetailController.vehicleModelController.value.text.isEmpty) {
                                   vehicleDetailController.snackBarStopFunction();
-                                  AppSnackBar.showErrorSnackBar(message: "Please select vehicle model.", title: "error");
+                                  AppSnackBar.showErrorSnackBar(message: "Please enter a vehicle model.", title: "error");
                                 } else if (vehicleDetailController.vehicleFuelTypeController.value.text.isEmpty) {
                                   vehicleDetailController.snackBarStopFunction();
-                                  AppSnackBar.showErrorSnackBar(message: "Please select vehicle fuel type.", title: "error");
+                                  AppSnackBar.showErrorSnackBar(message: "Please enter a vehicle fuel type.", title: "error");
                                 } else if (vehicleDetailController.vehicleTransmissionTypeController.value.text.isEmpty) {
-                                  AppSnackBar.showErrorSnackBar(message: "Please select vehicle transmission type.", title: "error");
+                                  AppSnackBar.showErrorSnackBar(message: "Please enter a vehicle transmission type.", title: "error");
                                   vehicleDetailController.snackBarStopFunction();
                                 }
                               }

@@ -245,20 +245,24 @@ class UserInformationScreen extends StatelessWidget {
 // }
 }
 
-Widget customTextFormField(
-    {String? Function(String?)? validator,
-    required String text,
-    required String hintText,
-    int? maxLength,
-    TextCapitalization? textCapitalization,
-    bool? readOnly,
-    Function(String)? onChanged,
-    required TextEditingController controller,
-    TextInputType keyboardType = TextInputType.text,
-    Widget? suffixIcon,
-    final List<TextInputFormatter>? customInputFormat,
-    bool? showPassword,
-    VoidCallback? onTap}) {
+Widget customTextFormField({
+  String? Function(String?)? validator,
+  required String text,
+  required String hintText,
+  int? maxLength,
+  TextCapitalization? textCapitalization,
+  bool? readOnly,
+  Function(String)? onChanged,
+  Function(PointerDownEvent?)? tapOutSide,
+  required TextEditingController controller,
+  TextInputType keyboardType = TextInputType.text,
+  Widget? suffixIcon,
+  final List<TextInputFormatter>? customInputFormat,
+  bool? showPassword,
+  VoidCallback? onTap,
+  FocusNode? focusNode,
+  Function(String?)? onFieldSubmitted,
+}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -281,6 +285,9 @@ Widget customTextFormField(
         isPassword: showPassword ?? false,
         onTap: onTap,
         customInputFormat: customInputFormat,
+        tapOutSide: tapOutSide,
+        onFieldSubmitted: onFieldSubmitted,
+        focusNode: focusNode,
       ),
     ],
   );

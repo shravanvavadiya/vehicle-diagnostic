@@ -30,8 +30,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final HomeController homeController = Get.put(HomeController());
 
-  // final UserInformationController userInformationController = Get.put(UserInformationController());
-
   @override
   Widget build(BuildContext context) {
     return Obx(

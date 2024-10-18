@@ -24,6 +24,7 @@ class ChatController extends GetxController with LoadingMixin, LoadingApiMixin {
   Rx<TextEditingController> answerController = TextEditingController().obs;
   Rx<GetChatQuestionModel> chatQuestionList = GetChatQuestionModel().obs;
   Rx<UserAnswerCheckModel> userAnswerCheckList = UserAnswerCheckModel().obs;
+  GetChatQuestionModel getChatQuestionModel = GetChatQuestionModel();
   RxBool isCheckText = false.obs;
   RxBool isEditAnsValue = false.obs;
   RxBool isAllAnswerAdd = false.obs;
@@ -31,7 +32,7 @@ class ChatController extends GetxController with LoadingMixin, LoadingApiMixin {
   RxInt isEditSelectedIndex = 0.obs;
   RxInt isEditTimeIndex = (-1).obs;
   RxInt passVehicleId = 0.obs;
-  List<String> splitQuestionList = <String>[];
+  List splitQuestionList = [];
   List demoList = [];
 
   ChatController({required int vehicleId}) {
@@ -42,20 +43,20 @@ class ChatController extends GetxController with LoadingMixin, LoadingApiMixin {
   Future<void> getAllChatQuestion() async {
     await processApi(
       () => ChatServices.chatGptQuestionServices(vehicleId: passVehicleId.value.toString()),
-      error: (error, stack) => handleLoading(false),
+      error: (error, stack) {
+        handleLoading(false);
+      },
       result: (data) {
         if (data.apiresponse!.data?.isEmpty != true) {
           chatQuestionList.value = data;
           isResponse.value = true;
           print("data ${data.apiresponse!.data!.length}");
-          demoList.assignAll(data.apiresponse!.data!.toList());
-          log("demoList ${demoList.toString()}");
-          RxString question = data.apiresponse!.data!.toString().obs;
-          // splitQuestionList = question.value.replaceAll("[", "").replaceAll("]", "").split(",").obs;
-          splitQuestionList.assignAll(data.apiresponse!.data!.toList());
+          splitQuestionList.addAll(data.apiresponse!.data!.toList());
           for (int i = 0; i < splitQuestionList.length; i++) {
-            questionAndAnswerList.add(QuestionAndAnswerModel(index: i, question: splitQuestionList[i], answer: ""));
+            questionAndAnswerList.add(QuestionAndAnswerModel(index: i, question: splitQuestionList[i].value, answer: ""));
+            print("object13 ${questionAndAnswerList.length}");
           }
+          print("questionAndAnswerListquestionAndAnswerListquestionAndAnswerList ${questionAndAnswerList}");
         } else {}
       },
     );

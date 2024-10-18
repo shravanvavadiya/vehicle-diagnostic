@@ -18,6 +18,8 @@ class CustomTextField extends StatelessWidget {
   final List<TextInputFormatter>? customInputFormat;
   final TextAlign? textAlign;
   final String? Function(String?)? validator;
+  final  Function(String?)? onFieldSubmitted;
+  final  Function(PointerDownEvent?)? tapOutSide;
   final Widget? prefix;
   final Widget? suffix;
   final Color fillColor;
@@ -56,7 +58,7 @@ class CustomTextField extends StatelessWidget {
     this.prefixWidget,
     this.suffixWidget,
     this.readOnly = false,
-    this.customInputFormat,
+    this.customInputFormat, this.tapOutSide, this.onFieldSubmitted,
   });
 
   final ValueNotifier<bool> _isObscure = ValueNotifier(true);
@@ -79,9 +81,12 @@ class CustomTextField extends StatelessWidget {
               letterSpacing: 0.5,
             ),
             onTap: onTap,
+
+            onTapOutside: tapOutSide,
             obscureText: isObscure,
             obscuringCharacter: '*',
             onChanged: onChanged,
+            onFieldSubmitted: onFieldSubmitted,
             controller: controller,
             maxLines: maxLine,
             maxLength: maxLength,

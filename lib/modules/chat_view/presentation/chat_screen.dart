@@ -179,11 +179,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                     //   ),
                                     // )
                                   ],
-                                ).paddingOnly(
-                                  left: 16.w,
-                                  right: 16.w,
-                                  top: 16.h,
-                                ),
+                                ).paddingOnly(left: 16.w, right: 16.w, top: 16.h),
                                 controller.questionAndAnswerList[index].answer!.isNotEmpty
                                     ? Align(
                                         alignment: Alignment.bottomRight,
@@ -219,7 +215,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                               ).paddingAll(10),
                                             ).paddingOnly(bottom: 8.h),
                                           ],
-                                        ).paddingOnly(left: 16.w, right: 16.w, top: 16.h),
+                                        ).paddingOnly(left: 16.w, right: 16.w),
                                       )
                                     : const SizedBox(),
                               ],

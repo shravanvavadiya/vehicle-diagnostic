@@ -60,8 +60,8 @@ class LetsStartWidget extends StatelessWidget {
                   image,
                   height: 256.h,
                 ).paddingOnly(
-                  top: 50.h,
-                  bottom: bottom,
+                  top: 45.h,
+                  bottom: bottom - 15,
                 ),
                 InfoTextWidget(
                   title: title,
@@ -73,7 +73,7 @@ class LetsStartWidget extends StatelessWidget {
                   bottomSpace: 14.h,
                   fontWeight: FontWeight.w400,
                 ).paddingOnly(
-                  bottom: 15.h,
+                  bottom: 0.h,
                   left: 16.w,
                   right: 16.w,
                 ),

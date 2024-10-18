@@ -42,25 +42,46 @@ class ProfileScreen extends StatelessWidget {
     ),
   ];
 
-  final ProfileController profileController = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: CustomAnnotatedRegions(
-        statusBarColor: AppColors.backgroundColor,
-        child: Scaffold(
-          backgroundColor: AppColors.whiteColor,
-          appBar: _buildAppBar(),
-          body: SafeArea(
-            child: ScrollConfiguration(
-              behavior: MyBehavior(),
-              child: Column(
-                children: [
-                  _buildGridview(),
-                  _buildDeleteButton(profileController),
-                  _buildLogoutButton(),
-                ],
+      child: GetX<ProfileController>(
+        init: ProfileController(),
+        builder: (profileController) => CustomAnnotatedRegions(
+          statusBarColor: AppColors.backgroundColor,
+          child: Scaffold(
+            backgroundColor: AppColors.whiteColor,
+            appBar: AppBar(
+              backgroundColor: AppColors.backgroundColor,
+              leadingWidth: 30,
+              elevation: 0,
+              title: AppText(
+                text: profileController.appBarHeading.value,
+                color: AppColors.blackColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 17.sp,
+              ),
+              leading: GestureDetector(
+                onTap: () {
+                  Get.back();
+                },
+                child: SvgPicture.asset(
+                  IconAsset.leftArrow,
+                  height: 18.h,
+                ),
+              ).paddingOnly(left: 16.w),
+            ),
+            body: SafeArea(
+              child: ScrollConfiguration(
+                behavior: MyBehavior(),
+                child: Column(
+                  children: [
+                    _buildGridview(),
+                    _buildDeleteButton(profileController),
+                    _buildLogoutButton(),
+                  ],
+                ),
               ),
             ),
           ),
@@ -152,29 +173,6 @@ class ProfileScreen extends StatelessWidget {
           );
         },
       ),
-    );
-  }
-
-  AppBar _buildAppBar() {
-    return AppBar(
-      backgroundColor: AppColors.backgroundColor,
-      leadingWidth: 30,
-      elevation: 0,
-      title: AppText(
-        text: AppString.profile,
-        color: AppColors.blackColor,
-        fontWeight: FontWeight.w600,
-        fontSize: 17.sp,
-      ),
-      leading: GestureDetector(
-        onTap: () {
-          Get.back();
-        },
-        child: SvgPicture.asset(
-          IconAsset.leftArrow,
-          height: 18.h,
-        ),
-      ).paddingOnly(left: 16.w),
     );
   }
 }

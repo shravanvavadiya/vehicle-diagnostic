@@ -149,7 +149,7 @@ class HomeController extends GetxController with LoadingMixin, LoadingApiMixin {
         log("profile image ::${getProfileData.value.photo}");
         SharedPreferencesHelper().setUserInfo(data);
 
-        log("user dave data ${SharedPreferencesHelper().getUserInfo()?.profileResponse?.profileData?.toJson()}");
+        log("user dave data home screen Flag ${SharedPreferencesHelper().getUserInfo()?.profileResponse?.profileData?.toJson()}");
       }
     });
   }

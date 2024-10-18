@@ -91,6 +91,7 @@ class OtpScreen extends StatelessWidget {
         controller.formatTime(controller.secondsRemaining.value).value == "00:00"
             ? GestureDetector(
                 onTap: () {
+
                   screenFlag == AppString.createNewAccountFlag
                       ? {controller.createNewAccountFunction(email: email, createPassword: createPassword, confirmPassword: confirmPassword)}
                       : controller.resendOtp(

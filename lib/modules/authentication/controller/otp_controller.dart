@@ -44,6 +44,7 @@ class OtpController extends GetxController with LoadingMixin, LoadingApiMixin {
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (secondsRemaining.value > 0) {
         secondsRemaining.value--;
+        log("timer start $timer");
       } else {
         timer.cancel();
       }
@@ -153,6 +154,7 @@ class OtpController extends GetxController with LoadingMixin, LoadingApiMixin {
       },
       result: (result) async {
         print("result $result");
+        startTimer();
         AppSnackBar.showErrorSnackBar(message: result.apiresponse!.data!.message ?? "", title: 'success');
       },
     );

@@ -112,17 +112,17 @@ class AppString {
   static const String privacyAndTerms = "Privacy and Terms";
   static const String cancelAnytime = "Cancel anytime";
   static const String restore = "Restore";
-  static const String pleaseEnterVehicleNumber = "Please enter vehicle number";
-  static const String pleaseEnterVehicleYear = "Please enter vehicle year";
-  static const String pleaseSelectVehicleMake = "Please select vehicle make";
-  static const String pleaseSelectVehicleModel = "Please select vehicle model";
-  static const String pleaseSelectTransMissionType = "Please select transMission type";
-  static const String pleaseSelectFuelType = "Please select fuel type";
+  static const String pleaseEnterVehicleNumber = "Please enter a vehicle number";
+  static const String pleaseEnterVehicleYear = "Please enter a vehicle year";
+  static const String pleaseSelectVehicleMake = "Please enter a vehicle make";
+  static const String pleaseSelectVehicleModel = "Please enter a vehicle model";
+  static const String pleaseSelectTransMissionType = "Please enter a transMission type";
+  static const String pleaseSelectFuelType = "Please enter a fuel type";
 
   // for validation
-  static const String pleaseEnterName = "Please enter name";
-  static const String pleaseEnterLastName = "Please enter last name";
-  static const String pleaseEnterEmail = "Please enter email";
+  static const String pleaseEnterName = "Please a enter name";
+  static const String pleaseEnterLastName = "Please enter a last name";
+  static const String pleaseEnterEmail = "Please enter a email";
   static const String pleaseEnterOtp = "Please enter otp";
   static const String pleaseEnterPassword = "Please enter a password";
   static const String bothPasswordNotMatch = "Passwords do not match.";
@@ -136,10 +136,10 @@ class AppString {
   static const String postCodeMustContainOnlyDigits =
       "Invalid postal code. Please enter a valid postal code between 3 to 10 characters, containing only letters, numbers, spaces";
   static const String vehicleYearMustContainOnlyDigits = "Vehicle year must contain only digits";
-  static const String selectVehicleMake = "Please select vehicle make";
-  static const String selectVehicleModel = "Please select vehicle model";
-  static const String selectTransmissionType = "Please select transmission type";
-  static const String selectFuelType = "Please select fuel type";
+  static const String selectVehicleMake = "Please enter a vehicle make";
+  static const String selectVehicleModel = "Please enter a vehicle model";
+  static const String selectTransmissionType = "Please enter a transmission type";
+  static const String selectFuelType = "Please enter a fuel type";
   static const String no = "No";
   static const String yes = "Yes";
   static const String freePlan = "Free Plan";

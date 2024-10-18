@@ -102,100 +102,100 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                         ],
                       ).paddingOnly(left: 3.w),
                     ),
-                    /*PopupMenuItem(
-                      height: 40.h,
-                      padding: EdgeInsets.symmetric(horizontal: 5.w),
-                      value: 2,
-                      onTap: () {
-                        _args.moreAboutVehicle?.isEmpty == true
-                            ? showDialog(
-                                context: Get.context!,
-                                builder: (context) {
-                                  return Dialog(
-                                    backgroundColor: AppColors.whiteColor,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                    ),
-                                    insetPadding: EdgeInsets.symmetric(horizontal: 55.w),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        AppText(
-                                          text: AppString.generateReport,
-                                          fontWeight: FontWeight.w500,
-                                          color: AppColors.blackColor,
-                                          fontSize: 18.sp,
-                                          textAlign: TextAlign.center,
-                                        ).paddingOnly(left: 14.w, right: 14.w, top: 5.h),
-                                        AppText(
-                                          text: "If you want to generate a report for the vehicle then you need to fill the vehicle diagnostic form.",
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12.5.sp,
-                                          color: AppColors.grey60,
-                                          letterSpacing: 0.3,
-                                          height: 1.4.h,
-                                          textAlign: TextAlign.center,
-                                        ).paddingOnly(
-                                          top: 20.h,
-                                          bottom: 20.h,
-                                          left: 16.w,
-                                          right: 16.w,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.back();
-                                          },
-                                          child: Container(
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(
-                                              color: AppColors.whiteColor,
-                                              border: Border(
-                                                top: BorderSide(color: AppColors.borderColor.withOpacity(0.6), width: 0.5),
-                                              ),
-                                              borderRadius: BorderRadius.only(
-                                                bottomRight: Radius.circular(10),
-                                                bottomLeft: Radius.circular(10),
-                                              ),
-                                            ),
-                                            child: AppText(
-                                              textAlign: TextAlign.center,
-                                              text: AppString.ok,
-                                              color: AppColors.logoutColor,
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.w600,
-                                            ).paddingSymmetric(vertical: 12.h),
-                                          ),
-                                        ),
-                                      ],
-                                    ).paddingOnly(top: 20.h),
-                                  );
-                                })
-                            : Get.to(ChatScreen(
-                                vehicleId: _args.id!,
-                                userId: _args.userId!,
-                                screenFlag: AppString.generateReportFlag,
-                              ));
-                      },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SvgPicture.asset(
-                            IconAsset.download,
-                            color: AppColors.primaryColor,
-                            height: 24.h,
-                          ),
-                          AppText(
-                            text: AppString.generateReport,
-                            color: AppColors.primaryColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14.sp,
-                          ).paddingOnly(left: 12.w),
-                        ],
-                      ).paddingOnly(left: 6.w),
-                    ),*/
+                    // PopupMenuItem(
+                    //   height: 40.h,
+                    //   padding: EdgeInsets.symmetric(horizontal: 5.w),
+                    //   value: 2,
+                    //   onTap: () {
+                    //     _args.moreAboutVehicle?.isEmpty == true
+                    //         ? showDialog(
+                    //             context: Get.context!,
+                    //             builder: (context) {
+                    //               return Dialog(
+                    //                 backgroundColor: AppColors.whiteColor,
+                    //                 shape: const RoundedRectangleBorder(
+                    //                   borderRadius: BorderRadius.all(
+                    //                     Radius.circular(10),
+                    //                   ),
+                    //                 ),
+                    //                 insetPadding: EdgeInsets.symmetric(horizontal: 55.w),
+                    //                 child: Column(
+                    //                   mainAxisSize: MainAxisSize.min,
+                    //                   children: [
+                    //                     AppText(
+                    //                       text: AppString.generateReport,
+                    //                       fontWeight: FontWeight.w500,
+                    //                       color: AppColors.blackColor,
+                    //                       fontSize: 18.sp,
+                    //                       textAlign: TextAlign.center,
+                    //                     ).paddingOnly(left: 14.w, right: 14.w, top: 5.h),
+                    //                     AppText(
+                    //                       text: "If you want to generate a report for the vehicle then you need to fill the vehicle diagnostic form.",
+                    //                       fontWeight: FontWeight.w400,
+                    //                       fontSize: 12.5.sp,
+                    //                       color: AppColors.grey60,
+                    //                       letterSpacing: 0.3,
+                    //                       height: 1.4.h,
+                    //                       textAlign: TextAlign.center,
+                    //                     ).paddingOnly(
+                    //                       top: 20.h,
+                    //                       bottom: 20.h,
+                    //                       left: 16.w,
+                    //                       right: 16.w,
+                    //                     ),
+                    //                     GestureDetector(
+                    //                       onTap: () {
+                    //                         Get.back();
+                    //                       },
+                    //                       child: Container(
+                    //                         width: double.infinity,
+                    //                         decoration: BoxDecoration(
+                    //                           color: AppColors.whiteColor,
+                    //                           border: Border(
+                    //                             top: BorderSide(color: AppColors.borderColor.withOpacity(0.6), width: 0.5),
+                    //                           ),
+                    //                           borderRadius: BorderRadius.only(
+                    //                             bottomRight: Radius.circular(10),
+                    //                             bottomLeft: Radius.circular(10),
+                    //                           ),
+                    //                         ),
+                    //                         child: AppText(
+                    //                           textAlign: TextAlign.center,
+                    //                           text: AppString.ok,
+                    //                           color: AppColors.logoutColor,
+                    //                           fontSize: 16.sp,
+                    //                           fontWeight: FontWeight.w600,
+                    //                         ).paddingSymmetric(vertical: 12.h),
+                    //                       ),
+                    //                     ),
+                    //                   ],
+                    //                 ).paddingOnly(top: 20.h),
+                    //               );
+                    //             })
+                    //         : Get.to(ChatScreen(
+                    //             vehicleId: _args.id!,
+                    //             userId: _args.userId!,
+                    //             screenFlag: AppString.generateReportFlag,
+                    //           ));
+                    //   },
+                    //   child: Row(
+                    //     crossAxisAlignment: CrossAxisAlignment.center,
+                    //     mainAxisAlignment: MainAxisAlignment.start,
+                    //     children: [
+                    //       SvgPicture.asset(
+                    //         IconAsset.download,
+                    //         color: AppColors.primaryColor,
+                    //         height: 24.h,
+                    //       ),
+                    //       AppText(
+                    //         text: AppString.generateReport,
+                    //         color: AppColors.primaryColor,
+                    //         fontWeight: FontWeight.w600,
+                    //         fontSize: 14.sp,
+                    //       ).paddingOnly(left: 12.w),
+                    //     ],
+                    //   ).paddingOnly(left: 6.w),
+                    // ),
                     PopupMenuItem(
                       height: 40.h,
                       padding: EdgeInsets.symmetric(horizontal: 5.w),
@@ -239,6 +239,7 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                                     GestureDetector(
                                       onTap: () {
                                         homeController.deleteVehicle(vehicleId: _args.id!);
+                                        log("vehicle id ${_args.id}");
                                       },
                                       child: Container(
                                         width: double.infinity,

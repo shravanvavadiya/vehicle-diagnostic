@@ -18,6 +18,7 @@ import '../../personal_information_view/model/personal_information_model.dart';
 
 class ProfileController extends GetxController with LoadingMixin, LoadingApiMixin {
   RxString screenName = AppString.accountInformation.obs;
+  RxString appBarHeading = AppString.profile.obs;
   final TextEditingController firstname = TextEditingController();
   final TextEditingController lastname = TextEditingController();
   final TextEditingController email = TextEditingController();
@@ -36,28 +37,28 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
 
   @override
   void onInit() {
-    WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) {
-        log("000");
-        getUserProfileModel.value = SharedPreferencesHelper().getUserInfo()!;
-        firstname.text = getUserProfileModel.value.profileResponse!.profileData!.firstName!;
-        lastname.text = getUserProfileModel.value.profileResponse!.profileData!.lastName!;
-        email.text = getUserProfileModel.value.profileResponse!.profileData!.email!;
-        postCode.text = getUserProfileModel.value.profileResponse!.profileData!.postCode!;
+    // getUserProfileAPI();
+    log("000");
+    getUserProfileModel.value = SharedPreferencesHelper().getUserInfo()!;
+    log("000 ::::::::::: ${getUserProfileModel.value.toJson()}");
 
-        log("111");
-        isValidateName.value = true;
-        isValidateLastName.value = true;
-        isValidateEmail.value = true;
-        isValidatePostCode.value = true;
-        isValidateImage.value = true;
-        log("222");
-        firstname.addListener(checkIfModified);
-        lastname.addListener(checkIfModified);
-        email.addListener(checkIfModified);
-        postCode.addListener(checkIfModified);
-      },
-    );
+    firstname.text = getUserProfileModel.value.profileResponse!.profileData!.firstName!;
+    lastname.text = getUserProfileModel.value.profileResponse!.profileData!.lastName!;
+    email.text = getUserProfileModel.value.profileResponse!.profileData!.email!;
+    postCode.text = getUserProfileModel.value.profileResponse!.profileData!.postCode!;
+
+    log("111");
+    isValidateName.value = true;
+    isValidateLastName.value = true;
+    isValidateEmail.value = true;
+    isValidatePostCode.value = true;
+    isValidateImage.value = true;
+    log("222");
+    firstname.addListener(checkIfModified);
+    lastname.addListener(checkIfModified);
+    email.addListener(checkIfModified);
+    postCode.addListener(checkIfModified);
+
     super.onInit();
   }
 
@@ -109,15 +110,29 @@ class ProfileController extends GetxController with LoadingMixin, LoadingApiMixi
           homeController.getProfileData.value = data.apiresponse!.data!;
           homeController.getProfileData.refresh();
           await SharedPreferencesHelper().setUserInfo(getUserProfileModel.value);
-
         }
         Get.back();
         Get.back();
+        getUserProfileAPI();
         isModified.value = false;
       },
     );
   }
 
+  Rx<ProfileData> getProfileData = ProfileData().obs;
+
+  Future<void> getUserProfileAPI() async {
+    await processApi(
+        () => ProfileService.getUserAPI(
+              userId: AppPreference.getInt("UserId"),
+            ), result: (data) {
+      if (data.profileResponse?.profileData != null) {
+        getProfileData.value = data.profileResponse!.profileData!;
+        SharedPreferencesHelper().setUserInfo(data);
+        log("user dave data ${SharedPreferencesHelper().getUserInfo()?.profileResponse?.profileData?.toJson()}");
+      }
+    });
+  }
 
   Future<void> deleteAccount({required int userId}) async {
     log("user Id ::$userId");

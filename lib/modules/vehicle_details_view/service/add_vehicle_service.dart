@@ -3,13 +3,9 @@ import 'dart:developer';
 
 import 'package:flutter_template/modules/vehicle_details_view/model/my_vehicle_model.dart';
 import 'package:flutter_template/modules/vehicle_details_view/model/vehicle_make_model.dart';
-import 'package:get/get.dart';
-import 'package:http/src/response.dart';
 import 'package:http/http.dart' as http;
 import '../../../api/api.dart';
 import '../../../utils/api_constants.dart';
-import '../../../utils/common_api_caller.dart';
-import '../../../utils/loading_mixin.dart';
 import '../model/vehicle_number_model.dart';
 
 /// Vehicle Information ::
